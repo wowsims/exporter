@@ -1,6 +1,6 @@
 ## Title: WowSimsExporter v2.5 |c0000ffffWOTLK|r
 ## Version: 2.5
-## Author: generalwrex, namreeb
+## Author: generalwrex, namreeb, riotdog
 ## Interface: 30402
 ## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/classic/ for simulations.
 ## SavedVariables: WSEDB

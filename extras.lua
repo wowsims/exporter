@@ -18,6 +18,7 @@ WowSimsExporter.supportedSims = {
 "warrior",
 "warlock",
 "paladin",
+"deathknight",
 }
 
 WowSimsExporter.slotNames = {
