@@ -55,7 +55,7 @@ function WowSimsExporter:CreateCharacterStructure(unit)
         class = engClass:lower(),
 		level = tonumber(level),
         talents = "",
-        professions = { }, --{ name = "", level = "" }, --wotlk
+        professions = { },
 		spec  =  self:CheckCharacterSpec(engClass:lower()),
         gear = { items = { } } 
 	}
