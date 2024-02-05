@@ -55,16 +55,18 @@ function WowSimsExporter:CreateCharacterStructure(unit)
         class = engClass:lower(),
 		level = tonumber(level),
         talents = "",
-				glyphs = { major = { }, minor = { } }, --wotlk
         professions = { }, --{ name = "", level = "" }, --wotlk
 		spec  =  self:CheckCharacterSpec(engClass:lower()),
         gear = { items = { } } 
 	}
-
+		if not IS_CLASSIC_ERA then
+			self.Character.glyphs = { major = { }, minor = { } }
+		end
     return self.Character
 end
 
 function WowSimsExporter:CreateGlyphEntry()
+	self.Character.glyphs = {}
 	local minor = {}
 	local major = {}
 	for t = 1, 6 do
@@ -203,7 +205,6 @@ end
 
 function WowSimsExporter:GetGearEnchantGems(withBags)
 	self.Character.gear = {}
-	self.Character.glyphs = {}
 	self.Character.bagItems = {}
 	self.Character.items = nil
 
