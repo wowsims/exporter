@@ -12,7 +12,7 @@ WowSimsExporter.Character = ""
 WowSimsExporter.Link = "https://wowsims.github.io/"
 
 local IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-local IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA and C_Engraving
+local IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA and C_Engraving ~= nil
 
 local AceGUI = LibStub("AceGUI-3.0")
 local LibParse = LibStub("LibParse")
