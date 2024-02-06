@@ -35,6 +35,9 @@ local function CreateCopyDialog(text)
     frame:AddChild(editbox)
 end
 
+---Create/show the main window.
+---@param classIsSupported boolean If false then show class not supported info instead of export stuff.
+---@param simLink string The URL to the (class/spec) sim to display.
 function UI:CreateMainWindow(classIsSupported, simLink)
     if _frame then return end
 
@@ -110,6 +113,8 @@ into the provided box and click "Import"
     _jsonbox = jsonbox
 end
 
+---Sets string in textbox.
+---@param outputString string
 function UI:SetOutput(outputString)
     if not _frame or not _jsonbox then return end
     _jsonbox:SetText(outputString)
@@ -118,10 +123,16 @@ function UI:SetOutput(outputString)
     _frame:SetStatusText("Data Generated!")
 end
 
+---Set the function that is used to get the output value when
+---pressing the character export button.
+---@param func fun():string
 function UI:SetOutputGenerator(func)
     _outputGenerator = func
 end
 
+---Set the function that is used to get the output value when
+---pressing the bag items export button.
+---@param func fun():string
 function UI:SetOutputGeneratorBags(func)
     _outputGeneratorBags = func
 end
