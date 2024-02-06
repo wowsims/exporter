@@ -1,7 +1,7 @@
 -- An EquipmentSpec is the data representation for items used by the sim.
 --
--- A table created with CreateEquipmentSpec() will behave much like a normal table, 
--- but it will throw errors if doing anything but setting an ItemSpec (see ItemSpec.lua) 
+-- A table created with CreateEquipmentSpec() will behave much like a normal table,
+-- but it will throw errors if doing anything but setting an ItemSpec (see ItemSpec.lua)
 -- or nil for numeric keys on the EquipmentSpec.items subtable.
 --
 -- The helper functions EquipmentSpecMeta:UpdateEquippedItems(unit) and
@@ -33,32 +33,7 @@ local itemLayout = {
     -- INVSLOT_AMMO, -- Not supported as item
 }
 
---TODO: fix sod, refactor?
--- TODO(Riotdog-GehennasEU): Is this sufficient? This seems to be what simc uses:
--- https://github.com/simulationcraft/simc-addon/blob/master/core.lua
--- Except we don't need the artifact check for wotlk classic.
-function considerItemReplacement(itemLink)
-    if not IsEquippableItem(itemLink) then
-        return false
-    end
 
-    local _, _, itemRarity, itemLevel, _, _, _, _, invType = GetItemInfo(itemLink)
-
-    -- Ignore TBC items like Rocket Boots Xtreme (Lite). The ilvl limit is intentionally set low
-    -- to limit accidental filtering.
-    if itemLevel <= 112 then
-        return false
-    end
-
-    -- Ignore ammunition.
-    if invType and _G[invType] and _G[invType] == INVTYPE_AMMO then
-        return false
-    end
-
-    -- https://wowwiki-archive.fandom.com/wiki/API_TYPE_Quality
-    -- 3 = Rare, 4 = Epic, 5 = Legendary
-    return itemRarity == 3 or itemRarity == 4 or itemRarity == 5
-end
 
 -- Metatable for the base EquipmentSpec table.
 local EquipmentSpecMeta = { isEquipmentSpec = true }
@@ -91,8 +66,8 @@ function EquipmentSpecMeta:UpdateEquippedItems(unit)
     end
 end
 
----Fill items with items from bag. Valid items are filtered by 
----the considerItemReplacement(itemLink) function.
+---Fill items with items from bag. Valid items are filtered by
+---the Env.TreatItemAsPossibleUpgrade(itemLink) function.
 function EquipmentSpecMeta:FillFromBagItems()
     local GetContainerNumSlots = C_Container.GetContainerNumSlots
     local GetContainerItemLink = C_Container.GetContainerItemLink
@@ -100,7 +75,7 @@ function EquipmentSpecMeta:FillFromBagItems()
     for bagId = 0, NUM_BAG_SLOTS do
         for slotId = 1, GetContainerNumSlots(bagId) do
             local itemLink = GetContainerItemLink(bagId, slotId)
-            if itemLink and considerItemReplacement(itemLink) then
+            if itemLink and Env.TreatItemAsPossibleUpgrade(itemLink) then
                 local itemSpec = Env.CreateItemSpec()
                 itemSpec:FillFromItemLink(itemLink)
                 if Env.IS_CLASSIC_ERA_SOD then itemSpec:SetRuneSpellFromSlot(slotId, bagId) end

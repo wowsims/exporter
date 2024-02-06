@@ -43,6 +43,43 @@ local statToStatId = {
     spirit = 5,
 }
 
+---Determine if an item should be exported on bag item export.
+-- TODO(Riotdog-GehennasEU): Is this sufficient? This seems to be what simc uses:
+-- https://github.com/simulationcraft/simc-addon/blob/master/core.lua
+-- Except we don't need the artifact check for wotlk classic.
+---@param itemLink string See https://wowpedia.fandom.com/wiki/ItemLink
+---@return boolean exportItem true if item should be exported
+function Env.TreatItemAsPossibleUpgrade(itemLink)
+    if not IsEquippableItem(itemLink) then return false end
+
+    local itemInfo = { GetItemInfo(itemLink) }
+    local itemRarity = itemInfo[3]
+    local itemLevel = itemInfo[4]
+    local itemClassId = itemInfo[12]
+
+    if Env.IS_CLASSIC_ERA then
+        local minIlvl = UnitLevel("player") - 15
+        if itemLevel <= minIlvl
+            or itemRarity < Enum.ItemQuality.Good then
+            return false
+        end
+    elseif Env.IS_CLASSIC_WRATH then
+        -- Ignore TBC items like Rocket Boots Xtreme (Lite). The ilvl limit is intentionally set low
+        -- to limit accidental filtering.
+        if itemLevel <= 112
+            or itemRarity < Enum.ItemQuality.Rare then
+            return false
+        end
+    end
+
+    -- Ignore ammunition.
+    if itemClassId == Enum.ItemClass.Projectile then
+        return false
+    end
+
+    return true
+end
+
 ---Check if stat1 is bigger than stat2.
 ---Accepts short (agi) or full stat names (agility)
 ---@param stat1 string
