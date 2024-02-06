@@ -12,6 +12,7 @@ WowSimsExporter.Character = ""
 WowSimsExporter.Link = "https://wowsims.github.io/"
 
 local IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+local IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA and C_Engraving ~= nil
 
 local AceGUI = LibStub("AceGUI-3.0")
 local LibParse = LibStub("LibParse")
@@ -58,8 +59,28 @@ function WowSimsExporter:CreateCharacterStructure(unit)
 		spec  =  self:CheckCharacterSpec(engClass:lower()),
         gear = { items = { } } 
 	}
-
+		if not IS_CLASSIC_ERA then
+			self.Character.glyphs = { major = { }, minor = { } }
+		end
     return self.Character
+end
+
+function WowSimsExporter:CreateGlyphEntry()
+	self.Character.glyphs = {}
+	local minor = {}
+	local major = {}
+	for t = 1, 6 do
+		local enabled, glyphType, glyphSpellID = GetGlyphSocketInfo(t)
+		if enabled and glyphSpellID then
+			local localizedName = GetSpellInfo(glyphSpellID)
+			if localizedName then
+				local t = glyphType == 1 and major or minor
+				table.insert(t, {["name"] = localizedName, ["spellID"] = glyphSpellID})
+			end
+		end
+		self.Character.glyphs.major = major
+		self.Character.glyphs.minor = minor
+	end
 end
 
 function WowSimsExporter:CreateProfessionEntry()
@@ -170,8 +191,6 @@ end
 -- Returns rune spell for an item, if item has a rune engraved.
 -- Leave bagId nil to check equipped items.
 local function getRuneSpellForItem(slotId, bagId)
-	if not IS_CLASSIC_ERA or not C_Engraving then return end
-
 	local runeData
 	if bagId == nil then
 		runeData = C_Engraving.GetRuneForEquipmentSlot(slotId)
@@ -197,14 +216,19 @@ function WowSimsExporter:GetGearEnchantGems(withBags)
 				local itemLink = GetInventoryItemLink("player", slotId)
 				if itemLink then
 					local itemData = self:createItemFromItemLink(itemLink)
-					itemData.rune = getRuneSpellForItem(slotId)
+					if IS_CLASSIC_ERA_SOD then
+						itemData.rune = getRuneSpellForItem(slotId)
+					end
 					equippedGear[slotNum] = itemData
 				end
 		end
 
 		self.Character.spec = self:CheckCharacterSpec(self.Character.class)
 		self.Character.talents = self:CreateTalentEntry()
-		self:CreateProfessionEntry() -- wotlk
+		if not IS_CLASSIC_ERA then
+			self:CreateGlyphEntry()
+		end
+		self:CreateProfessionEntry()
 		self.Character.gear.items = equippedGear
 		return self.Character
 	end
@@ -215,7 +239,9 @@ function WowSimsExporter:GetGearEnchantGems(withBags)
 			local itemLink = GetContainerItemLink(bag, slot)
 			if itemLink and considerItemReplacement(itemLink) then
 				local itemData = self:createItemFromItemLink(itemLink)
-				itemData.rune = getRuneSpellForItem(slot, bag)
+				if IS_CLASSIC_ERA_SOD then
+					itemData.rune = getRuneSpellForItem(slot, bag)
+				end
 				table.insert(bagGear, itemData)
 			end
 		end
