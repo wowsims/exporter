@@ -192,6 +192,14 @@ end
 -- Leave bagId nil to check equipped items.
 local function getRuneSpellForItem(slotId, bagId)
 	local runeData
+
+    -- After first login the whole engraving stuff may not be loaded yet!
+    -- GetNumRunesKnown will return 0 for maximum runes available in that case.
+    if select(2, C_Engraving.GetNumRunesKnown()) == 0 then
+        LoadAddOn("Blizzard_EngravingUI")
+        C_Engraving.RefreshRunesList()
+    end
+
 	if bagId == nil then
 		runeData = C_Engraving.GetRuneForEquipmentSlot(slotId)
 	else
