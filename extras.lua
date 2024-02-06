@@ -21,43 +21,6 @@ WowSimsExporter.supportedSims = {
     "deathknight",
 }
 
-WowSimsExporter.slotNames = {
-    "HeadSlot",
-    "NeckSlot",
-    "ShoulderSlot",
-    "BackSlot",
-    "ChestSlot",
-    "WristSlot",
-    "HandsSlot",
-    "WaistSlot",
-    "LegsSlot",
-    "FeetSlot",
-    "Finger0Slot",
-    "Finger1Slot",
-    "Trinket0Slot",
-    "Trinket1Slot",
-    "MainHandSlot",
-    "SecondaryHandSlot",
-    "RangedSlot",
-    "AmmoSlot",
-}
-
-WowSimsExporter.professionNames = {
-    [164] = "Blacksmithing",
-    [165] = "Leatherworking",
-    [171] = "Alchemy",
-    [182] = "Herbalism",
-    [186] = "Mining",
-    [197] = "Tailoring",
-    [202] = "Engineering",
-    [333] = "Enchanting",
-    [393] = "Skinning",
-    [755] = "Jewelcrafting",
-    [773] = "Inscription"
-}
-
-
-
 WowSimsExporter.prelink = "https://wowsims.github.io/classic/"
 WowSimsExporter.postlink = ""
 WowSimsExporter.specializations = {

@@ -5,23 +5,23 @@
 -- Update Date : 2024-02-04 coolmodi(FelixPflaum) v2.6 - Added rune exporting and split the addon for classic/wotlk
 -- Update Date : 2024-02-04 generalwrex (Natop on Old Blanchy) v2.6 - Minor fixes and version change
 
+local Env = select(2, ...)
+
 WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0")
 
-
 WowSimsExporter.Character = ""
-WowSimsExporter.Link = "https://wowsims.github.io/"
 
 local IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 local IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
 
+Env.IS_CLASSIC_ERA = IS_CLASSIC_ERA
+Env.IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA_SOD
+
 local AceGUI = LibStub("AceGUI-3.0")
 local LibParse = LibStub("LibParse")
 
-local version = "2.6"
-
--- Ulduar WotLK classic patch moved to the retail API.
-local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or _G.GetContainerNumSlots
-local GetContainerItemLink = C_Container and C_Container.GetContainerItemLink or _G.GetContainerItemLink
+-- Get from .toc file.
+local version = GetAddOnMetadata(select(1, ...), "Version")
 
 local defaults = {
     profile = {
@@ -42,10 +42,9 @@ local options = {
     },
 }
 
-
 function WowSimsExporter:CreateCharacterStructure(unit)
     local name, realm = UnitFullName(unit)
-    local locClass, engClass, locRace, engRace, gender, name, server = GetPlayerInfoByGUID(UnitGUID(unit))
+    local locClass, engClass, locRace, engRace, gender, name = GetPlayerInfoByGUID(UnitGUID(unit))
     local level = UnitLevel(unit)
 
     self.Character = {
@@ -56,86 +55,13 @@ function WowSimsExporter:CreateCharacterStructure(unit)
         level       = tonumber(level),
         talents     = "",
         professions = {},
-        spec        = self:CheckCharacterSpec(engClass:lower()),
-        gear        = { items = {} }
+        spec        = Env.CheckCharacterSpec(engClass:lower()),
+        gear        = Env.CreateEquipmentSpec()
     }
     if not IS_CLASSIC_ERA then
         self.Character.glyphs = { major = {}, minor = {} }
     end
     return self.Character
-end
-
-function WowSimsExporter:CreateGlyphEntry()
-    self.Character.glyphs = {}
-    local minor = {}
-    local major = {}
-    for t = 1, 6 do
-        local enabled, glyphType, glyphSpellID = GetGlyphSocketInfo(t)
-        if enabled and glyphSpellID then
-            local localizedName = GetSpellInfo(glyphSpellID)
-            if localizedName then
-                local t = glyphType == 1 and major or minor
-                table.insert(t, { ["name"] = localizedName, ["spellID"] = glyphSpellID })
-            end
-        end
-        self.Character.glyphs.major = major
-        self.Character.glyphs.minor = minor
-    end
-end
-
-function WowSimsExporter:CreateProfessionEntry()
-    local names = WowSimsExporter.professionNames
-    local names_inv = tInvert(names)
-    local professions = {}
-
-    for i = 1, GetNumSkillLines() do
-        local name, _, _, skillLevel = GetSkillLineInfo(i)
-        if names_inv[name] then
-            table.insert(professions, { name = name, level = skillLevel })
-        end
-    end
-    self.Character.professions = professions
-end
-
-function WowSimsExporter:CreateTalentEntry()
-    local talents = {}
-
-    local numTabs = GetNumTalentTabs()
-    for t = 1, numTabs do
-        local numTalents = GetNumTalents(t)
-        for i = 1, numTalents do
-            local nameTalent, icon, tier, column, currRank, maxRank = self:GetOrderedTalentInfo(t, i)
-
-            table.insert(talents, tostring(currRank))
-        end
-        if (t < 3) then
-            table.insert(talents, "-")
-        end
-    end
-
-    return table.concat(talents)
-end
-
-function WowSimsExporter:CheckCharacterSpec(class)
-    local specs = self.specializations
-
-    T1 = GetNumTalents(1)
-    T2 = GetNumTalents(2)
-    T3 = GetNumTalents(3)
-
-    local spec = ""
-
-    for i, character in ipairs(specs) do
-        if character then
-            if (character.class == class) then
-                if character.comparator(T1, T2, T3) then
-                    spec = character.spec
-                    break
-                end
-            end
-        end
-    end
-    return spec
 end
 
 function WowSimsExporter:OpenWindow(input)
@@ -149,113 +75,22 @@ function WowSimsExporter:OpenWindow(input)
     end
 end
 
-function WowSimsExporter:createItemFromItemLink(itemLink)
-    local Id, Enchant, Gem1, Gem2, Gem3, Gem4 = self:ParseItemLink(itemLink)
-    item = {}
-    item.id = tonumber(Id)
-    item.enchant = tonumber(Enchant)
-    if not IS_CLASSIC_ERA then
-        item.gems = { tonumber(Gem1), tonumber(Gem2), tonumber(Gem3), tonumber(Gem4) }
-    end
-    return item
-end
-
--- TODO(Riotdog-GehennasEU): Is this sufficient? This seems to be what simc uses:
--- https://github.com/simulationcraft/simc-addon/blob/master/core.lua
--- Except we don't need the artifact check for wotlk classic.
-function considerItemReplacement(itemLink)
-    if not IsEquippableItem(itemLink) then
-        return false
-    end
-
-    local _, _, itemRarity, itemLevel, _, _, _, _, invType = GetItemInfo(itemLink)
-
-    -- Ignore TBC items like Rocket Boots Xtreme (Lite). The ilvl limit is intentionally set low
-    -- to limit accidental filtering.
-    if itemLevel <= 112 then
-        return false
-    end
-
-    -- Ignore ammunition.
-    if invType and _G[invType] and _G[invType] == INVTYPE_AMMO then
-        return false
-    end
-
-    -- https://wowwiki-archive.fandom.com/wiki/API_TYPE_Quality
-    -- 3 = Rare, 4 = Epic, 5 = Legendary
-    return itemRarity == 3 or itemRarity == 4 or itemRarity == 5
-end
-
--- coolmodi(FelixPflaum) changes
--- Returns rune spell for an item, if item has a rune engraved.
--- Leave bagId nil to check equipped items.
-local function getRuneSpellForItem(slotId, bagId)
-    local runeData
-    if bagId == nil then
-        runeData = C_Engraving.GetRuneForEquipmentSlot(slotId)
-    else
-        runeData = C_Engraving.GetRuneForInventorySlot(bagId, slotId)
-    end
-
-    if runeData then
-        return runeData.learnedAbilitySpellIDs[1]
-    end
-end
-
 function WowSimsExporter:GetGearEnchantGems(withBags)
-    self.Character.gear = {}
-    self.Character.bagItems = {}
-    self.Character.items = nil
-
     if not withBags then
-        local equippedGear = {}
-        local slotNames = WowSimsExporter.slotNames
-        for slotNum = 1, #slotNames do
-            local slotId = GetInventorySlotInfo(slotNames[slotNum])
-            local itemLink = GetInventoryItemLink("player", slotId)
-            if itemLink then
-                local itemData = self:createItemFromItemLink(itemLink)
-                if IS_CLASSIC_ERA_SOD then
-                    itemData.rune = getRuneSpellForItem(slotId)
-                end
-                equippedGear[slotNum] = itemData
-            end
-        end
-
-        self.Character.spec = self:CheckCharacterSpec(self.Character.class)
-        self.Character.talents = self:CreateTalentEntry()
+        self.Character.gear:UpdateEquippedItems("player")
+        self.Character.spec = Env.CheckCharacterSpec(self.Character.class)
+        self.Character.talents = Env.CreateTalentString()
         if not IS_CLASSIC_ERA then
-            self:CreateGlyphEntry()
+            self.Character.glyphs = Env.CreateGlyphEntry()
         end
-        self:CreateProfessionEntry()
-        self.Character.gear.items = equippedGear
+        self.Character.professions = Env.CreateProfessionEntry()
         return self.Character
     end
 
-    local bagGear = {}
-    for bag = 0, 4 do
-        for slot = 1, GetContainerNumSlots(bag) do
-            local itemLink = GetContainerItemLink(bag, slot)
-            if itemLink and considerItemReplacement(itemLink) then
-                local itemData = self:createItemFromItemLink(itemLink)
-                if IS_CLASSIC_ERA_SOD then
-                    itemData.rune = getRuneSpellForItem(slot, bag)
-                end
-                table.insert(bagGear, itemData)
-            end
-        end
-    end
-    DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags."):format(#bagGear))
-    return { ["items"] = bagGear }
-end
-
-function WowSimsExporter:ParseItemLink(itemLink)
-    local _, _, Color, Ltype, Id, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix, Unique, LinkLvl, Name =
-        string.find(
-            itemLink,
-            "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?"
-        )
-    return Id, Enchant, Gem1, Gem2, Gem3, Gem4
+    local equipmentSpecBags = Env.CreateEquipmentSpec()
+    equipmentSpecBags:FillFromBagItems()
+    DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags."):format(#equipmentSpecBags.items))
+    return equipmentSpecBags
 end
 
 function WowSimsExporter:OnInitialize()
@@ -404,7 +239,7 @@ into the provided box and click "Import"
 
         local l = AceGUI:Create("Label")
         l:SetText("Your characters class is currently unsupported. The supported classes are currently;\n" ..
-        table.concat(self.supportedSims, "\n"))
+            table.concat(self.supportedSims, "\n"))
         --l:SetColor(255,0,0)
         l:SetFullWidth(true)
         frame:AddChild(l)
@@ -416,43 +251,6 @@ into the provided box and click "Import"
         frame:AddChild(extraButton)
         frame:AddChild(jsonbox)
     end
-end
-
--- Borrowed from rating buster!!
--- As of Classic Patch 3.4.0, GetTalentInfo indices no longer correlate
--- to their positions in the tree. Building a talent cache ordered by
--- tier then column allows us to replicate the previous behavior.
-local orderedTalentCache = {}
-do
-    local f = CreateFrame("Frame")
-    f:RegisterEvent("SPELLS_CHANGED")
-    f:SetScript("OnEvent", function()
-        local temp = {}
-        for tab = 1, GetNumTalentTabs() do
-            temp[tab] = {}
-            local products = {}
-            for i = 1, GetNumTalents(tab) do
-                local name, _, tier, column = GetTalentInfo(tab, i)
-                local product = (tier - 1) * 4 + column
-                temp[tab][product] = i
-                table.insert(products, product)
-            end
-
-            table.sort(products)
-
-            orderedTalentCache[tab] = {}
-            local j = 1
-            for _, product in ipairs(products) do
-                orderedTalentCache[tab][j] = temp[tab][product]
-                j = j + 1
-            end
-        end
-        f:UnregisterEvent("SPELLS_CHANGED")
-    end)
-end
-
-function WowSimsExporter:GetOrderedTalentInfo(tab, num)
-    return GetTalentInfo(tab, orderedTalentCache[tab][num])
 end
 
 function WowSimsExporter:OnEnable()

@@ -11,6 +11,18 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="ExportStructures/ItemSpec.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="ExportStructures/EquipmentSpec.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="ExportStructures/TalentString.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="ExportStructures/Misc.lua">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="WowSimsExporter-Vanilla.toc">
       <SubType>TableOfContents</SubType>
     </Content>
