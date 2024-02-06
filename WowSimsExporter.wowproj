@@ -20,9 +20,6 @@
     <Content Include="ExportStructures/EquipmentSpec.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="ExportStructures/TalentString.lua">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="ExportStructures/Misc.lua">
       <SubType>Code</SubType>
     </Content>
@@ -33,6 +30,15 @@
       <SubType>TableOfContents</SubType>
     </Content>
     <Content Include="extras.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Shared.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Conditional_Wrath.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Conditional_Vanilla.lua">
       <SubType>Code</SubType>
     </Content>
     <Content Include="WowSimsExporter-Wrath.toc">

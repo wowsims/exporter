@@ -64,24 +64,7 @@ end
 ---@param bagId integer|nil If not nil check bag items instead of equipped items.
 function ItemSpecMeta:SetRuneSpellFromSlot(slotId, bagId)
     if not self._structure.rune then return end
-
-    -- After first login the whole engraving stuff may not be loaded yet!
-    -- GetNumRunesKnown will return 0 for maximum runes available in that case.
-    if select(2, C_Engraving.GetNumRunesKnown()) == 0 then
-        LoadAddOn("Blizzard_EngravingUI")
-        C_Engraving.RefreshRunesList()
-    end
-
-    local runeData
-    if bagId == nil then
-        runeData = C_Engraving.GetRuneForEquipmentSlot(slotId)
-    else
-        runeData = C_Engraving.GetRuneForInventorySlot(bagId, slotId)
-    end
-
-    if runeData then
-        self.rune = runeData.learnedAbilitySpellIDs[1]
-    end
+    self.rune = Env.GetEngravedRuneSpell(slotId, bagId)
 end
 
 ---Create a new ItemSpec table.

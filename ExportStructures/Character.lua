@@ -1,4 +1,4 @@
--- A Character is the base table that gets exported and holds all neede data.
+-- A Character is the base table that gets exported and holds all needed data.
 
 local Env = select(2, ...)
 
@@ -18,7 +18,7 @@ local CharacterMeta = {
 }
 CharacterMeta.__index = CharacterMeta
 
----Prevent adding keys that are not definde in the metatable.
+---Prevent adding keys that are not defined in the metatable.
 ---@param self table
 ---@param key any The key that is being added.
 ---@param value any The value that is being added.
@@ -28,8 +28,7 @@ function CharacterMeta.__newindex(self, key, value)
 end
 
 ---Fill all data for unit.
--- TODO: This doesn't actually work for anything but "player"
----@param unit string Target unit. "player" or "target" for inspect (not implemented).
+---@param unit "player"|"target" Target unit. "target" would need to be inspect target.
 function CharacterMeta:SetUnit(unit)
     local name, realm = UnitFullName(unit)
     local _, englishClass, _, englishRace = GetPlayerInfoByGUID(UnitGUID(unit))
@@ -40,7 +39,7 @@ function CharacterMeta:SetUnit(unit)
     self.race = englishRace:gsub("Scourge", "Undead") -- hack? lol
     self.class = englishClass:lower()
     self.level = UnitLevel(unit)
-    self.spec = Env.CheckCharacterSpec(self.class)
+    self.spec = Env.GetSpec(unit)
 end
 
 ---Fill remaining data needed for export.

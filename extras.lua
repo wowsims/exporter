@@ -1,68 +1,45 @@
--- Author      : generalwrex (Natop on Myzrael)
--- Create Date : 2/6/2022 10:35:32 AM
-
-
--- Notes Below
-
--- How to check for blood tank or feral bear with this system?Check for certian talents? probally
-
 local Env = select(2, ...)
 
-if not WowSimsExporter then WowSimsExporter = {} end
+-- Borrowed from rating buster!!
+-- As of Classic Patch 3.4.0, GetTalentInfo indices no longer correlate
+-- to their positions in the tree. Building a talent cache ordered by
+-- tier then column allows us to replicate the previous behavior.
+local orderedTalentCache = {}
+do
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("SPELLS_CHANGED")
+    f:SetScript("OnEvent", function()
+        local temp = {}
+        for tab = 1, GetNumTalentTabs() do
+            temp[tab] = {}
+            local products = {}
+            for i = 1, GetNumTalents(tab) do
+                local name, _, tier, column = GetTalentInfo(tab, i)
+                local product = (tier - 1) * 4 + column
+                temp[tab][product] = i
+                table.insert(products, product)
+            end
 
-WowSimsExporter.supportedSims = {
-    "hunter",
-    "mage",
-    "shaman",
-    "priest",
-    "rogue",
-    "druid",
-    "warrior",
-    "warlock",
-    "paladin",
-    "deathknight",
-}
+            table.sort(products)
 
-Env.supportedClasses = WowSimsExporter.supportedSims
+            orderedTalentCache[tab] = {}
+            local j = 1
+            for _, product in ipairs(products) do
+                orderedTalentCache[tab][j] = temp[tab][product]
+                j = j + 1
+            end
+        end
+        f:UnregisterEvent("SPELLS_CHANGED")
+    end)
+end
 
-WowSimsExporter.prelink = "https://wowsims.github.io/classic/"
-WowSimsExporter.postlink = ""
-WowSimsExporter.specializations = {
-
-    -- shaman
-    { comparator = function(A, B, C) return A > B and A > C end, spec = "elemental", class = "shaman", url = "elemental_shaman" },
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "enhancement", class = "shaman", url = "enhancement_shaman" },
-    -- hunter
-    { comparator = function(A, B, C) return A > B and A > C end, spec = "beast_mastery", class = "hunter", url = "hunter" },
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "marksman",  class = "hunter", url = "hunter" },
-    { comparator = function(A, B, C) return C > A and C > B end, spec = "survival",  class = "hunter", url = "hunter" },
-    -- druid
-    { comparator = function(A, B, C) return A > B and A > C end, spec = "balance",   class = "druid", url = "balance_druid" },
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "feral",     class = "druid", url = "feral_druid" },
-    --{comparator = function(A,B,C) return B > A and B > C end, spec="feral_bear", class="druid",url="feral_tank_druid"},	
-    -- warlock
-
-    { comparator = function(A, B, C) return A > A and B > C end, spec = "affliction", class = "warlock", url = "warlock" },
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "demonology", class = "warlock", url = "warlock" },
-    { comparator = function(A, B, C) return C > A and C > B end, spec = "destruction", class = "warlock", url = "warlock" },
-    -- rogue
-    { comparator = function(A, B, C) return A > B and A > C end, spec = "assassination", class = "rogue", url = "rogue" },
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "combat",    class = "rogue", url = "rogue" },
-    { comparator = function(A, B, C) return C > A and C > B end, spec = "subtlety",  class = "rogue", url = "rogue" },
-    -- mage
-    { comparator = function(A, B, C) return A > B and A > C end, spec = "arcane",    class = "mage",  url = "mage" },
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "fire",      class = "mage",  url = "mage" },
-    { comparator = function(A, B, C) return C > A and C > B end, spec = "frost",     class = "mage",  url = "mage" },
-    -- warrior
-    { comparator = function(A, B, C) return A > B and A > C end, spec = "arms",      class = "warrior", url = "warrior" },
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "fury",      class = "warrior", url = "warrior" },
-    { comparator = function(A, B, C) return C > A and C > B end, spec = "protection", class = "warrior", url = "protection_warrior" },
-    -- paladin
-    { comparator = function(A, B, C) return B > A and B > C end, spec = "protection", class = "paladin", url = "retribution_paladin" },
-    { comparator = function(A, B, C) return C > A and C > B end, spec = "retribution", class = "paladin", url = "protection_paladin" },
-    -- priest
-    { comparator = function(A, B, C) return C > A and C > B end, spec = "shadow",    class = "priest", url = "shadow_priest" },
-}
+---Get current talent rank, treating talents sequentially ordered.
+---@param tab integer The tree numer. 1-3
+---@param num integer The talent index, counted from left to right, line by line.
+---@return integer currentRank
+function Env.GetTalentRankOrdered(tab, num)
+    return select(5, GetTalentInfo(tab, orderedTalentCache[tab][num]))
+end
 
 -- table extension contains
 function table.contains(table, element)

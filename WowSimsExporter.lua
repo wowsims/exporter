@@ -5,14 +5,7 @@
 -- Update Date : 2024-02-04 coolmodi(FelixPflaum) v2.6 - Added rune exporting and split the addon for classic/wotlk
 -- Update Date : 2024-02-04 generalwrex (Natop on Old Blanchy) v2.6 - Minor fixes and version change
 
-local Env = select(2, ...)
-
-local IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-local IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
-
-Env.IS_CLASSIC_ERA = IS_CLASSIC_ERA
-Env.IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA_SOD
-Env.VERSION = GetAddOnMetadata(select(1, ...), "Version")
+local addonName, Env = ...
 
 local LibParse = LibStub("LibParse")
 
@@ -23,7 +16,7 @@ local defaults = {
 }
 
 local options = {
-    name = "WowSimsExporter",
+    name = addonName,
     handler = WowSimsExporter,
     type = "group",
     args = {
@@ -50,7 +43,12 @@ function WowSimsExporter:OnInitialize()
     self:RegisterChatCommand("wowsimsexporter", "OpenWindow")
     self:RegisterChatCommand("wsexporter", "OpenWindow")
 
-    self:Print("WowSimsExporter v" .. Env.VERSION .. " Initialized. use /wse For Window.")
+    self:Print(addonName .. " v" .. Env.VERSION .. " Initialized. use /wse For Window.")
+
+    if not Env.IS_CLIENT_SUPPORTED then
+        self:Print("WARNING: Sim does not support your game version! Supported versions are:\n" ..
+            table.concat(Env.supportedClientNames, "\n"))
+    end
 end
 
 function WowSimsExporter:OpenWindow(input)
@@ -77,25 +75,11 @@ local function GenerateOutputBags()
     return LibParse:JSONEncode(equipmentSpecBags)
 end
 
-local function GetLinkToSim(character, classIsSupported)
-    if not classIsSupported then return end
-
-    local spec  = character.spec
-    local class = character.class
-    local specs = WowSimsExporter.specializations
-
-    for i, char in ipairs(specs) do
-        if char and char.class == class and char.spec == spec then
-            return WowSimsExporter.prelink .. (char.url) .. WowSimsExporter.postlink
-        end
-    end
-end
-
 function WowSimsExporter:CreateWindow(generate)
     local character = Env.CreateCharacter()
     character:SetUnit("player")
     local classIsSupported = table.contains(Env.supportedClasses, character.class)
-    local linkToSim = GetLinkToSim(character)
+    local linkToSim = Env.prelink .. select(2, Env.GetSpec("player"))
 
     Env.UI:CreateMainWindow(classIsSupported, linkToSim)
     if not classIsSupported then return end
