@@ -6,6 +6,8 @@
 
 -- How to check for blood tank or feral bear with this system?Check for certian talents? probally
 
+local Env = select(2, ...)
+
 if not WowSimsExporter then WowSimsExporter = {} end
 
 WowSimsExporter.supportedSims = {
@@ -20,6 +22,8 @@ WowSimsExporter.supportedSims = {
     "paladin",
     "deathknight",
 }
+
+Env.supportedClasses = WowSimsExporter.supportedSims
 
 WowSimsExporter.prelink = "https://wowsims.github.io/classic/"
 WowSimsExporter.postlink = ""

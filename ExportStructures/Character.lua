@@ -11,12 +11,21 @@ local CharacterMeta = {
     class       = "",
     level       = 0,
     talents     = "",
-    professions = nil,
+    professions = {},
     spec        = "",
-    gear        = nil,
-    glyphs      = nil
+    gear        = {},
+    glyphs      = {},
 }
 CharacterMeta.__index = CharacterMeta
+
+---Prevent adding keys that are not definde in the metatable.
+---@param self table
+---@param key any The key that is being added.
+---@param value any The value that is being added.
+function CharacterMeta.__newindex(self, key, value)
+    assert(self[key], "Tried to add invalid key to Character!")
+    rawset(self, key, value)
+end
 
 ---Fill all data for unit.
 -- TODO: This doesn't actually work for anything but "player"

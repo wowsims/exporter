@@ -44,7 +44,7 @@ function ItemSpecMeta.__newindex(self, key, value)
     rawset(self, key, value)
 end
 
----Fill values from and item link.
+---Fill values from an item link.
 ---@param itemLink string See https://wowpedia.fandom.com/wiki/ItemLink
 function ItemSpecMeta:FillFromItemLink(itemLink)
     local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId = strsplit(":", itemLink)
@@ -59,7 +59,7 @@ function ItemSpecMeta:FillFromItemLink(itemLink)
     end
 end
 
----Set rune spell for from an item in a slot, if item has a rune engraved.
+---Set rune spell from an item in a slot, if item has a rune engraved.
 ---@param slotId integer
 ---@param bagId integer|nil If not nil check bag items instead of equipped items.
 function ItemSpecMeta:SetRuneSpellFromSlot(slotId, bagId)
