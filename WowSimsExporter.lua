@@ -17,7 +17,7 @@ local IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
 local AceGUI = LibStub("AceGUI-3.0")
 local LibParse = LibStub("LibParse")
 
-local version = "2.6"
+local version = "2.7"
 
 -- Ulduar WotLK classic patch moved to the retail API.
 local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or _G.GetContainerNumSlots
