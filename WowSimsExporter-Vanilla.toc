@@ -21,5 +21,6 @@ ExportStructures/ItemSpec.lua
 ExportStructures/EquipmentSpec.lua
 ExportStructures/TalentString.lua
 ExportStructures/Misc.lua
+ExportStructures/Character.lua
 WowSimsExporter.lua
 extras.lua

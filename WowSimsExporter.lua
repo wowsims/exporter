@@ -9,7 +9,7 @@ local Env = select(2, ...)
 
 WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0")
 
-WowSimsExporter.Character = ""
+WowSimsExporter.Character = Env.CreateCharacter()
 
 local IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 local IS_CLASSIC_ERA_SOD = IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
@@ -42,28 +42,6 @@ local options = {
     },
 }
 
-function WowSimsExporter:CreateCharacterStructure(unit)
-    local name, realm = UnitFullName(unit)
-    local locClass, engClass, locRace, engRace, gender, name = GetPlayerInfoByGUID(UnitGUID(unit))
-    local level = UnitLevel(unit)
-
-    self.Character = {
-        name        = name,
-        realm       = realm,
-        race        = engRace:gsub("Scourge", "Undead"), -- hack? lol
-        class       = engClass:lower(),
-        level       = tonumber(level),
-        talents     = "",
-        professions = {},
-        spec        = Env.CheckCharacterSpec(engClass:lower()),
-        gear        = Env.CreateEquipmentSpec()
-    }
-    if not IS_CLASSIC_ERA then
-        self.Character.glyphs = { major = {}, minor = {} }
-    end
-    return self.Character
-end
-
 function WowSimsExporter:OpenWindow(input)
     if not input or input:trim() == "" then
         self:CreateWindow()
@@ -73,24 +51,6 @@ function WowSimsExporter:OpenWindow(input)
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
     end
-end
-
-function WowSimsExporter:GetGearEnchantGems(withBags)
-    if not withBags then
-        self.Character.gear:UpdateEquippedItems("player")
-        self.Character.spec = Env.CheckCharacterSpec(self.Character.class)
-        self.Character.talents = Env.CreateTalentString()
-        if not IS_CLASSIC_ERA then
-            self.Character.glyphs = Env.CreateGlyphEntry()
-        end
-        self.Character.professions = Env.CreateProfessionEntry()
-        return self.Character
-    end
-
-    local equipmentSpecBags = Env.CreateEquipmentSpec()
-    equipmentSpecBags:FillFromBagItems()
-    DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags."):format(#equipmentSpecBags.items))
-    return equipmentSpecBags
 end
 
 function WowSimsExporter:OnInitialize()
@@ -160,7 +120,7 @@ function WowSimsExporter:CreateCopyDialog(text)
 end
 
 function WowSimsExporter:CreateWindow(generate)
-    local char = self:CreateCharacterStructure("player")
+    WowSimsExporter.Character:SetUnit("player")
 
     local frame = AceGUI:Create("Frame")
     frame:SetCallback(
@@ -183,11 +143,14 @@ function WowSimsExporter:CreateWindow(generate)
     local function l_Generate(withBags)
         jsonbox:SetText('')
         if not withBags then
-            WowSimsExporter.Character = WowSimsExporter:GetGearEnchantGems(withBags)
+            WowSimsExporter.Character:FillForExport()
             jsonbox:SetText(LibParse:JSONEncode(WowSimsExporter.Character))
         else
-            local bagData = WowSimsExporter:GetGearEnchantGems(withBags)
-            jsonbox:SetText(LibParse:JSONEncode(bagData))
+            local equipmentSpecBags = Env.CreateEquipmentSpec()
+            equipmentSpecBags:FillFromBagItems()
+            DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags."):format(#
+                equipmentSpecBags.items))
+            jsonbox:SetText(LibParse:JSONEncode(equipmentSpecBags))
         end
         jsonbox:HighlightText()
         jsonbox:SetFocus()
@@ -227,7 +190,7 @@ into the provided box and click "Import"
 
 ]])
 
-    if not table.contains(self.supportedSims, char.class) then
+    if not table.contains(self.supportedSims, self.Character.class) then
         frame:AddChild(icon)
 
         local l1 = AceGUI:Create("Heading")
@@ -246,7 +209,7 @@ into the provided box and click "Import"
     else
         frame:AddChild(icon)
         frame:AddChild(label)
-        WowSimsExporter:BuildLinks(frame, char)
+        WowSimsExporter:BuildLinks(frame, self.Character)
         frame:AddChild(button)
         frame:AddChild(extraButton)
         frame:AddChild(jsonbox)

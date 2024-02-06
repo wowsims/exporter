@@ -12,7 +12,7 @@ function Env.CreateGlyphEntry()
         local enabled, glyphType, glyphSpellID = GetGlyphSocketInfo(t)
         if enabled and glyphSpellID then
             local glyphtable = glyphType == 1 and glyphs.major or glyphs.minor
-            table.insert(glyphtable, { ["spellID"] = glyphSpellID })
+            table.insert(glyphtable, { spellID = glyphSpellID })
         end
     end
 

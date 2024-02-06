@@ -23,6 +23,9 @@
     <Content Include="ExportStructures/Misc.lua">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="ExportStructures/Character.lua">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="WowSimsExporter-Vanilla.toc">
       <SubType>TableOfContents</SubType>
     </Content>
