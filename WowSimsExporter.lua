@@ -139,6 +139,31 @@ function WowSimsExporter:CheckCharacterSpec(class)
 	return spec
 end
 
+function WowSimsExporter:CreateEquipmentSetDataEntry()
+	if(C_EquipmentSet.CanUseEquipmentSets()) then
+
+		local sets = {}
+		local numSets = C_EquipmentSet.GetNumEquipmentSets()
+
+		for t = 1, numSets do
+			local set = {}
+
+			local equipmentSetID = C_EquipmentSet.GetEquipmentSetIDs()[t]
+			local name, iconFileID, setID, isEquipped, numItems, numEquipped, numInInventory, numLost, numIgnored = C_EquipmentSet.GetEquipmentSetInfo(equipmentSetID)
+			local itemIDs = C_EquipmentSet.GetItemIDs(setID)
+
+			set.name = name
+			set.itemcount = numItems
+			set.items = itemIDs
+			table.insert(sets, set)		
+		end		
+		DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d itemSets from Equipment Manager."):format(numSets))
+		return sets;
+    else	
+		DEFAULT_CHAT_FRAME:AddMessage("[|cffFFFF00WowSimsExporter|r] Equipment Manager is disabled in Options! Please enable it!")
+    end
+end
+
 function WowSimsExporter:OpenWindow(input)
     if not input or input:trim() == "" then
 		self:CreateWindow()
@@ -363,14 +388,18 @@ function WowSimsExporter:CreateWindow(generate)
     jsonbox:SetFullHeight(true)
     jsonbox:DisableButton(true)
    
-	local function l_Generate(withBags)
+	-- options 1 = default, 2 = withBags, 3 = itemsets
+	local function l_Generate(options)
 		jsonbox:SetText('')
-		if not withBags then
-			WowSimsExporter.Character = WowSimsExporter:GetGearEnchantGems(withBags)
+		if options == 1 then
+			WowSimsExporter.Character = WowSimsExporter:GetGearEnchantGems(false)
 			jsonbox:SetText(LibParse:JSONEncode(WowSimsExporter.Character))
-		else
-			local bagData = WowSimsExporter:GetGearEnchantGems(withBags)
+		elseif options == 2 then
+			local bagData = WowSimsExporter:GetGearEnchantGems(true)
 			jsonbox:SetText(LibParse:JSONEncode(bagData))
+		elseif options == 3 then
+			local itemSets = WowSimsExporter:CreateEquipmentSetDataEntry()
+			jsonbox:SetText(LibParse:JSONEncode(itemSets))
 		end
 		jsonbox:HighlightText()
 		jsonbox:SetFocus()
@@ -380,18 +409,25 @@ function WowSimsExporter:CreateWindow(generate)
 
 	if generate then l_Generate() end
 
-  local button = AceGUI:Create("Button")
+    local button = AceGUI:Create("Button")
     button:SetText("Generate Data (Equipped Only)")
     button:SetWidth(300)
 	button:SetCallback("OnClick", function()		
-		l_Generate(false)
+		l_Generate(1)
 	end)
 
 	local extraButton = AceGUI:Create("Button")
 	extraButton:SetText("Batch: Export Bag Items")
 	extraButton:SetWidth(300)
 	extraButton:SetCallback("OnClick", function()		
-		l_Generate(true)
+		l_Generate(2)
+	end)
+
+	local extraButton2 = AceGUI:Create("Button")
+	extraButton2:SetText("Batch: Export Item Sets")
+	extraButton2:SetWidth(300)
+	extraButton2:SetCallback("OnClick", function()		
+		l_Generate(3)
 	end)
 	
 	local icon = AceGUI:Create("Icon")
@@ -399,9 +435,9 @@ function WowSimsExporter:CreateWindow(generate)
 	icon:SetImageSize(32, 32)
 	icon:SetFullWidth(true)
 
-  local label = AceGUI:Create("Label")
+    local label = AceGUI:Create("Label")
 	label:SetFullWidth(true)
-  label:SetText([[
+    label:SetText([[
 
 To upload your character to the simuator, click on the url below that leads to the simuator website.
 
@@ -416,14 +452,12 @@ into the provided box and click "Import"
 
 		local l1 = AceGUI:Create("Heading")
 		l1:SetText("")
-		--l1:SetColor(255,0,0)
 		l1:SetFullWidth(true)
 		frame:AddChild(l1)
 
 
 		local l = AceGUI:Create("Label")
 		l:SetText("Your characters class is currently unsupported. The supported classes are currently;\n"..table.concat(self.supportedSims,"\n"))
-		--l:SetColor(255,0,0)
 		l:SetFullWidth(true)
 		frame:AddChild(l)
 	else
@@ -433,10 +467,13 @@ into the provided box and click "Import"
 		WowSimsExporter:BuildLinks(frame, char)
 		frame:AddChild(button)
 		frame:AddChild(extraButton)
+		frame:AddChild(extraButton2)
 		frame:AddChild(jsonbox)
 
 	end
 
+	_G["WowSimsExporter_Frame"] = frame.frame
+	tinsert(UISpecialFrames, "WowSimsExporter_Frame")
 end
 -- Borrowed from rating buster!!
 -- As of Classic Patch 3.4.0, GetTalentInfo indices no longer correlate
@@ -474,8 +511,6 @@ end
 function WowSimsExporter:GetOrderedTalentInfo(tab, num)
 	return GetTalentInfo(tab, orderedTalentCache[tab][num])
 end
-
-
 
 function WowSimsExporter:OnEnable()
 end
