@@ -2,7 +2,7 @@
 ## Version: 2.7
 ## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
 ## Interface: 11500
-## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/classic/ for simulations.
+## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/sod/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
 
@@ -17,6 +17,12 @@ Libs\AceConsole-3.0\AceConsole-3.0.xml
 Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 
-
-WowSimsExporter.lua
 extras.lua
+Shared.lua
+Conditional_Vanilla.lua
+ExportStructures/ItemSpec.lua
+ExportStructures/EquipmentSpec.lua
+ExportStructures/Misc.lua
+ExportStructures/Character.lua
+UI.lua
+WowSimsExporter.lua

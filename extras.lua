@@ -1,108 +1,64 @@
--- Author      : generalwrex (Natop on Myzrael)
--- Create Date : 2/6/2022 10:35:32 AM
+local Env = select(2, ...)
 
+-- Borrowed from rating buster!!
+-- As of Classic Patch 3.4.0, GetTalentInfo indices no longer correlate
+-- to their positions in the tree. Building a talent cache ordered by
+-- tier then column allows us to replicate the previous behavior.
+local orderedTalentCache = {}
+do
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("SPELLS_CHANGED")
+    f:SetScript("OnEvent", function()
+        local temp = {}
+        for tab = 1, GetNumTalentTabs() do
+            temp[tab] = {}
+            local products = {}
+            for i = 1, GetNumTalents(tab) do
+                local name, _, tier, column = GetTalentInfo(tab, i)
+                local product = (tier - 1) * 4 + column
+                temp[tab][product] = i
+                table.insert(products, product)
+            end
 
--- Notes Below
+            table.sort(products)
 
--- How to check for blood tank or feral bear with this system?Check for certian talents? probally
+            orderedTalentCache[tab] = {}
+            local j = 1
+            for _, product in ipairs(products) do
+                orderedTalentCache[tab][j] = temp[tab][product]
+                j = j + 1
+            end
+        end
+        f:UnregisterEvent("SPELLS_CHANGED")
+    end)
+end
 
-if not WowSimsExporter then WowSimsExporter = {} end
-
-WowSimsExporter.supportedSims = {
-"hunter",
-"mage",
-"shaman",
-"priest",
-"rogue",
-"druid",
-"warrior",
-"warlock",
-"paladin",
-"deathknight",
-}
-
-WowSimsExporter.slotNames = {
-    "HeadSlot",
-    "NeckSlot",
-    "ShoulderSlot",
-    "BackSlot",
-    "ChestSlot",
-    "WristSlot",
-    "HandsSlot",
-    "WaistSlot",
-    "LegsSlot",
-    "FeetSlot",
-    "Finger0Slot",
-    "Finger1Slot",
-    "Trinket0Slot",
-    "Trinket1Slot",
-    "MainHandSlot",
-    "SecondaryHandSlot",
-	"RangedSlot",
-    "AmmoSlot",
-}
-
-WowSimsExporter.professionNames = {
-	[164] = "Blacksmithing",
-	[165] = "Leatherworking",
-	[171] = "Alchemy",
-	[182] = "Herbalism",
-	[186] = "Mining",
-	[197] = "Tailoring",
-	[202] = "Engineering",
-	[333] = "Enchanting",
-	[393] = "Skinning",
-	[755] = "Jewelcrafting",
-	[773] = "Inscription"
-}
-
-
-
-WowSimsExporter.prelink = "https://wowsims.github.io/classic/"
-WowSimsExporter.postlink = ""
-WowSimsExporter.specializations = {
-
-	-- shaman
-	{comparator = function(A,B,C) return A > B and A > C end, spec="elemental", class="shaman", url="elemental_shaman"},
-	{comparator = function(A,B,C) return B > A and B > C end, spec="enhancement", class="shaman",url="enhancement_shaman"},
-	-- hunter
-	{comparator = function(A,B,C) return A > B and A > C end, spec="beast_mastery", class="hunter",url="hunter"},
-	{comparator = function(A,B,C) return B > A and B > C end, spec="marksman", class="hunter",url="hunter"},
-	{comparator = function(A,B,C) return C > A and C > B end, spec="survival", class="hunter",url="hunter"},
-	-- druid
-	{comparator = function(A,B,C) return A > B and A > C end, spec="balance", class="druid",url="balance_druid"},
-	{comparator = function(A,B,C) return B > A and B > C end, spec="feral", class="druid",url="feral_druid"},
-	--{comparator = function(A,B,C) return B > A and B > C end, spec="feral_bear", class="druid",url="feral_tank_druid"},	
-	-- warlock
-
-	{comparator = function(A,B,C) return A > A and B > C end, spec="affliction", class="warlock", url="warlock"},	
-	{comparator = function(A,B,C) return B > A and B > C end, spec="demonology", class="warlock", url="warlock"},	
-	{comparator = function(A,B,C) return C > A and C > B end, spec="destruction",class="warlock", url="warlock"},
-	-- rogue
-	{comparator = function(A,B,C) return A > B and A > C end, spec="assassination", class="rogue", url="rogue"},
-	{comparator = function(A,B,C) return B > A and B > C end, spec="combat", class="rogue", url="rogue"},
-	{comparator = function(A,B,C) return C > A and C > B end, spec="subtlety", class="rogue", url="rogue"},
-	-- mage
-	{comparator = function(A,B,C) return A > B and A > C end, spec="arcane", class="mage", url="mage"},
-	{comparator = function(A,B,C) return B > A and B > C end, spec="fire", class="mage", url="mage"},
-	{comparator = function(A,B,C) return C > A and C > B end, spec="frost", class="mage", url="mage"},
-	-- warrior
-	{comparator = function(A,B,C) return A > B and A > C end, spec="arms", class="warrior", url="warrior"},
-	{comparator = function(A,B,C) return B > A and B > C end, spec="fury", class="warrior", url="warrior"},
-	{comparator = function(A,B,C) return C > A and C > B end, spec="protection",class="warrior", url="protection_warrior"},
-	-- paladin
-	{comparator = function(A,B,C) return B > A and B > C end, spec="protection", class="paladin", url="retribution_paladin"},	
-	{comparator = function(A,B,C) return C > A and C > B end, spec="retribution",class="paladin", url="protection_paladin"},
-	-- priest
-	{comparator = function(A,B,C) return C > A and C > B end, spec="shadow", class="priest", url="shadow_priest"},
-}
+---Get current talent rank, treating talents sequentially ordered.
+---@param tab integer The tree numer. 1-3
+---@param num integer The talent index, counted from left to right, line by line.
+---@return integer currentRank
+function Env.GetTalentRankOrdered(tab, num)
+    return select(5, GetTalentInfo(tab, orderedTalentCache[tab][num]))
+end
 
 -- table extension contains
 function table.contains(table, element)
-  for _, value in pairs(table) do
-    if value == element then
-      return true
+    for _, value in pairs(table) do
+        if value == element then
+            return true
+        end
     end
-  end
-  return false
+    return false
+end
+
+---Return the index of the biggest value in a numerically keyed table of numbers.
+---@param table number[]
+function Env.TableMaxValIndex(table)
+    local idxMax = 1
+    for i = 2, #table do
+        if table[i] > table[idxMax] then
+            idxMax = i
+        end
+    end
+    return idxMax
 end
