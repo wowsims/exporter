@@ -92,6 +92,14 @@ function Env.StatBiggerThanStat(stat1, stat2)
     return select(2, UnitStat("player", statId1)) > select(2, UnitStat("player", statId2))
 end
 
+-- Some runes learn multiple spells, i.e. the learnedAbilitySpellIDs array of the
+-- rune data returned by C_Engraving.GetRuneForEquipmentSlot and C_Engraving.GetRuneForInventorySlot
+-- has multiple entries. The sim uses one of those Ids to indentify runes.
+-- Map the first spell Id to the expected spell Id for runes that do not have it at position 1.
+local runeSpellRemap = {
+    [407993] = 407995, -- Mangle: The bear version is expected.
+}
+
 ---Get rune spell from an item in a slot, if item has a rune engraved.
 ---@param slotId integer
 ---@param bagId integer|nil If not nil check bag items instead of equipped items.
@@ -112,7 +120,11 @@ function Env.GetEngravedRuneSpell(slotId, bagId)
     end
 
     if runeData then
-        return runeData.learnedAbilitySpellIDs[1]
+        local firstSpellId = runeData.learnedAbilitySpellIDs[1]
+        if runeSpellRemap[firstSpellId] then
+            return runeSpellRemap[firstSpellId]
+        end
+        return firstSpellId
     end
 end
 
