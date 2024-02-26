@@ -6,8 +6,8 @@ Env.prelink = "https://wowsims.github.io/sod/"
 Env.supportedClasses = {
     "hunter",
     -- "mage",
-    -- "shaman",
-    -- "priest",
+    "shaman",
+    "priest",
     -- "rogue",
     "druid",
     "warrior",
@@ -17,8 +17,8 @@ Env.supportedClasses = {
 
 local TblMaxValIdx = Env.TableMaxValIndex
 
---Env.AddSpec("shaman", "elemental", "elemental_shaman", function(t) return TblMaxValIdx(t) == 1 end)
---Env.AddSpec("shaman", "enhancement", "enhancement_shaman", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("shaman", "elemental", "elemental_shaman", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("shaman", "enhancement", "enhancement_shaman", function(t) return TblMaxValIdx(t) == 2 end)
 
 Env.AddSpec("hunter", "beast_mastery", "hunter", function(t) return TblMaxValIdx(t) == 1 end)
 Env.AddSpec("hunter", "marksman", "hunter", function(t) return TblMaxValIdx(t) == 2 end)
@@ -55,10 +55,8 @@ Env.AddSpec("mage", "frost", "mage", function(t) return TblMaxValIdx(t) == 3 end
 
 Env.AddSpec("warrior", "arms", "warrior", function(t) return TblMaxValIdx(t) == 1 end)
 Env.AddSpec("warrior", "fury", "warrior", function(t) return TblMaxValIdx(t) == 2 end)
---Env.AddSpec("warrior", "protection", "protection_warrior", function(t) return TblMaxValIdx(t) == 3 end)
 
 --Env.AddSpec("paladin", "protection", "retribution_paladin", function(t) return TblMaxValIdx(t) == 2 end)
 --Env.AddSpec("paladin", "retribution", "protection_paladin", function(t) return TblMaxValIdx(t) == 3 end)
 
---Env.AddSpec("priest", "shadow", "shadow_priest", function(t) return TblMaxValIdx(t) == 3 end)
---Env.AddSpec("priest", "holy_disc", "healing_priest", function(t) return TblMaxValIdx(t) < 3 end)
+Env.AddSpec("priest", "shadow", "shadow_priest", function(t) return true end)
