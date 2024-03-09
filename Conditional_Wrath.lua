@@ -55,8 +55,8 @@ Env.AddSpec("warrior", "arms", "warrior", function(t) return TblMaxValIdx(t) == 
 Env.AddSpec("warrior", "fury", "warrior", function(t) return TblMaxValIdx(t) == 2 end)
 Env.AddSpec("warrior", "protection", "protection_warrior", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("paladin", "protection", "retribution_paladin", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("paladin", "retribution", "protection_paladin", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("paladin", "protection", "protection_paladin", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("paladin", "retribution", "retribution_paladin", function(t) return TblMaxValIdx(t) == 3 end)
 
 Env.AddSpec("priest", "shadow", "shadow_priest", function(t) return TblMaxValIdx(t) == 3 end)
 Env.AddSpec("priest", "holy_disc", "healing_priest", function(t) return TblMaxValIdx(t) < 3 end)
