@@ -14,17 +14,17 @@ function Env.CreateGlyphEntry()
         for t = 1, numGlyphSockets do
             local enabled, glyphType, glyphSpellID = GetGlyphSocketInfo(t)
             if enabled and glyphSpellID then
-                local glyphTypeName = glyphType == 1 and "major" or "minor"
-                table.insert(glyphs[glyphTypeName], { spellID = glyphSpellID })
+                local glyphtable = glyphType == 1 and glyphs.major or glyphs.minor
+                table.insert(glyphtable, { spellID = glyphSpellID })
             end
         end
         return glyphs
     elseif (Env.IS_CLASSIC_CATA) then
         for t = 1, numGlyphSockets do
-            local enabled, glyphType, glyphTooltipIndex, glyphID = GetGlyphSocketInfo(t)
+            local enabled, glyphType, , glyphID, glyphSpellID = GetGlyphSocketInfo(t)
             if enabled and glyphType and glyphID then
-                local glyphTypeName = glyphType == 1 and glyphs.prime or glyphType == 2 and glyphs.major or glyphs.minor
-                table.insert(glyphTypeName, { itemID = glyphID })
+                local glyphtable = glyphType == 1 and glyphs.prime or glyphType == 2 and glyphs.major or glyphs.minor
+                table.insert(glyphtable, { itemID = glyphID, spellID = glyphSpellID })
             end
         end
     end
