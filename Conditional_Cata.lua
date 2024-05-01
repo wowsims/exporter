@@ -1,7 +1,7 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_CATA then return end
 
-Env.prelink = "https://wowsims.github.io/wotlk/"
+Env.prelink = "https://wowsims.github.io/cata/"
 
 Env.supportedClasses = {
     "hunter",
@@ -32,11 +32,11 @@ Env.AddSpec("hunter", "survival", "hunter", function(t) return TblMaxValIdx(t) =
 Env.AddSpec("druid", "balance", "balance_druid", function(t) return TblMaxValIdx(t) == 1 end)
 Env.AddSpec("druid", "feral", "feral_druid", function(t)
     return TblMaxValIdx(t) == 2
-        and Env.GetTalentRankOrdered(2, 22) < 3 -- https://www.wowhead.com/wotlk/spell=57873/protector-of-the-pack
+        and Env.GetTalentRankOrdered(2, 1) < 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
 end)
 Env.AddSpec("druid", "feral_bear", "feral_tank_druid", function(t)
     return TblMaxValIdx(t) == 2
-        and Env.GetTalentRankOrdered(2, 22) == 3 -- https://www.wowhead.com/wotlk/spell=57873/protector-of-the-pack
+        and Env.GetTalentRankOrdered(2, 1) == 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
 end)
 
 Env.AddSpec("warlock", "affliction", "warlock", function(t) return TblMaxValIdx(t) == 1 end)
@@ -61,24 +61,6 @@ Env.AddSpec("paladin", "retribution", "retribution_paladin", function(t) return 
 Env.AddSpec("priest", "shadow", "shadow_priest", function(t) return TblMaxValIdx(t) == 3 end)
 Env.AddSpec("priest", "holy_disc", "healing_priest", function(t) return TblMaxValIdx(t) < 3 end)
 
-local function HasDkTankTanlents()
-    -- I guess every tank will have at least a sum of those?
-    local anticipation = Env.GetTalentRankOrdered(3, 3) -- https://www.wowhead.com/wotlk/spell=55129/anticipation
-    local bladeBarrier = Env.GetTalentRankOrdered(1, 3) -- https://www.wowhead.com/wotlk/spell=55226/blade-barrier
-    return anticipation + bladeBarrier > 5
-end
-Env.AddSpec("deathknight", "blood", "deathknight", function(t)
-    return not HasDkTankTanlents()
-        and TblMaxValIdx(t) == 1
-end)
-Env.AddSpec("deathknight", "frost", "deathknight", function(t)
-    return not HasDkTankTanlents()
-        and TblMaxValIdx(t) == 2
-end)
-Env.AddSpec("deathknight", "unholy", "deathknight", function(t)
-    return not HasDkTankTanlents()
-        and TblMaxValIdx(t) == 3
-end)
-Env.AddSpec("deathknight", "blood", "tank_deathknight", function(t)
-    return HasDkTankTanlents()
-end)
+Env.AddSpec("deathknight", "blood", "deathknight", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("deathknight", "frost", "deathknight", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("deathknight", "unholy", "deathknight", function(t) return TblMaxValIdx(t) == 3 end)
