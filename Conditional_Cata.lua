@@ -34,7 +34,7 @@ Env.AddSpec("druid", "feral", "feral_druid", function(t)
     return TblMaxValIdx(t) == 2
         and Env.GetTalentRankOrdered(2, 1) < 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
 end)
-Env.AddSpec("druid", "feral_bear", "feral_tank_druid", function(t)
+Env.AddSpec("druid", "guardian", "guardian_druid", function(t)
     return TblMaxValIdx(t) == 2
         and Env.GetTalentRankOrdered(2, 1) == 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
 end)
