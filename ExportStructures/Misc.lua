@@ -3,20 +3,34 @@ local Env = select(2, ...)
 ---Create glyphs table.
 ---@return table
 function Env.CreateGlyphEntry()
+    local numGlyphSockets = GetNumGlyphSockets();
     local glyphs = {
+        prime = {},
         major = {},
         minor = {},
     }
-
-    for t = 1, 6 do
-        local enabled, glyphType, glyphSpellID = GetGlyphSocketInfo(t)
-        if enabled and glyphSpellID then
-            local glyphtable = glyphType == 1 and glyphs.major or glyphs.minor
-            table.insert(glyphtable, { spellID = glyphSpellID })
+    
+    if Env.IS_CLASSIC_WRATH then
+        for t = 1, numGlyphSockets do
+            local enabled, glyphType, glyphSpellID = GetGlyphSocketInfo(t)
+            if enabled and glyphSpellID then
+                local glyphTypeName = glyphType == 1 and "major" or "minor"
+                table.insert(glyphs[glyphTypeName], { spellID = glyphSpellID })
+            end
+        end
+        return glyphs
+    elseif (Env.IS_CLASSIC_CATA) then
+        for t = 1, numGlyphSockets do
+            local enabled, glyphType, glyphTooltipIndex, glyphID = GetGlyphSocketInfo(t)
+            if enabled and glyphType and glyphID then
+                local glyphTypeName = glyphType == 1 and glyphs.prime or glyphType == 2 and glyphs.major or glyphs.minor
+                table.insert(glyphTypeName, { itemID = glyphID })
+            end
         end
     end
 
     return glyphs
+
 end
 
 ---Create professions table.

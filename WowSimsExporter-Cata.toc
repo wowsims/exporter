@@ -1,0 +1,28 @@
+## Title: WowSimsExporter v2.8 |c0000ffffCataclysm|r
+## Version: 2.9
+## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
+## Interface: 30403
+## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/cata/ for simulations.
+## SavedVariables: WSEDB
+## OptionalDeps: Ace3
+
+Libs\LibStub\LibStub.lua
+Libs\LibParse\LibParse.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceEvent-3.0\AceEvent-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml 
+Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
+Libs\AceConsole-3.0\AceConsole-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+
+extras.lua
+Shared.lua
+Conditional_Cata.lua
+ExportStructures/ItemSpec.lua
+ExportStructures/EquipmentSpec.lua
+ExportStructures/Misc.lua
+ExportStructures/Character.lua
+UI.lua
+WowSimsExporter.lua
