@@ -29,6 +29,7 @@ local protobufLayout = {
         id = "number",      --"int"
         enchant = "number", --"int"
         gems = "table",     --"int[]"
+        random_suffix = "number", --"int"
     }
 }
 
