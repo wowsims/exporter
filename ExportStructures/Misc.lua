@@ -21,10 +21,10 @@ function Env.CreateGlyphEntry()
         return glyphs
     elseif (Env.IS_CLASSIC_CATA) then
         for t = 1, numGlyphSockets do
-            local enabled, glyphType, glyphTooltipIndex, glyphID, glyphSpellID = GetGlyphSocketInfo(t)
+            local enabled, glyphType, glyphTooltipIndex, glyphID = GetGlyphSocketInfo(t)
             if enabled and glyphType and glyphID then
                 local glyphtable = glyphType == 1 and glyphs.major or glyphType == 2 and glyphs.minor or glyphs.prime
-                table.insert(glyphtable, { itemID = glyphID, spellID = glyphSpellID })
+                table.insert(glyphtable, { spellID = glyphID })
             end
         end
     end
