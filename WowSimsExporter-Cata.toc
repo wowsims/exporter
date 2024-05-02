@@ -20,6 +20,7 @@ Libs\AceConfig-3.0\AceConfig-3.0.xml
 extras.lua
 Shared.lua
 Conditional_Cata.lua
+CataReforgeDetection.lua
 ExportStructures/ItemSpec.lua
 ExportStructures/EquipmentSpec.lua
 ExportStructures/Misc.lua
