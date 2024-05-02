@@ -5,9 +5,11 @@ Env.VERSION = GetAddOnMetadata(select(1, ...), "Version")
 Env.IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 Env.IS_CLASSIC_ERA_SOD = Env.IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
 Env.IS_CLASSIC_WRATH = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
-Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH
+Env.IS_CLASSIC_CATA = WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC
+Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA
 
 Env.supportedClientNames = {
+    "Classic: Cataclysm",
     "Classic: WotLK",
     "Classic: SoD (Export may work for Era, but sim is made for SoD only!)",
 }
@@ -63,7 +65,7 @@ function Env.TreatItemAsPossibleUpgrade(itemLink)
             or itemRarity < Enum.ItemQuality.Good then
             return false
         end
-    elseif Env.IS_CLASSIC_WRATH then
+    elseif Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA then
         -- Ignore TBC items like Rocket Boots Xtreme (Lite). The ilvl limit is intentionally set low
         -- to limit accidental filtering.
         if itemLevel <= 112

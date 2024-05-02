@@ -24,6 +24,11 @@ local protobufLayout = {
         id = "number",      --"int"
         enchant = "number", --"int"
         gems = "table",     --"int[]"
+    },
+    [WOW_PROJECT_CATACLYSM_CLASSIC] = {
+        id = "number",      --"int"
+        enchant = "number", --"int"
+        gems = "table",     --"int[]"
     }
 }
 
