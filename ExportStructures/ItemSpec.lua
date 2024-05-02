@@ -26,10 +26,11 @@ local protobufLayout = {
         gems = "table",     --"int[]"
     },
     [WOW_PROJECT_CATACLYSM_CLASSIC] = {
-        id = "number",      --"int"
-        enchant = "number", --"int"
-        gems = "table",     --"int[]"
+        id = "number",            --"int"
+        enchant = "number",       --"int"
+        gems = "table",           --"int[]"
         random_suffix = "number", --"int"
+        reforging = "number",     --"int"
     }
 }
 
@@ -71,6 +72,14 @@ end
 function ItemSpecMeta:SetRuneSpellFromSlot(slotId, bagId)
     if not self._structure.rune then return end
     self.rune = Env.GetEngravedRuneSpell(slotId, bagId)
+end
+
+---Set reforge ID from an equipped item, if item is reforged.
+---@param unit string
+---@param slotId integer
+function ItemSpecMeta:SetReforge(unit, slotId)
+    if not self._structure.reforging then return end
+    self.reforging = Env.GetReforgeId(unit, slotId)
 end
 
 ---Create a new ItemSpec table.

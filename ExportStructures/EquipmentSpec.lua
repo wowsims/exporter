@@ -61,6 +61,7 @@ function EquipmentSpecMeta:UpdateEquippedItems(unit)
             local itemSpec = Env.CreateItemSpec()
             itemSpec:FillFromItemLink(itemLink)
             if Env.IS_CLASSIC_ERA_SOD then itemSpec:SetRuneSpellFromSlot(slotId) end
+            if Env.IS_CLASSIC_CATA then itemSpec:SetReforge(unit, slotId) end
             self.items[itemIndex] = itemSpec
         end
     end
