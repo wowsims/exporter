@@ -23,7 +23,7 @@ function Env.CreateGlyphEntry()
         for t = 1, numGlyphSockets do
             local enabled, glyphType, glyphTooltipIndex, glyphID, glyphSpellID = GetGlyphSocketInfo(t)
             if enabled and glyphType and glyphID then
-                local glyphtable = glyphType == 1 and glyphs.prime or glyphType == 2 and glyphs.major or glyphs.minor
+                local glyphtable = glyphType == 1 and glyphs.major or glyphType == 2 and glyphs.minor or glyphs.prime
                 table.insert(glyphtable, { itemID = glyphID, spellID = glyphSpellID })
             end
         end
