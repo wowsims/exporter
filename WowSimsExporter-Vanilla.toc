@@ -1,5 +1,5 @@
-## Title: WowSimsExporter v2.8 |cffff8000Classic SoD|r
-## Version: 2.9
+## Title: WowSimsExporter v2.10 |cffff8000Classic SoD|r
+## Version: 2.10
 ## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
 ## Interface: 11500
 ## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/sod/ for simulations.

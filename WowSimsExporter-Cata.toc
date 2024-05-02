@@ -1,7 +1,7 @@
-## Title: WowSimsExporter v2.8 |c0000ffffCataclysm|r
-## Version: 2.9
+## Title: WowSimsExporter v2.10 |cffff3a03Cataclysm|r
+## Version: 2.10
 ## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
-## Interface: 30403
+## Interface: 40400
 ## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/cata/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
