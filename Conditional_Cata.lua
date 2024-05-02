@@ -22,45 +22,51 @@ Env.professionNames[GetSpellInfo(45357)] = { skillLine = 773, engName = "Inscrip
 
 local TblMaxValIdx = Env.TableMaxValIndex
 
-Env.AddSpec("shaman", "elemental", "elemental_shaman", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("shaman", "enhancement", "enhancement_shaman", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("shaman", "elemental", "shaman/elemental", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("shaman", "enhancement", "shaman/enhancement", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("shaman", "enhancement", "shaman/restoration", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("hunter", "beast_mastery", "hunter", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("hunter", "marksman", "hunter", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("hunter", "survival", "hunter", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("hunter", "beast_mastery", "hunter/beast_mastery", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("hunter", "marksman", "hunter/marksmanship", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("hunter", "survival", "hunter/survival", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("druid", "balance", "balance_druid", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("druid", "feral", "feral_druid", function(t)
+Env.AddSpec("druid", "balance", "druid/balance", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("druid", "feral", "druid/feral", function(t)
     return TblMaxValIdx(t) == 2
-        and Env.GetTalentRankOrdered(2, 1) < 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
+        -- and Env.GetTalentRankOrdered(2, 1) < 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
 end)
-Env.AddSpec("druid", "guardian", "guardian_druid", function(t)
+--[[ 
+Env.AddSpec("druid", "guardian", "druid/guardian", function(t)
     return TblMaxValIdx(t) == 2
         and Env.GetTalentRankOrdered(2, 1) == 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
-end)
+end) 
+]]
+Env.AddSpec("druid", "balance", "druid/Restoration", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("warlock", "affliction", "warlock", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("warlock", "demonology", "warlock", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("warlock", "destruction", "warlock", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("warlock", "affliction", "warlock/affliction", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("warlock", "demonology", "warlock/demonology", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("warlock", "destruction", "warlock/destruction", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("rogue", "assassination", "rogue", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("rogue", "combat", "rogue", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("rogue", "subtlety", "rogue", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("rogue", "assassination", "rogue/assassination", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("rogue", "combat", "rogue/combat", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("rogue", "subtlety", "rogue/subtlety", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("mage", "arcane", "mage", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("mage", "fire", "mage", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("mage", "frost", "mage", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("mage", "arcane", "mage/arcane", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("mage", "fire", "mage/fire", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("mage", "frost", "mage/frost", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("warrior", "arms", "warrior", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("warrior", "fury", "warrior", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("warrior", "protection", "protection_warrior", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("warrior", "arms", "warrior/arms", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("warrior", "fury", "warrior/fury", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("warrior", "protection", "warrior/protection", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("paladin", "protection", "protection_paladin", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("paladin", "retribution", "retribution_paladin", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("paladin", "protection", "paladin/holy", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("paladin", "protection", "paladin/protection", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("paladin", "retribution", "paladin/retribution", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("priest", "shadow", "shadow_priest", function(t) return TblMaxValIdx(t) == 3 end)
-Env.AddSpec("priest", "holy_disc", "healing_priest", function(t) return TblMaxValIdx(t) < 3 end)
+Env.AddSpec("priest", "disc", "priest/discipline", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("priest", "holy", "priest/holy", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("priest", "shadow", "priest/shadow", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("deathknight", "blood", "deathknight", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("deathknight", "frost", "deathknight", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("deathknight", "unholy", "deathknight", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("deathknight", "blood", "death_knight/blood", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("deathknight", "frost", "death_knight/frost", function(t) return TblMaxValIdx(t) == 2 end)
+Env.AddSpec("deathknight", "unholy", "death_knight/unholy", function(t) return TblMaxValIdx(t) == 3 end)
