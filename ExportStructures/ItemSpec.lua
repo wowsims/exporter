@@ -12,31 +12,26 @@
 
 local Env = select(2, ...)
 
--- Protobuf layouts. Strings are types for some weak type checking (on key creation only!)
+-- Protobuf layout used in the sim. Strings are types for some weak type checking (on key creation only!)
 local protobufLayout = {
-    [WOW_PROJECT_CLASSIC] = {
-        id = "number",            --"int"
-        random_suffix = "number", --"int"
-        enchant = "number",       --"int"
-        rune = "number",          --"int"
-    },
-    [WOW_PROJECT_WRATH_CLASSIC] = {
-        id = "number",      --"int"
-        enchant = "number", --"int"
-        gems = "table",     --"int[]"
-    },
-    [WOW_PROJECT_CATACLYSM_CLASSIC] = {
-        id = "number",            --"int"
-        enchant = "number",       --"int"
-        gems = "table",           --"int[]"
-        random_suffix = "number", --"int"
-        reforging = "number",     --"int"
-    }
+    id = "number",      -- int
+    enchant = "number", -- int
 }
 
-assert(protobufLayout[WOW_PROJECT_ID], "No ItemSpec structure defined for this client version!")
+if Env.IS_CLASSIC_ERA then
+    protobufLayout.random_suffix = "number" -- int
+    if Env.IS_CLASSIC_ERA_SOD then
+        protobufLayout.rune = "number"      -- int
+    end
+elseif Env.IS_CLASSIC_WRATH then
+    protobufLayout.gems = "table"           -- int[]
+elseif Env.IS_CLASSIC_CATA then
+    protobufLayout.gems = "table"           -- int[]
+    protobufLayout.random_suffix = "number" -- int
+    protobufLayout.reforging = "number"     -- int
+end
 
-local ItemSpecMeta = { isItemSpec = true, _structure = protobufLayout[WOW_PROJECT_ID] }
+local ItemSpecMeta = { isItemSpec = true, _structure = protobufLayout }
 ItemSpecMeta.__index = ItemSpecMeta
 
 ---Prevent adding keys not defined in the chosen layout or with wrong type.
