@@ -113,11 +113,66 @@ end
 CreateFrame("GameTooltip", "WSEScanningTooltip", nil, "GameTooltipTemplate")
 WSEScanningTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 
+local baseItemLink = "item:9333:"
+
+---@return table<integer, string>
+local function GetBaseItemText()
+    WSEScanningTooltip:ClearLines()
+    WSEScanningTooltip:SetHyperlink(baseItemLink)
+    local regions = { WSEScanningTooltip:GetRegions() }
+
+    local itemText = {}
+
+    for i = 1, #regions do
+        local region = regions[i]
+        if region and region:GetObjectType() == "FontString" then
+            local text = region:GetText()
+            if text then
+                itemText[i] = text
+            end
+        end
+    end
+
+    return itemText
+end
+
+local baseItemText
+
+---Get the text of an item's enchant as it will appear in the tooltip
+---@param unit string
+---@param itemSlot integer
+---@return string
+local function GetItemEnchantText(unit, itemSlot)
+    local itemLink = GetInventoryItemLink(unit, itemSlot)
+    local enchantID = itemLink:match("item:.-:(.-):")
+
+    if not baseItemText then
+        baseItemText = GetBaseItemText()
+    end
+
+    WSEScanningTooltip:ClearLines()
+    WSEScanningTooltip:SetHyperlink(baseItemLink .. enchantID)
+    local regions = { WSEScanningTooltip:GetRegions() }
+
+    for i = 1, #regions do
+        local region = regions[i]
+        if region and region:GetObjectType() == "FontString" then
+            local text = region:GetText()
+            if text and baseItemText[i] ~= text then
+                return text
+            end
+        end
+    end
+
+    return ""
+end
+
 ---Parse stats used in reforging and their current value from item tooltip.
 ---@param unit string
 ---@param itemSlot integer
+---@param enchantText string
 ---@return table<integer, number>
-local function GetItemCurrentStats(unit, itemSlot)
+local function GetItemCurrentStats(unit, itemSlot, enchantText)
     local currentStats = {}
 
     WSEScanningTooltip:ClearLines()
@@ -128,7 +183,7 @@ local function GetItemCurrentStats(unit, itemSlot)
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text then
+            if text and text ~= enchantText then
                 for statId, v in pairs(statIdToStrings) do
                     local pos = text:find(v.statStringNoVar)
                     if pos then
@@ -151,7 +206,8 @@ end
 ---@param unit string
 ---@param itemSlot integer
 local function GetItemReforgedStats(unit, itemSlot)
-    local statsCurrent = GetItemCurrentStats(unit, itemSlot)
+    local enchantText = GetItemEnchantText(unit, itemSlot)
+    local statsCurrent = GetItemCurrentStats(unit, itemSlot, enchantText)
     local statsDefault = GetItemDefaultStats(unit, itemSlot)
 
     -- Find src stat, i.e. the reduced default stat
