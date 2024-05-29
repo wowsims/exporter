@@ -187,18 +187,6 @@
     <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Slider.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceHook-3.0/AceHook-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceHook-3.0/AceHook-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceTimer-3.0/AceTimer-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceTimer-3.0/AceTimer-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Libs\" />
@@ -213,8 +201,6 @@
     <Folder Include="Libs\AceEvent-3.0\" />
     <Folder Include="Libs\AceGUI-3.0\" />
     <Folder Include="Libs\AceGUI-3.0\widgets\" />
-    <Folder Include="Libs\AceHook-3.0\" />
-    <Folder Include="Libs\AceTimer-3.0\" />
     <Folder Include="Libs\CallbackHandler-1.0\" />
     <Folder Include="Libs\LibStub\" />
     <Folder Include="Skins" />

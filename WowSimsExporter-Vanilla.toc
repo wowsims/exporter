@@ -1,21 +1,15 @@
-## Title: WowSimsExporter v2.10 |cffff8000Classic SoD|r
-## Version: 2.10
+## Title: WowSimsExporter v@project-version@ |cffff8000Classic SoD|r
+## Version: @project-version@
 ## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
 ## Interface: 11500
 ## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/sod/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
+## X-Curse-Project-ID: 590920
 
-Libs\LibStub\LibStub.lua
-Libs\LibParse\LibParse.lua
-Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
-Libs\AceAddon-3.0\AceAddon-3.0.xml
-Libs\AceEvent-3.0\AceEvent-3.0.xml
-Libs\AceDB-3.0\AceDB-3.0.xml 
-Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
-Libs\AceConsole-3.0\AceConsole-3.0.xml
-Libs\AceGUI-3.0\AceGUI-3.0.xml
-Libs\AceConfig-3.0\AceConfig-3.0.xml
+#@non-debug@
+embeds.xml
+#@end-non-debug@
 
 extras.lua
 Shared.lua
