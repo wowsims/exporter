@@ -1,10 +1,9 @@
 # WowSims Exporter
-An exporter addon for World Of Warcraft: WOTLK Classic and Season of Discovery Sims at  https://wowsims.github.io/
+An exporter addon for World Of Warcraft: Classic Sims at https://wowsims.github.io/
 
 There is a channel on the wowsims discord call integrations to talking real time to people, please don't use the discord for support if it can be avoided please use the issue tracker. we may request to talk to you in the integrations channel involving a pull request or an issue though that's fine.
 
 Invite is located here https://discord.gg/N9ZgAMXQ3p
-
 
 **Getting the addon**
 
