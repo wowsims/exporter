@@ -1,4 +1,4 @@
-## Title: WowSimsExporter v@project-version@ |cffff3a03Cataclysm|r
+## Title: WowSimsExporter @project-version@ |cffff3a03Cataclysm|r
 ## Version: @project-version@
 ## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
 ## Interface: 40400
