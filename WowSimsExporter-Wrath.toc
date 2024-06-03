@@ -1,4 +1,4 @@
-## Title: WowSimsExporter v@project-version@ |c0000ffffWOTLK|r
+## Title: WowSimsExporter @project-version@ |c0000ffffWOTLK|r
 ## Version: @project-version@
 ## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
 ## Interface: 30403
