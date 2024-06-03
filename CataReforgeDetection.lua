@@ -14,7 +14,7 @@ local statIdToStrings = {
 }
 -- Add strings without the placeholder.
 for _, v in pairs(statIdToStrings) do
-    v.statStringNoVar = v.statString:gsub("%%s", "")
+    v.statStringNoVar = v.statString:format(".-")
 end
 
 -- Map localised strings to stat IDs.
