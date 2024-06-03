@@ -167,6 +167,8 @@ local function GetItemEnchantText(unit, itemSlot)
     return ""
 end
 
+local socketBonus = "^" .. ITEM_SOCKET_BONUS:format("")
+
 ---Parse stats used in reforging and their current value from item tooltip.
 ---@param unit string
 ---@param itemSlot integer
@@ -183,7 +185,7 @@ local function GetItemCurrentStats(unit, itemSlot, enchantText)
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text and text ~= enchantText then
+            if text and text ~= enchantText and not text:find(socketBonus) then
                 for statId, v in pairs(statIdToStrings) do
                     local pos = text:find(v.statStringNoVar)
                     if pos then
