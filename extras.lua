@@ -14,10 +14,12 @@ do
             temp[tab] = {}
             local products = {}
             for i = 1, GetNumTalents(tab) do
-                local name, _, tier, column = GetTalentInfo(tab, i)
-                local product = (tier - 1) * 4 + column
-                temp[tab][product] = i
-                table.insert(products, product)
+                local name, _, tier, column, _, _, _, avail, _ = GetTalentInfo(tab, i)
+                if avail then -- sometimes indices are empty ...
+                    local product = (tier - 1) * 4 + column
+                    temp[tab][product] = i
+                    table.insert(products, product)
+                end
             end
 
             table.sort(products)
@@ -25,8 +27,10 @@ do
             orderedTalentCache[tab] = {}
             local j = 1
             for _, product in ipairs(products) do
-                orderedTalentCache[tab][j] = temp[tab][product]
-                j = j + 1
+                if product then
+                    orderedTalentCache[tab][j] = temp[tab][product]
+                    j = j + 1
+                end
             end
         end
         f:UnregisterEvent("SPELLS_CHANGED")
@@ -39,6 +43,10 @@ end
 ---@return integer currentRank
 function Env.GetTalentRankOrdered(tab, num)
     return select(5, GetTalentInfo(tab, orderedTalentCache[tab][num]))
+end
+
+function Env.GetNumTalentsFixed(tab)
+    return #orderedTalentCache[tab]
 end
 
 -- table extension contains

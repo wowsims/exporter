@@ -55,6 +55,7 @@ end
 ---@return string
 function Env.CreateTalentString()
     local GetTalentRank = Env.GetTalentRankOrdered
+    local GetNumTalents = Env.GetNumTalentsFixed
     local tabs = {}
     for tab = 1, GetNumTalentTabs() do
         local talents = {}
