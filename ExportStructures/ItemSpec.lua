@@ -68,13 +68,6 @@ function ItemSpecMeta:FillFromItemLink(itemLink)
     end
 end
 
----Returns if gemID string is a gem.
----@param gemId string
-function isGem(gemId)
-    if gemId == '' then return false end
-    return true
-end
-
 ---Set rune spell from an item in a slot, if item has a rune engraved.
 ---@param slotId integer
 ---@param bagId integer|nil If not nil check bag items instead of equipped items.
