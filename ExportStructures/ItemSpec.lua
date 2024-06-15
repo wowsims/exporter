@@ -55,6 +55,13 @@ function ItemSpecMeta:FillFromItemLink(itemLink)
     self.enchant = tonumber(enchantId)
     if self._structure.gems then
         self.gems = { tonumber(gemId1), tonumber(gemId2), tonumber(gemId3), tonumber(gemId4) }
+        
+        -- Loop over all filled gems and make sure to backwards fill empty (nil) gem slots with 0.
+        for i = 1, #self.gems do
+            if i > 1 and self.gems[i] and not self.gems[i - 1] then
+                self.gems[i - 1] = 0
+            end 
+        end
     end
     if self._structure.random_suffix then
         self.random_suffix = tonumber(suffixId)
