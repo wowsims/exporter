@@ -54,11 +54,27 @@ function ItemSpecMeta:FillFromItemLink(itemLink)
     self.id = tonumber(itemId)
     self.enchant = tonumber(enchantId)
     if self._structure.gems then
+        if not isGem(gemId1) and isGem(gemId2) or isGem(gemId3) or isGem(gemId4) then
+            gemId1 = 0
+        end
+        if not isGem(gemId2) and isGem(gemId3) or isGem(gemId4) then
+            gemId2 = 0
+        end
+        if not isGem(gemId3) and isGem(gemId4) then
+            gemId3 = 0
+        end
         self.gems = { tonumber(gemId1), tonumber(gemId2), tonumber(gemId3), tonumber(gemId4) }
     end
     if self._structure.random_suffix then
         self.random_suffix = tonumber(suffixId)
     end
+end
+
+---Returns if gemID string is a gem.
+---@param gemId string
+function isGem(gemId)
+    if gemId == '' then return false end
+    return true
 end
 
 ---Set rune spell from an item in a slot, if item has a rune engraved.
