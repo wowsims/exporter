@@ -102,6 +102,26 @@ local runeSpellRemap = {
     [407993] = 407995, -- Mangle: The bear version is expected.
 }
 
+-- Ring Runes don't provide a Spell ID like other runes do. We have to convert the Enchant ID back to the Spell ID manually.
+-- Ordered by spell name
+local enchantmentIDToSpellID = {
+    [7514] = 442893, -- Arcane Specialization
+    [7508] = 442876, -- Axe Specialization
+    [7510] = 442887, -- Dagger Specialization
+    [7555] = 459312, -- Defense Specialization
+    [7520] = 453622, -- Feral Combat Specialization
+    [7515] = 442894, -- Fire Specialization
+    [7511] = 442890, -- Fist Weapon Specialization
+    [7516] = 442895, -- Frost Specialization
+    [7519] = 442898, -- Holy Specialization
+    [7509] = 442881, -- Mace Specialization
+    [7517] = 442896, -- Nature Specialization
+    [7513] = 442892, -- Pole Weapon Specialization
+    [7512] = 442891, -- Ranged Weapon Specialization
+    [7518] = 442897, -- Shadow Specialization
+    [7507] = 442813, -- Sword Specialization
+}
+
 ---Get rune spell from an item in a slot, if item has a rune engraved.
 ---@param slotId integer
 ---@param bagId integer|nil If not nil check bag items instead of equipped items.
@@ -123,10 +143,17 @@ function Env.GetEngravedRuneSpell(slotId, bagId)
 
     if runeData then
         local firstSpellId = runeData.learnedAbilitySpellIDs[1]
-        if runeSpellRemap[firstSpellId] then
-            return runeSpellRemap[firstSpellId]
+        if firstSpellId == nil then
+            -- Fall back to re-mapping the enchant ID.
+            -- Should only apply to ring specializations for now.
+            return enchantmentIDToSpellID[runeData.itemEnchantmentID]
+        else
+            -- All non-ring runes should have a Spell ID
+            if runeSpellRemap[firstSpellId] then
+                return runeSpellRemap[firstSpellId]
+            end
+            return firstSpellId
         end
-        return firstSpellId
     end
 end
 
