@@ -123,6 +123,20 @@ into the provided box and click "Import"
     _jsonbox = jsonbox
 end
 
+---Create a button on the character panel that will call the provided function
+---@param onClick fun()
+function UI:CreateCharacterPanelButton(onClick)
+    local openButton = CreateFrame("Button", nil, CharacterFrame, "UIPanelButtonTemplate")
+    openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
+    openButton:Show()
+    openButton:SetText("WowSims")
+    openButton:SetSize(openButton:GetTextWidth() + 15, openButton:GetTextHeight() + 10)
+    openButton:SetScript("OnClick", openButton:SetScript("OnClick", function(self)
+        onClick()
+    end))
+    openButton:RegisterForClicks("AnyUp")
+end
+
 ---Sets string in textbox.
 ---@param outputString string
 function UI:SetOutput(outputString)
