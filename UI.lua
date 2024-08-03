@@ -46,6 +46,13 @@ function UI:CreateMainWindow(classIsSupported, simLink)
     frame:SetTitle("WowSimsExporter " .. Env.VERSION .. "")
     frame:SetStatusText("Click 'Generate Data' to generate exportable data")
     frame:SetLayout("Flow")
+
+    -- Add the frame as a global variable under the name `WowSimsExporter`
+    _G["WowSimsExporter"] = frame.frame
+    -- Register the global variable `WowSimsExporter` as a "special frame"
+    -- so that it is closed when the escape key is pressed.
+    tinsert(UISpecialFrames, "WowSimsExporter")
+
     _frame = frame
 
     local icon = AceGUI:Create("Icon")
@@ -108,6 +115,9 @@ into the provided box and click "Import"
     jsonbox:SetFullWidth(true)
     jsonbox:SetFullHeight(true)
     jsonbox:DisableButton(true)
+    jsonbox.editBox:SetScript("OnEscapePressed", function(self)
+        OnClose(frame)
+    end)
     frame:AddChild(jsonbox)
 
     _jsonbox = jsonbox
