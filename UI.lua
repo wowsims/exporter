@@ -43,9 +43,16 @@ function UI:CreateMainWindow(classIsSupported, simLink)
 
     local frame = AceGUI:Create("Frame")
     frame:SetCallback("OnClose", OnClose)
-    frame:SetTitle("WowSimsExporter V" .. Env.VERSION .. "")
+    frame:SetTitle("WowSimsExporter " .. Env.VERSION .. "")
     frame:SetStatusText("Click 'Generate Data' to generate exportable data")
     frame:SetLayout("Flow")
+
+    -- Add the frame as a global variable under the name `WowSimsExporter`
+    _G["WowSimsExporter"] = frame.frame
+    -- Register the global variable `WowSimsExporter` as a "special frame"
+    -- so that it is closed when the escape key is pressed.
+    tinsert(UISpecialFrames, "WowSimsExporter")
+
     _frame = frame
 
     local icon = AceGUI:Create("Icon")
@@ -108,9 +115,26 @@ into the provided box and click "Import"
     jsonbox:SetFullWidth(true)
     jsonbox:SetFullHeight(true)
     jsonbox:DisableButton(true)
+    jsonbox.editBox:SetScript("OnEscapePressed", function(self)
+        OnClose(frame)
+    end)
     frame:AddChild(jsonbox)
 
     _jsonbox = jsonbox
+end
+
+---Create a button on the character panel that will call the provided function
+---@param onClick fun()
+function UI:CreateCharacterPanelButton(onClick)
+    local openButton = CreateFrame("Button", nil, CharacterFrame, "UIPanelButtonTemplate")
+    openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
+    openButton:Show()
+    openButton:SetText("WowSims")
+    openButton:SetSize(openButton:GetTextWidth() + 15, openButton:GetTextHeight() + 10)
+    openButton:SetScript("OnClick", openButton:SetScript("OnClick", function(self)
+        onClick()
+    end))
+    openButton:RegisterForClicks("AnyUp")
 end
 
 ---Sets string in textbox.

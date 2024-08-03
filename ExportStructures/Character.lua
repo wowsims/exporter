@@ -4,6 +4,7 @@ local Env = select(2, ...)
 
 -- The metatable for a Character.
 local CharacterMeta = {
+    version     = "",
     unit        = "",
     name        = "",
     realm       = "",
@@ -33,6 +34,7 @@ function CharacterMeta:SetUnit(unit)
     local name, realm = UnitFullName(unit)
     local _, englishClass, _, englishRace = GetPlayerInfoByGUID(UnitGUID(unit))
 
+    self.version = Env.VERSION
     self.unit = unit
     self.name = name
     self.realm = realm
@@ -45,7 +47,6 @@ end
 ---Fill remaining data needed for export.
 function CharacterMeta:FillForExport()
     assert(self.unit, "Unit was not yet set!")
-
     self.talents = Env.CreateTalentString()
     self.professions = Env.CreateProfessionEntry()
 
