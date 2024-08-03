@@ -43,7 +43,7 @@ function UI:CreateMainWindow(classIsSupported, simLink)
 
     local frame = AceGUI:Create("Frame")
     frame:SetCallback("OnClose", OnClose)
-    frame:SetTitle("WowSimsExporter V" .. Env.VERSION .. "")
+    frame:SetTitle("WowSimsExporter " .. Env.VERSION .. "")
     frame:SetStatusText("Click 'Generate Data' to generate exportable data")
     frame:SetLayout("Flow")
     _frame = frame
