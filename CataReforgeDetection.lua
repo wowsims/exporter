@@ -114,6 +114,7 @@ CreateFrame("GameTooltip", "WSEScanningTooltip", nil, "GameTooltipTemplate")
 WSEScanningTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 
 local baseItemLink = "item:9333:"
+C_Item.RequestLoadItemDataByID(baseItemLink)
 
 ---@return table<integer, string>
 local function GetBaseItemText()
