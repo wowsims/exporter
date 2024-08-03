@@ -43,7 +43,7 @@ function WowSimsExporter:OnInitialize()
     self:RegisterChatCommand("wowsimsexporter", "OpenWindow")
     self:RegisterChatCommand("wsexporter", "OpenWindow")
 
-    self:Print(addonName .. " v" .. Env.VERSION .. " Initialized. use /wse For Window.")
+    self:Print(addonName .. " " .. Env.VERSION .. " Initialized. use /wse For Window.")
 
     if not Env.IS_CLIENT_SUPPORTED then
         self:Print("WARNING: Sim does not support your game version! Supported versions are:\n" ..
