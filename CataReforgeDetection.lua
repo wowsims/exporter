@@ -186,7 +186,7 @@ local function GetItemCurrentStats(unit, itemSlot, enchantText)
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text and text ~= enchantText and not text:find(socketBonus) then
+            if text and text ~= enchantText and not text:find(socketBonus) and not text:find("^|") then
                 for statId, v in pairs(statIdToStrings) do
                     local pos = text:find(v.statStringNoVar)
                     if pos then
