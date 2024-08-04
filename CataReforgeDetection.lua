@@ -114,6 +114,7 @@ CreateFrame("GameTooltip", "WSEScanningTooltip", nil, "GameTooltipTemplate")
 WSEScanningTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 
 local baseItemLink = "item:9333:"
+C_Item.RequestLoadItemDataByID(baseItemLink)
 
 ---@return table<integer, string>
 local function GetBaseItemText()
@@ -185,7 +186,7 @@ local function GetItemCurrentStats(unit, itemSlot, enchantText)
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text and text ~= enchantText and not text:find(socketBonus) then
+            if text and text ~= enchantText and not text:find(socketBonus) and not text:find("^|") then
                 for statId, v in pairs(statIdToStrings) do
                     local pos = text:find(v.statStringNoVar)
                     if pos then
