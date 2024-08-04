@@ -127,13 +127,18 @@ end
 ---@param onClick fun()
 function UI:CreateCharacterPanelButton(onClick)
     local openButton = CreateFrame("Button", nil, CharacterFrame, "UIPanelButtonTemplate")
-    openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
+    if Env.IS_CLASSIC_CATA then
+        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
+    else
+        openButton:SetPoint("RIGHT", CharacterFrameCloseButton, "RIGHT", 0, 0)
+        openButton:SetPoint("TOP", CharacterFrameTab1, "TOP", 0, 0)
+    end
     openButton:Show()
     openButton:SetText("WowSims")
     openButton:SetSize(openButton:GetTextWidth() + 15, openButton:GetTextHeight() + 10)
-    openButton:SetScript("OnClick", openButton:SetScript("OnClick", function(self)
+    openButton:SetScript("OnClick", function(self)
         onClick()
-    end))
+    end)
     openButton:RegisterForClicks("AnyUp")
 end
 
