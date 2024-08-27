@@ -6,6 +6,8 @@
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
 ## X-Curse-Project-ID: 590920
+## X-Wago-ID: as3Dfg57
+## X-WoWI-ID: 26823
 
 #@non-debug@
 embeds.xml
