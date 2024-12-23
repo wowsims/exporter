@@ -134,6 +134,12 @@ function Env.GetEngravedRuneSpell(slotId, bagId)
         C_Engraving.RefreshRunesList()
     end
 
+    -- The shoulder "runes" are special and don't use the C_Engraving API
+    -- Instead they override a special spell "Soul Engraving" (1219955)
+    if slotId == 3 then
+        return FindSpellOverrideByID(1219955)
+    end
+
     local runeData
     if bagId == nil then
         runeData = C_Engraving.GetRuneForEquipmentSlot(slotId)
