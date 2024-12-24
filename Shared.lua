@@ -136,8 +136,16 @@ function Env.GetEngravedRuneSpell(slotId, bagId)
 
     -- The shoulder "runes" are special and don't use the C_Engraving API
     -- Instead they override a special spell "Soul Engraving" (1219955)
-    if slotId == 3 then
-        return FindSpellOverrideByID(1219955)
+    if bagId == nil then
+        if slotId == INVSLOT_SHOULDER then
+            return FindSpellOverrideByID(1219955)
+        end
+    else
+        local itemLocation = ItemLocation:CreateFromBagAndSlot(bagId, slotId)
+        local inventoryType = C_Item.GetItemInventoryType(itemLocation)
+        if inventoryType == Enum.InventoryType.IndexShoulderType then
+            return Env.GetSoulEngravingSpellID(slotId, bagId)
+        end
     end
 
     local runeData
@@ -215,4 +223,58 @@ function Env.AddSpec(playerClass, spec, url, checkFunc)
         url = url,
         isCurrentSpec = checkFunc,
     })
+end
+
+CreateFrame("GameTooltip", "WSEScanningTooltip", nil, "GameTooltipTemplate")
+WSEScanningTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+
+local baseItemLink = "item:9333:"
+C_Item.RequestLoadItemDataByID(baseItemLink)
+
+---@return table<integer, string>
+local function GetBaseItemText()
+    WSEScanningTooltip:ClearLines()
+    WSEScanningTooltip:SetHyperlink(baseItemLink)
+    local regions = { WSEScanningTooltip:GetRegions() }
+
+    local itemText = {}
+
+    for i = 1, #regions do
+        local region = regions[i]
+        if region and region:GetObjectType() == "FontString" then
+            local text = region:GetText()
+            if text then
+                itemText[i] = text
+            end
+        end
+    end
+
+    return itemText
+end
+
+local baseItemText
+
+---Get the localized text of a given enchantID as it will appear in an tooltip
+---@param enchantID integer
+---@return string
+function Env.GetEnchantText(enchantID)
+    if not baseItemText then
+        baseItemText = GetBaseItemText()
+    end
+
+    WSEScanningTooltip:ClearLines()
+    WSEScanningTooltip:SetHyperlink(baseItemLink .. enchantID)
+    local regions = { WSEScanningTooltip:GetRegions() }
+
+    for i = 1, #regions do
+        local region = regions[i]
+        if region and region:GetObjectType() == "FontString" then
+            local text = region:GetText()
+            if text and baseItemText[i] ~= text then
+                return text
+            end
+        end
+    end
+
+    return ""
 end
