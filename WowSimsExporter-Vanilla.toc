@@ -1,4 +1,4 @@
-## Title: WowSimsExporter @project-version@ |cffff8000Classic SoD|r
+## Title: WowSimsExporter |cffff8000Classic SoD|r
 ## Version: @project-version@
 ## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
 ## Interface: 11505, 11506
