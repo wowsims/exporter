@@ -18,7 +18,8 @@ jobs:
   release:
 
     # we can run our steps on pretty much anything, but the "ubuntu-latest" image is a safe bet
-    runs-on: ubuntu-latest
+    # As of Ubuntu 22.05 svn is no longer installed by default so for now we have to stick on 22.04
+    runs-on: ubuntu-22.04
 
     # specify the environment variables used by the packager, matching the secrets from the project on GitHub
     env:
