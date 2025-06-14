@@ -1,14 +1,20 @@
 local Env = select(2, ...)
 
-Env.VERSION = GetAddOnMetadata(select(1, ...), "Version")
-
 Env.IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 Env.IS_CLASSIC_ERA_SOD = Env.IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
 Env.IS_CLASSIC_WRATH = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 Env.IS_CLASSIC_CATA = WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC
-Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA
+Env.IS_CLASSIC_MISTS = WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC
+Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS
+
+if Env.IS_CLASSIC_MISTS then
+    Env.VERSION = C_AddOns.GetAddOnMetadata(select(1, ...), "Version")
+else
+    Env.VERSION = GetAddOnMetadata(select(1, ...), "Version")
+end
 
 Env.supportedClientNames = {
+    "Classic: Mists of Pandaria",
     "Classic: Cataclysm",
     "Classic: WotLK",
     "Classic: SoD (Export may work for Era, but sim is made for SoD only!)",
@@ -198,7 +204,11 @@ function Env.GetSpec(unit)
     local playerClass = select(2, UnitClass(unit))
 
     if specializations[playerClass] then
-        local spentTalentPoints = CountSpentTalentsPerTree(unit == "target")
+        local spentTalentPoints
+
+        if not Env.IS_CLASSIC_MISTS then
+            spentTalentPoints = CountSpentTalentsPerTree(unit == "target")
+        end
 
         for _, specData in pairs(specializations[playerClass]) do
             if specData.isCurrentSpec(spentTalentPoints) then

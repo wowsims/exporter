@@ -47,7 +47,11 @@ end
 ---Fill remaining data needed for export.
 function CharacterMeta:FillForExport()
     assert(self.unit, "Unit was not yet set!")
-    self.talents = Env.CreateTalentString()
+    if Env.IS_CLASSIC_MISTS then
+        self.talents = Env.CreateMistsTalentString()
+    else
+        self.talents = Env.CreateTalentString()
+    end
     self.professions = Env.CreateProfessionEntry()
 
     local equipmentSet = Env.CreateEquipmentSpec()

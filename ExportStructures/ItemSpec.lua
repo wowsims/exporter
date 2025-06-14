@@ -29,6 +29,11 @@ elseif Env.IS_CLASSIC_CATA then
     protobufLayout.gems = "table"           -- int[]
     protobufLayout.random_suffix = "number" -- int
     protobufLayout.reforging = "number"     -- int
+elseif Env.IS_CLASSIC_MISTS then
+    protobufLayout.gems = "table"           -- int[]
+    protobufLayout.random_suffix = "number" -- int
+    protobufLayout.reforging = "number"     -- int
+    protobufLayout.upgrade = "number"       -- int
 end
 
 local ItemSpecMeta = { isItemSpec = true, _structure = protobufLayout }
@@ -49,7 +54,7 @@ end
 ---Fill values from an item link.
 ---@param itemLink string See https://wowpedia.fandom.com/wiki/ItemLink
 function ItemSpecMeta:FillFromItemLink(itemLink)
-    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId = strsplit(":", itemLink)
+    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId, _, _, reforgeId, _, upgrades = strsplit(":", itemLink)
 
     self.id = tonumber(itemId)
     self.enchant = tonumber(enchantId)
@@ -65,6 +70,9 @@ function ItemSpecMeta:FillFromItemLink(itemLink)
     end
     if self._structure.random_suffix then
         self.random_suffix = tonumber(suffixId)
+    end
+    if Env.IS_CLASSIC_MISTS and self._structure.reforging then
+        self.reforging = tonumber(reforgeId)
     end
 end
 
