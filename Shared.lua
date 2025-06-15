@@ -288,3 +288,25 @@ function Env.GetEnchantText(enchantID)
 
     return ""
 end
+
+---Parse current item upgrade level from item tooltip.
+---@param unit string
+---@param itemSlot integer
+---@return integer
+function Env.GetItemUpgradeLevel(unit, itemSlot)
+    WSEScanningTooltip:ClearLines()
+    WSEScanningTooltip:SetInventoryItem(unit, itemSlot)
+    local regions = { WSEScanningTooltip:GetRegions() }
+
+    for i = 1, #regions do
+        local region = regions[i]
+        if region and region:GetObjectType() == "FontString" then
+            local text = region:GetText()
+            if text and text:find("^Upgrade Level") then
+                local _, _, curLevel, maxLevel = text:find(".+(%d)/(%d)")
+                return tonumber(curLevel)
+            end
+        end
+    end
+    return 0
+end

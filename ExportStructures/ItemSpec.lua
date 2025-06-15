@@ -92,6 +92,14 @@ function ItemSpecMeta:SetReforge(unit, slotId)
     self.reforging = Env.GetReforgeId(unit, slotId)
 end
 
+---Set upgrade level from an equipped item, 0 if no upgrade path.
+---@param unit string
+---@param slotId integer
+function ItemSpecMeta:SetUpgrade(unit, slotId)
+    if not self._structure.upgrade then return end
+    self.upgrade = Env.GetItemUpgradeLevel(unit, slotId)
+end
+
 ---Create a new ItemSpec table.
 local function CreateItemSpec()
     return setmetatable({}, ItemSpecMeta)
