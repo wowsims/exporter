@@ -302,13 +302,14 @@ function Env.GetItemUpgradeLevel(unit, itemSlot)
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text and text:find(".+: %d/%d") then
-                local _, _, curLevel, maxLevel = text:find(".+(%d)/(%d)")
+            if text and text:find(ITEM_UPGRADE_TOOLTIP_FORMAT) then
+                local pattern, _ = ITEM_UPGRADE_TOOLTIP_FORMAT:gsub("%%d","%(%%d%)")
+                local _, _, curLevel, maxLevel = text:find(pattern)
                 return tonumber(curLevel)
             end
         end
     end
-    return 0
+    return -1
 end
 
 
@@ -324,13 +325,13 @@ function Env.GetHandTinker(unit)
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text and text:find(".+:.+1.?920.+\. \(.+\)") then
+            if text and text:find(".+:.+1.?920.+%. %(.+%)") then
                 return 4898 -- Synapse Srping
             end
-            if text and text:find(".+:.+2.?880.+\. \(.+\)") then
+            if text and text:find(".+:.+2.?880.+%. %(.+%)") then
                 return 4697 -- Phase Fingers
             end
-            if text and text:find(".+:.+42.?000.+63.?000.+\. \(.+\)") then
+            if text and text:find(".+:.+42.?000.+63.?000.+%. %(.+%)") then
                 return 4698 -- Incendiary Fireworks Launcher
             end
         end

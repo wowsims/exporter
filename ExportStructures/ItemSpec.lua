@@ -98,7 +98,8 @@ end
 ---@param slotId integer
 function ItemSpecMeta:SetUpgrade(unit, slotId)
     if not self._structure.upgrade_step then return end
-    self.upgrade_step = Env.GetItemUpgradeLevel(unit, slotId)
+    local upgrade_step = Env.GetItemUpgradeLevel(unit, slotId)
+    if upgrade_step ~= -1 then self.upgrade_step = upgrade_step end
 end
 
 ---Set tinker enchant ID from equipped hand item
