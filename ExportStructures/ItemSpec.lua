@@ -33,7 +33,8 @@ elseif Env.IS_CLASSIC_MISTS then
     protobufLayout.gems = "table"           -- int[]
     protobufLayout.random_suffix = "number" -- int
     protobufLayout.reforging = "number"     -- int
-    protobufLayout.upgrade = "number"       -- int
+    protobufLayout.upgrade_step = "number"  -- int
+    protobufLayout.tinker = "number"        -- int
 end
 
 local ItemSpecMeta = { isItemSpec = true, _structure = protobufLayout }
@@ -96,8 +97,16 @@ end
 ---@param unit string
 ---@param slotId integer
 function ItemSpecMeta:SetUpgrade(unit, slotId)
-    if not self._structure.upgrade then return end
-    self.upgrade = Env.GetItemUpgradeLevel(unit, slotId)
+    if not self._structure.upgrade_step then return end
+    self.upgrade_step = Env.GetItemUpgradeLevel(unit, slotId)
+end
+
+---Set tinker enchant ID from equipped hand item
+---@param unit string
+function ItemSpecMeta:SetHandTinker(unit)
+    if not self._structure.tinker then return end
+    local tinkerID = Env.GetHandTinker(unit)
+    if tinkerID ~= 0 then self.tinker = tinkerID end
 end
 
 ---Create a new ItemSpec table.
