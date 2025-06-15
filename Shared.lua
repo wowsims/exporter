@@ -321,17 +321,21 @@ function Env.GetHandTinker(unit)
     WSEScanningTooltip:SetInventoryItem(unit, INVSLOT_HAND)
     local regions = { WSEScanningTooltip:GetRegions() }
 
+    local use_localized = ITEM_SPELL_TRIGGER_ONUSE
+    local cooldown_m_localized = ITEM_COOLDOWN_TOTAL_MIN
+    local cooldown_s_localized = ITEM_COOLDOWN_TOTAL_SEC
+
     for i = 1, #regions do
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text and text:find(".+:.+1.?920.+%. %(.+%)") then
+            if text and text:find(use_localized..".+1.?920.+"..cooldown_m_localized) then
                 return 4898 -- Synapse Srping
             end
-            if text and text:find(".+:.+2.?880.+%. %(.+%)") then
+            if text and text:find(use_localized..".+2.?880.+"..cooldown_m_localized) then
                 return 4697 -- Phase Fingers
             end
-            if text and text:find(".+:.+42.?000.+63.?000.+%. %(.+%)") then
+            if text and text:find(use_localized..".+42.?000.+63.?000.+"..cooldown_s_localized) then
                 return 4698 -- Incendiary Fireworks Launcher
             end
         end
