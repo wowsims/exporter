@@ -19,7 +19,7 @@ function Env.CreateGlyphEntry()
             end
         end
         return glyphs
-    elseif (Env.IS_CLASSIC_CATA) then
+    elseif (Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS) then
         for t = 1, numGlyphSockets do
             local enabled, glyphType, glyphTooltipIndex, glyphID = GetGlyphSocketInfo(t)
             if enabled and glyphType and glyphID then
@@ -51,7 +51,7 @@ function Env.CreateProfessionEntry()
     return professions
 end
 
----Create a string in the format "000..000-000..000-000..000".
+---Create a string in the format "000..000-000..000-000..000". Used for Pre-Mists classic
 ---@return string
 function Env.CreateTalentString()
     local GetTalentRank = Env.GetTalentRankOrdered
@@ -66,4 +66,17 @@ function Env.CreateTalentString()
         table.insert(tabs, table.concat(talents))
     end
     return table.concat(tabs, "-")
+end
+
+---Create a string in the format "000000". Used for Mists classic
+---@return string
+function Env.CreateMistsTalentString()
+    local GetTalentTierInfo = GetTalentTierInfo
+    local activeSpecGroup = C_SpecializationInfo.GetActiveSpecGroup()
+    local talents = {}
+    for tab = 1, MAX_NUM_TALENT_TIERS do
+        local _, talent, _ = GetTalentTierInfo(tab, activeSpecGroup)
+        table.insert(talents, tostring(talent))
+    end
+    return table.concat(talents)
 end

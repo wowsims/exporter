@@ -62,6 +62,12 @@ function EquipmentSpecMeta:UpdateEquippedItems(unit)
             itemSpec:FillFromItemLink(itemLink)
             if Env.IS_CLASSIC_ERA_SOD then itemSpec:SetRuneSpellFromSlot(slotId) end
             if Env.IS_CLASSIC_CATA then itemSpec:SetReforge(unit, slotId) end
+            if Env.IS_CLASSIC_MISTS then
+                itemSpec:SetUpgrade(unit, slotId)
+                if slotId == INVSLOT_HAND then
+                    itemSpec:SetHandTinker(unit)
+                end
+            end
             self.items[itemIndex] = itemSpec
         end
     end

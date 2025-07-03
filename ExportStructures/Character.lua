@@ -19,6 +19,14 @@ local CharacterMeta = {
 }
 CharacterMeta.__index = CharacterMeta
 
+local function getRace(unit, englishRace)
+    if englishRace == "Pandaren" then
+        local englishFaction, _ = UnitFactionGroup(unit)
+        return englishRace.." ("..englishFaction:sub(1,1)..")"
+    end
+    return englishRace:gsub("Scourge", "Undead") -- hack? lol
+end
+
 ---Prevent adding keys that are not defined in the metatable.
 ---@param self table
 ---@param key any The key that is being added.
@@ -38,7 +46,7 @@ function CharacterMeta:SetUnit(unit)
     self.unit = unit
     self.name = name
     self.realm = realm
-    self.race = englishRace:gsub("Scourge", "Undead") -- hack? lol
+    self.race = getRace(unit, englishRace)
     self.class = englishClass:lower()
     self.level = UnitLevel(unit)
     self.spec = Env.GetSpec(unit)
@@ -47,7 +55,11 @@ end
 ---Fill remaining data needed for export.
 function CharacterMeta:FillForExport()
     assert(self.unit, "Unit was not yet set!")
-    self.talents = Env.CreateTalentString()
+    if Env.IS_CLASSIC_MISTS then
+        self.talents = Env.CreateMistsTalentString()
+    else
+        self.talents = Env.CreateTalentString()
+    end
     self.professions = Env.CreateProfessionEntry()
 
     local equipmentSet = Env.CreateEquipmentSpec()

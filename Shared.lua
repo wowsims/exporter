@@ -1,14 +1,20 @@
 local Env = select(2, ...)
 
-Env.VERSION = GetAddOnMetadata(select(1, ...), "Version")
-
 Env.IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 Env.IS_CLASSIC_ERA_SOD = Env.IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
 Env.IS_CLASSIC_WRATH = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 Env.IS_CLASSIC_CATA = WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC
-Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA
+Env.IS_CLASSIC_MISTS = WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC
+Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS
+
+if Env.IS_CLASSIC_MISTS then
+    Env.VERSION = C_AddOns.GetAddOnMetadata(select(1, ...), "Version")
+else
+    Env.VERSION = GetAddOnMetadata(select(1, ...), "Version")
+end
 
 Env.supportedClientNames = {
+    "Classic: Mists of Pandaria",
     "Classic: Cataclysm",
     "Classic: WotLK",
     "Classic: SoD (Export may work for Era, but sim is made for SoD only!)",
@@ -198,7 +204,11 @@ function Env.GetSpec(unit)
     local playerClass = select(2, UnitClass(unit))
 
     if specializations[playerClass] then
-        local spentTalentPoints = CountSpentTalentsPerTree(unit == "target")
+        local spentTalentPoints
+
+        if not Env.IS_CLASSIC_MISTS then
+            spentTalentPoints = CountSpentTalentsPerTree(unit == "target")
+        end
 
         for _, specData in pairs(specializations[playerClass]) do
             if specData.isCurrentSpec(spentTalentPoints) then
@@ -277,4 +287,58 @@ function Env.GetEnchantText(enchantID)
     end
 
     return ""
+end
+
+---Parse current item upgrade level from item tooltip.
+---@param unit string
+---@param itemSlot integer
+---@return integer
+function Env.GetItemUpgradeLevel(unit, itemSlot)
+    WSEScanningTooltip:ClearLines()
+    WSEScanningTooltip:SetInventoryItem(unit, itemSlot)
+    local regions = { WSEScanningTooltip:GetRegions() }
+
+    for i = 1, #regions do
+        local region = regions[i]
+        if region and region:GetObjectType() == "FontString" then
+            local text = region:GetText()
+            if text and text:find(ITEM_UPGRADE_TOOLTIP_FORMAT) then
+                local pattern, _ = ITEM_UPGRADE_TOOLTIP_FORMAT:gsub("%%d","%(%%d%)")
+                local _, _, curLevel, maxLevel = text:find(pattern)
+                return tonumber(curLevel)
+            end
+        end
+    end
+    return -1
+end
+
+
+---Parse hand tinker from item tooltip.
+---@param unit string
+---@return integer
+function Env.GetHandTinker(unit)
+    WSEScanningTooltip:ClearLines()
+    WSEScanningTooltip:SetInventoryItem(unit, INVSLOT_HAND)
+    local regions = { WSEScanningTooltip:GetRegions() }
+
+    local use_localized = ITEM_SPELL_TRIGGER_ONUSE
+    local cooldown_m_localized = ITEM_COOLDOWN_TOTAL_MIN
+    local cooldown_s_localized = ITEM_COOLDOWN_TOTAL_SEC
+
+    for i = 1, #regions do
+        local region = regions[i]
+        if region and region:GetObjectType() == "FontString" then
+            local text = region:GetText()
+            if text and text:find(use_localized..".+1.?920.+"..cooldown_m_localized) then
+                return 4898 -- Synapse Srping
+            end
+            if text and text:find(use_localized..".+2.?880.+"..cooldown_m_localized) then
+                return 4697 -- Phase Fingers
+            end
+            if text and text:find(use_localized..".+42.?000.+63.?000.+"..cooldown_s_localized) then
+                return 4698 -- Incendiary Fireworks Launcher
+            end
+        end
+    end
+    return 0
 end

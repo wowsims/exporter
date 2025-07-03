@@ -29,6 +29,12 @@ elseif Env.IS_CLASSIC_CATA then
     protobufLayout.gems = "table"           -- int[]
     protobufLayout.random_suffix = "number" -- int
     protobufLayout.reforging = "number"     -- int
+elseif Env.IS_CLASSIC_MISTS then
+    protobufLayout.gems = "table"           -- int[]
+    protobufLayout.random_suffix = "number" -- int
+    protobufLayout.reforging = "number"     -- int
+    protobufLayout.upgrade_step = "number"  -- int
+    protobufLayout.tinker = "number"        -- int
 end
 
 local ItemSpecMeta = { isItemSpec = true, _structure = protobufLayout }
@@ -49,7 +55,7 @@ end
 ---Fill values from an item link.
 ---@param itemLink string See https://wowpedia.fandom.com/wiki/ItemLink
 function ItemSpecMeta:FillFromItemLink(itemLink)
-    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId = strsplit(":", itemLink)
+    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId, _, _, reforgeId, _, upgrades = strsplit(":", itemLink)
 
     self.id = tonumber(itemId)
     self.enchant = tonumber(enchantId)
@@ -65,6 +71,9 @@ function ItemSpecMeta:FillFromItemLink(itemLink)
     end
     if self._structure.random_suffix then
         self.random_suffix = tonumber(suffixId)
+    end
+    if Env.IS_CLASSIC_MISTS and self._structure.reforging then
+        self.reforging = tonumber(reforgeId)
     end
 end
 
@@ -82,6 +91,23 @@ end
 function ItemSpecMeta:SetReforge(unit, slotId)
     if not self._structure.reforging then return end
     self.reforging = Env.GetReforgeId(unit, slotId)
+end
+
+---Set upgrade level from an equipped item, 0 if no upgrade path.
+---@param unit string
+---@param slotId integer
+function ItemSpecMeta:SetUpgrade(unit, slotId)
+    if not self._structure.upgrade_step then return end
+    local upgrade_step = Env.GetItemUpgradeLevel(unit, slotId)
+    if upgrade_step ~= -1 then self.upgrade_step = upgrade_step end
+end
+
+---Set tinker enchant ID from equipped hand item
+---@param unit string
+function ItemSpecMeta:SetHandTinker(unit)
+    if not self._structure.tinker then return end
+    local tinkerID = Env.GetHandTinker(unit)
+    if tinkerID ~= 0 then self.tinker = tinkerID end
 end
 
 ---Create a new ItemSpec table.

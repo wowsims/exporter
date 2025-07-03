@@ -1,0 +1,23 @@
+## Title: WowSimsExporter |cff28ae7eMists of Pandaria|r
+## Version: @project-version@
+## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
+## Interface: 50500
+## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/cata/ for simulations.
+## SavedVariables: WSEDB
+## OptionalDeps: Ace3
+## X-Curse-Project-ID: 590920
+## X-Wago-ID: as3Dfg57
+## X-WoWI-ID: 26823
+
+#@non-debug@
+embeds.xml
+#@end-non-debug@
+
+Shared.lua
+Conditional_Mists.lua
+ExportStructures/ItemSpec.lua
+ExportStructures/EquipmentSpec.lua
+ExportStructures/Misc.lua
+ExportStructures/Character.lua
+UI.lua
+WowSimsExporter.lua
