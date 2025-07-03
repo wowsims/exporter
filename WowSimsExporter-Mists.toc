@@ -1,6 +1,6 @@
 ## Title: WowSimsExporter |cff28ae7eMists of Pandaria|r
 ## Version: @project-version@
-## Author: generalwrex(Natop of Old Blanchy), namreeb, coolmodi(FelixPflaum), riotdog
+## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog, polynomix
 ## Interface: 50500
 ## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/cata/ for simulations.
 ## SavedVariables: WSEDB

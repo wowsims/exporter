@@ -28,7 +28,8 @@ function Env.CreateGlyphEntry()
             end
         end
     end
-
+    -- hack? unsure.. seems normal to me, prime shouldn't be shown in the dat if its mists!
+    if(Env.IS_CLASSIC_MISTS) then glyphs.prime = nil end 
     return glyphs
 
 end

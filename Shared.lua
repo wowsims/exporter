@@ -9,8 +9,10 @@ Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.
 
 if Env.IS_CLASSIC_MISTS then
     Env.VERSION = C_AddOns.GetAddOnMetadata(select(1, ...), "Version")
+    Env.AUTHORS = C_AddOns.GetAddOnMetadata(select(1, ...), "Author")
 else
     Env.VERSION = GetAddOnMetadata(select(1, ...), "Version")
+    Env.AUTHORS = GetAddOnMetadata(select(1, ...), "Author")
 end
 
 Env.supportedClientNames = {

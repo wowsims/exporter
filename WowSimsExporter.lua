@@ -1,9 +1,10 @@
--- Author      : generalwrex (Natop on Myzrael TBC)
+-- Author      : generalwrex (Natop)
 -- Create Date : 1/28/2022 9:30:08 AM
 --
 -- Update Date : 2023-04-16 Riotdog-GehennasEU: v2.5 - exporting bag items for bulk sim, fixes use of legacy APIs in libs and corrects link order (LibStub must come first).
 -- Update Date : 2024-02-04 coolmodi(FelixPflaum) v2.6 - Added rune exporting and split the addon for classic/wotlk
 -- Update Date : 2024-02-04 generalwrex (Natop on Old Blanchy) v2.6 - Minor fixes and version change
+-- Update Date : 2025-07-03 Polynomix & generalwrex V2.7
 
 local addonName, Env = ...
 
@@ -44,7 +45,7 @@ function WowSimsExporter:OnInitialize()
     self:RegisterChatCommand("wsexporter", "OpenWindow")
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
 
-    self:Print(addonName .. " " .. Env.VERSION .. " Initialized. use /wse For Window.")
+    self:Print(addonName .. " " .. Env.VERSION .. " Initialized. use /wse For Window.\n\124cff008000Credits go to " .. Env.AUTHORS.."\124r")
 
     if not Env.IS_CLIENT_SUPPORTED then
         self:Print("WARNING: Sim does not support your game version! Supported versions are:\n" ..

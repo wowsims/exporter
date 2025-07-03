@@ -33,4 +33,7 @@ It was created using World of Warcraft Addon Creator 2015, its a very good IDE b
 #Contributors
 generalwrex
 zku
-FelixPflaum
+namreeb
+coolmodi(FelixPflaum)
+riotdog 
+polynomix
