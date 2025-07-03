@@ -44,6 +44,7 @@ function WowSimsExporter:OnInitialize()
     self:RegisterChatCommand("wowsimsexporter", "OpenWindow")
     self:RegisterChatCommand("wsexporter", "OpenWindow")
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
+    Env.WSEUnit = "player"
 
     self:Print(addonName .. " " .. Env.VERSION .. " Initialized. use /wse For Window.\n\124cff008000Credits go to " .. Env.AUTHORS.."\124r")
 
@@ -58,6 +59,11 @@ function WowSimsExporter:OpenWindow(input)
         self:CreateWindow()
     elseif (input == "export") then
         self:CreateWindow(true)
+    elseif (input == "inspect") then
+        Env.WSEUnit = "target"
+        InspectUnit(Env.WSEUnit)
+        self:CreateWindow(true)     
+        
     elseif (input == "options") then
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
@@ -79,9 +85,9 @@ end
 
 function WowSimsExporter:CreateWindow(generate)
     local character = Env.CreateCharacter()
-    character:SetUnit("player")
+    character:SetUnit(Env.WSEUnit)
     local classIsSupported = table.contains(Env.supportedClasses, character.class)
-    local linkToSim = Env.prelink .. select(2, Env.GetSpec("player"))
+    local linkToSim = Env.prelink .. select(2, Env.GetSpec(Env.WSEUnit))
 
     Env.UI:CreateMainWindow(classIsSupported, linkToSim)
     if not classIsSupported then return end
@@ -90,14 +96,14 @@ end
 
 Env.UI:SetOutputGenerator(function()
     local character = Env.CreateCharacter()
-    character:SetUnit("player")
+    character:SetUnit(Env.WSEUnit)
     local output = GenerateOutput(character)
     return output
 end)
 
 Env.UI:SetOutputGeneratorBags(function()
     local character = Env.CreateCharacter()
-    character:SetUnit("player")
+    character:SetUnit(Env.WSEUnit)
     local output = GenerateOutputBags()
     return output
 end)
