@@ -121,6 +121,7 @@ into the provided box and click "Import"
     frame:AddChild(jsonbox)
 
     _jsonbox = jsonbox
+    return frame.frame
 end
 
 ---Create a button on the character panel that will call the provided function

@@ -56,14 +56,15 @@ end
 
 function WowSimsExporter:OpenWindow(input)
     if not input or input:trim() == "" then
+        Env.WSEUnit = "player"
         self:CreateWindow()
     elseif (input == "export") then
+        Env.WSEUnit = "player"
         self:CreateWindow(true)
     elseif (input == "inspect") then
         Env.WSEUnit = "target"
         InspectUnit(Env.WSEUnit)
-        self:CreateWindow(true)     
-        
+        self:CreateWindow()
     elseif (input == "options") then
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
@@ -89,7 +90,9 @@ function WowSimsExporter:CreateWindow(generate)
     local classIsSupported = table.contains(Env.supportedClasses, character.class)
     local linkToSim = Env.prelink .. select(2, Env.GetSpec(Env.WSEUnit))
 
-    Env.UI:CreateMainWindow(classIsSupported, linkToSim)
+    local frame = Env.UI:CreateMainWindow(classIsSupported, linkToSim)
+    frame:RegisterEvent("INSPECT_READY")
+    frame:SetScript("OnEvent", function(self, event) if event == "INSPECT_READY" and character.unit=="target" then Env.UI:SetOutput(GenerateOutput(character)) end end)
     if not classIsSupported then return end
     if generate then Env.UI:SetOutput(GenerateOutput(character)) end
 end
