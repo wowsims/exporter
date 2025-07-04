@@ -90,10 +90,15 @@ function WowSimsExporter:CreateWindow(generate)
     local classIsSupported = table.contains(Env.supportedClasses, character.class)
     local linkToSim = Env.prelink .. select(2, Env.GetSpec(Env.WSEUnit))
 
-    local frame = Env.UI:CreateMainWindow(classIsSupported, linkToSim)
+    frame = Env.UI:CreateMainWindow(classIsSupported, linkToSim)
     frame:RegisterEvent("INSPECT_READY")
-    frame:SetScript("OnEvent", function(self, event) if event == "INSPECT_READY" and character.unit=="target" then Env.UI:SetOutput(GenerateOutput(character)) end end)
+    frame:SetScript("OnEvent", function(self, event)
+        if event == "INSPECT_READY" and character.unit=="target" then
+            Env.UI:SetOutput(GenerateOutput(character))
+            end
+        end)
     if not classIsSupported then return end
+
     if generate then Env.UI:SetOutput(GenerateOutput(character)) end
 end
 

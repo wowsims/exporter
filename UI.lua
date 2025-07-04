@@ -167,4 +167,26 @@ function UI:SetOutputGeneratorBags(func)
     _outputGeneratorBags = func
 end
 
+function UI:CreateInspectButton()
+    if not InspectFrame then return end
+
+    local inspectButton = CreateFrame("Button", "WSEInspectButton", InspectFrame, "UIPanelButtonTemplate")
+    inspectButton:SetSize(50, 24)
+    inspectButton:SetText("WowSims")
+    inspectButton:SetPoint("TOPRIGHT", InspectFrame, "BOTTOMRIGHT", 0, 0)
+    inspectButton:SetSize(inspectButton:GetTextWidth() + 15, inspectButton:GetTextHeight() + 10)
+    inspectButton:SetScript("OnClick", function()
+        
+    end)
+end
+
+-- we might want to just make a event loader -wrex
+hooksecurefunc("InspectFrame_LoadUI", function()
+    C_Timer.After(0.1, UI.CreateInspectButton)
+end)
+
+if IsAddOnLoaded("Blizzard_InspectUI") then
+    C_Timer.After(0.1, UI.CreateInspectButton)
+end
+
 Env.UI = UI
