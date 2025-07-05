@@ -10,7 +10,9 @@ local addonName, Env = ...
 
 local LibParse = LibStub("LibParse")
 
-local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0")
+Env.WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0")
+
+local WowSimsExporter = Env.WowSimsExporter
 
 local defaults = {
     profile = {},
@@ -44,6 +46,7 @@ function WowSimsExporter:OnInitialize()
     self:RegisterChatCommand("wowsimsexporter", "OpenWindow")
     self:RegisterChatCommand("wsexporter", "OpenWindow")
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
+    if Env.IS_CLASSIC_MISTS then Env.UI.CreateDropDownEntry() end
     Env.WSEUnit = "player"
 
     self:Print(addonName .. " " .. Env.VERSION .. " Initialized. use /wse For Window.\n\124cff008000Credits go to " .. Env.AUTHORS.."\124r")
@@ -61,7 +64,7 @@ function WowSimsExporter:OpenWindow(input)
     elseif (input == "export") then
         Env.WSEUnit = "player"
         self:CreateWindow(true)
-    elseif (input == "inspect") then
+    elseif (input == "inspect") and Env.IS_CLASSIC_MISTS then
         Env.WSEUnit = "target"
         InspectUnit(Env.WSEUnit)
         self:CreateWindow()
@@ -90,13 +93,15 @@ function WowSimsExporter:CreateWindow(generate)
     local classIsSupported = table.contains(Env.supportedClasses, character.class)
     local linkToSim = Env.prelink .. select(2, Env.GetSpec(Env.WSEUnit))
 
-    frame = Env.UI:CreateMainWindow(classIsSupported, linkToSim)
-    frame:RegisterEvent("INSPECT_READY")
-    frame:SetScript("OnEvent", function(self, event)
-        if event == "INSPECT_READY" and character.unit=="target" then
-            Env.UI:SetOutput(GenerateOutput(character))
-            end
-        end)
+    local frame = Env.UI:CreateMainWindow(classIsSupported, linkToSim)
+    if Env.IS_CLASSIC_MISTS then
+        frame:RegisterEvent("INSPECT_READY")
+        frame:SetScript("OnEvent", function(self, event) -- for some reason, equipment data is not ready when this fire, so some gear might be missing in the export string
+            if event == "INSPECT_READY" and character.unit=="target" then
+                --Env.UI:SetOutput(GenerateOutput(character)) -- so do not auto generate for now
+                end
+            end)
+    end
     if not classIsSupported then return end
 
     if generate then Env.UI:SetOutput(GenerateOutput(character)) end
