@@ -39,7 +39,7 @@ end
 ---@param classIsSupported boolean If false then show class not supported info instead of export stuff.
 ---@param simLink string The URL to the (class/spec) sim to display.
 function UI:CreateMainWindow(classIsSupported, simLink)
-    if _frame then return end
+    if _frame then return _frame.frame end
 
     local frame = AceGUI:Create("Frame")
     frame:SetCallback("OnClose", OnClose)
@@ -92,7 +92,7 @@ into the provided box and click "Import"
 
     local button = AceGUI:Create("Button")
     button:SetText("Generate Data (Equipped Only)")
-    button:SetWidth(300)
+    button:SetWidth(666)
     button:SetCallback("OnClick", function()
         if _outputGenerator then
             UI:SetOutput(_outputGenerator())
@@ -100,7 +100,7 @@ into the provided box and click "Import"
     end)
     frame:AddChild(button)
 
-    local extraButton = AceGUI:Create("Button")
+    --[[local extraButton = AceGUI:Create("Button")
     extraButton:SetText("Batch: Export Bag Items")
     extraButton:SetWidth(300)
     extraButton:SetCallback("OnClick", function()
@@ -108,7 +108,7 @@ into the provided box and click "Import"
             UI:SetOutput(_outputGeneratorBags())
         end
     end)
-    frame:AddChild(extraButton)
+    frame:AddChild(extraButton)]]--
 
     local jsonbox = AceGUI:Create("MultiLineEditBox")
     jsonbox:SetLabel("Copy and paste into the websites importer!")
@@ -173,20 +173,51 @@ function UI:CreateInspectButton()
     local inspectButton = CreateFrame("Button", "WSEInspectButton", InspectFrame, "UIPanelButtonTemplate")
     inspectButton:SetSize(50, 24)
     inspectButton:SetText("WowSims")
-    inspectButton:SetPoint("TOPRIGHT", InspectFrame, "BOTTOMRIGHT", 0, 0)
+    inspectButton:SetPoint("BOTTOMRIGHT", InspectFrame, "BOTTOMRIGHT", 0, 0)
     inspectButton:SetSize(inspectButton:GetTextWidth() + 15, inspectButton:GetTextHeight() + 10)
     inspectButton:SetScript("OnClick", function()
-        
+        Env.WSEUnit = "target"
+        Env.WowSimsExporter:CreateWindow(true)
     end)
 end
+do
+    if Env.IS_CLASSIC_MISTS then
+        UnitPopupWowsimsExportMixin = CreateFromMixins(UnitPopupButtonBaseMixin)
+        UnitPopupMenuPlayerWSE = CreateFromMixins(UnitPopupTopLevelMenuMixin)
 
--- we might want to just make a event loader -wrex
-hooksecurefunc("InspectFrame_LoadUI", function()
-    C_Timer.After(0.1, UI.CreateInspectButton)
-end)
+        local playerMenu = UnitPopupManager:GetMenu("PLAYER")
+        local playerEntries = playerMenu:GetEntries()
+        tinsert(playerEntries, UnitPopupWowsimsExportMixin)
 
-if IsAddOnLoaded("Blizzard_InspectUI") then
-    C_Timer.After(0.1, UI.CreateInspectButton)
+        function UnitPopupMenuPlayerWSE:GetEntries()
+            return playerEntries
+        end
+
+        function UnitPopupWowsimsExportMixin:GetText(contextData)
+            return "WowSims Export"
+        end
+
+        function UnitPopupWowsimsExportMixin:OnClick(contextData)
+            Env.WowSimsExporter:OpenWindow("inspect")
+        end
+
+        function UnitPopupWowsimsExportMixin:GetInteractDistance()
+            return 2
+        end
+
+        function UI:CreateDropDownEntry()
+            UnitPopupManager:RegisterMenu("PLAYER", UnitPopupMenuPlayerWSE)
+        end
+
+        -- we might want to just make a event loader -wrex
+        hooksecurefunc("InspectFrame_LoadUI", function()
+            C_Timer.After(0.1, UI.CreateInspectButton)
+        end)
+
+        if C_AddOns.IsAddOnLoaded("Blizzard_InspectUI") then
+            C_Timer.After(0.1, UI.CreateInspectButton)
+        end
+    end
 end
 
 Env.UI = UI
