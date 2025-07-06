@@ -16,6 +16,7 @@ embeds.xml
 extras.lua
 Shared.lua
 Conditional_Wrath.lua
+SavedDataManager.lua
 ExportStructures/ItemSpec.lua
 ExportStructures/EquipmentSpec.lua
 ExportStructures/Misc.lua
