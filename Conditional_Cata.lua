@@ -16,10 +16,6 @@ Env.supportedClasses = {
     "deathknight",
 }
 
-Env.professionNames[GetSpellInfo(25229)] = { skillLine = 755, engName = "Jewelcrafting" }
-Env.professionNames[GetSpellInfo(45357)] = { skillLine = 773, engName = "Inscription" }
-
-
 local TblMaxValIdx = Env.TableMaxValIndex
 
 Env.AddSpec("shaman", "elemental", "shaman/elemental", function(t) return TblMaxValIdx(t) == 1 end)
