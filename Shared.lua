@@ -22,21 +22,18 @@ Env.supportedClientNames = {
     "Classic: SoD (Export may work for Era, but sim is made for SoD only!)",
 }
 
--- This is needed because classic has no way to get Ids for professions.
--- GetSkillLineInfo() only returns localized values. GetSpellInfo() also does.
--- These spells are NOT the skill line, but have the same name in english,
--- So they should probably end up with the same translation.
--- engName is what the sim uses.
 Env.professionNames = {
-    [GetSpellInfo(2018)] = { skillLine = 164, engName = "Blacksmithing" },
-    [GetSpellInfo(3104)] = { skillLine = 165, engName = "Leatherworking" },
-    [GetSpellInfo(2259)] = { skillLine = 171, engName = "Alchemy" },
-    [GetSpellInfo(9134)] = { skillLine = 182, engName = "Herbalism" },
-    [GetSpellInfo(2575)] = { skillLine = 186, engName = "Mining" },
-    [GetSpellInfo(3908)] = { skillLine = 197, engName = "Tailoring" },
-    [GetSpellInfo(12656)] = { skillLine = 202, engName = "Engineering" },
-    [GetSpellInfo(7412)] = { skillLine = 333, engName = "Enchanting" },
-    [GetSpellInfo(8617)] = { skillLine = 393, engName = "Skinning" },
+    [CHARACTER_PROFESSION_BLACKSMITHING]  = { skillLine = 164, engName = "Blacksmithing" },
+    [CHARACTER_PROFESSION_LEATHERWORKING] = { skillLine = 165, engName = "Leatherworking" },
+    [CHARACTER_PROFESSION_ALCHEMY]        = { skillLine = 171, engName = "Alchemy" },
+    [CHARACTER_PROFESSION_HERBALISM]      = { skillLine = 182, engName = "Herbalism" },
+    [CHARACTER_PROFESSION_MINING]         = { skillLine = 186, engName = "Mining" },
+    [CHARACTER_PROFESSION_TAILORING]      = { skillLine = 197, engName = "Tailoring" },
+    [CHARACTER_PROFESSION_ENGINEERING]    = { skillLine = 202, engName = "Engineering" },
+    [CHARACTER_PROFESSION_ENCHANTING]     = { skillLine = 333, engName = "Enchanting" },
+    [CHARACTER_PROFESSION_SKINNING]       = { skillLine = 393, engName = "Skinning" },
+    [CHARACTER_PROFESSION_JEWELCRAFTING]  = { skillLine = 755, engName = "Jewelcrafting" },
+    [CHARACTER_PROFESSION_INSCRIPTION]    = { skillLine = 773, engName = "Inscription" },
 }
 
 local statToStatId = {

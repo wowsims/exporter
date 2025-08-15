@@ -17,10 +17,6 @@ Env.supportedClasses = {
     "monk",
 }
 
-Env.professionNames[GetSpellInfo(25229)] = { skillLine = 755, engName = "Jewelcrafting" }
-Env.professionNames[GetSpellInfo(45357)] = { skillLine = 773, engName = "Inscription" }
-
-
 local GetSpecialization = C_SpecializationInfo.GetSpecialization
 
 Env.AddSpec("shaman", "elemental", "shaman/elemental", function(t) return GetSpecialization() == 1 end)
