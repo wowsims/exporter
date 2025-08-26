@@ -22,19 +22,31 @@ Env.supportedClientNames = {
     "Classic: SoD (Export may work for Era, but sim is made for SoD only!)",
 }
 
-Env.professionNames = {
-    [CHARACTER_PROFESSION_BLACKSMITHING]  = { skillLine = 164, engName = "Blacksmithing" },
-    [CHARACTER_PROFESSION_LEATHERWORKING] = { skillLine = 165, engName = "Leatherworking" },
-    [CHARACTER_PROFESSION_ALCHEMY]        = { skillLine = 171, engName = "Alchemy" },
-    [CHARACTER_PROFESSION_HERBALISM]      = { skillLine = 182, engName = "Herbalism" },
-    [CHARACTER_PROFESSION_MINING]         = { skillLine = 186, engName = "Mining" },
-    [CHARACTER_PROFESSION_TAILORING]      = { skillLine = 197, engName = "Tailoring" },
-    [CHARACTER_PROFESSION_ENGINEERING]    = { skillLine = 202, engName = "Engineering" },
-    [CHARACTER_PROFESSION_ENCHANTING]     = { skillLine = 333, engName = "Enchanting" },
-    [CHARACTER_PROFESSION_SKINNING]       = { skillLine = 393, engName = "Skinning" },
-    [CHARACTER_PROFESSION_JEWELCRAFTING]  = { skillLine = 755, engName = "Jewelcrafting" },
-    [CHARACTER_PROFESSION_INSCRIPTION]    = { skillLine = 773, engName = "Inscription" },
+-- SkillLine.db2
+local professionSkillLineIDs = {
+    Blacksmithing  = 164,
+    Leatherworking = 165,
+    Alchemy        = 171,
+    Herbalism      = 182,
+    Mining         = 186,
+    Tailoring      = 197,
+    Engineering    = 202,
+    Enchanting     = 333,
+    Skinning       = 393,
+    Jewelcrafting  = 755,
+    Inscription    = 773,
 }
+
+Env.professionNames = {}
+for engName, skillLine in pairs(professionSkillLineIDs) do
+    local localizedName = C_TradeSkillUI.GetTradeSkillDisplayName(skillLine)
+    if localizedName then
+        Env.professionNames[localizedName] = {
+            skillLine = skillLine,
+            engName = engName
+        }
+    end
+end
 
 local statToStatId = {
     str = 1,
