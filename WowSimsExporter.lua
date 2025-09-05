@@ -49,18 +49,22 @@ function WowSimsExporter:OnInitialize()
     self:RegisterChatCommand("wsexporter", "OpenWindow")
 
     -- Register events for automatic character saving
-    self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", "OnCharacterChanged")
-    self:RegisterEvent("CHARACTER_POINTS_CHANGED", "OnCharacterChanged") 
-    self:RegisterEvent("PLAYER_TALENT_UPDATE", "OnCharacterChanged")
-    self:RegisterEvent("ENCHANT_SPELL_COMPLETED", "OnCharacterChanged")
-    if Env.IS_CLASSIC_ERA_SOD then
-        self:RegisterEvent("RUNE_UPDATED", "OnCharacterChanged")
-    end
-    if not Env.IS_CLASSIC_ERA then
-        self:RegisterEvent("GLYPH_ADDED", "OnCharacterChanged")
-        self:RegisterEvent("GLYPH_REMOVED", "OnCharacterChanged")
-        self:RegisterEvent("GLYPH_UPDATED", "OnCharacterChanged")
-    end
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", function (event, isInitialLogin, isReloadingUI)
+        if isInitialLogin then
+            self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", "OnCharacterChanged")
+            self:RegisterEvent("CHARACTER_POINTS_CHANGED", "OnCharacterChanged") 
+            self:RegisterEvent("PLAYER_TALENT_UPDATE", "OnCharacterChanged")
+            self:RegisterEvent("ENCHANT_SPELL_COMPLETED", "OnCharacterChanged")
+            if Env.IS_CLASSIC_ERA_SOD then
+                self:RegisterEvent("RUNE_UPDATED", "OnCharacterChanged")
+            end
+            if not Env.IS_CLASSIC_ERA then
+                self:RegisterEvent("GLYPH_ADDED", "OnCharacterChanged")
+                self:RegisterEvent("GLYPH_REMOVED", "OnCharacterChanged")
+                self:RegisterEvent("GLYPH_UPDATED", "OnCharacterChanged")
+            end
+        end
+    end)
 
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
 
