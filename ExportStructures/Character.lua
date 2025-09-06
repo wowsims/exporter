@@ -53,10 +53,10 @@ function CharacterMeta:SetUnit(unit)
 end
 
 ---Fill remaining data needed for export.
-function CharacterMeta:FillForExport()
+function CharacterMeta:FillForExport(isInspect)
     assert(self.unit, "Unit was not yet set!")
     if Env.IS_CLASSIC_MISTS then
-        self.talents = Env.CreateMistsTalentString()
+        self.talents = Env.CreateMistsTalentString(isInspect)
     else
         self.talents = Env.CreateTalentString()
     end
@@ -67,7 +67,7 @@ function CharacterMeta:FillForExport()
     self.gear = equipmentSet
 
     if not Env.IS_CLASSIC_ERA then
-        self.glyphs = Env.CreateGlyphEntry()
+        self.glyphs = Env.CreateGlyphEntry(isInspect)
     end
 end
 
