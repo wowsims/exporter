@@ -3,7 +3,7 @@ local Env = select(2, ...)
 ---Create glyphs table.
 ---@return table
 function Env.CreateGlyphEntry(isInspect)
-    local unit = isInspect and "target" or "player"
+    local unit = isInspect and Env.inspectUnit or "player"
     local numGlyphSockets = GetNumGlyphSockets();
     local glyphs = {
         prime = {},
@@ -74,7 +74,7 @@ end
 ---Create a string in the format "000000". Used for Mists classic
 ---@return string
 function Env.CreateMistsTalentString(isInspect)
-    local unit = isInspect and "target" or "player"
+    local unit = isInspect and Env.inspectUnit or "player"
     local GetTalentInfo = C_SpecializationInfo.GetTalentInfo
     local activeSpecGroup = C_SpecializationInfo.GetActiveSpecGroup(isInspect)
     local talents = {}

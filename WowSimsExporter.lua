@@ -75,6 +75,9 @@ function WowSimsExporter:OnInitialize()
                 self:Unhook("InspectFrame_LoadUI")
             end)
         end)
+        self:SecureHook("InspectUnit", function (unit)
+            Env.inspectUnit=unit
+        end)
     end
 
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
@@ -124,7 +127,7 @@ end
 
 function WowSimsExporter:CreateWindow(generate, isInspect)
     local character = Env.CreateCharacter()
-    local unit = isInspect and "target" or "player"
+    local unit = isInspect and Env.inspectUnit or "player"
     character:SetUnit(unit)
     local classIsSupported = table.contains(Env.supportedClasses, character.class)
     local linkToSim = Env.prelink .. select(2, Env.GetSpec("player"))
