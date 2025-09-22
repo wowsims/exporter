@@ -5,7 +5,7 @@ Env.IS_CLASSIC_ERA_SOD = Env.IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
 Env.IS_CLASSIC_WRATH = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 Env.IS_CLASSIC_CATA = WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC
 Env.IS_CLASSIC_MISTS = WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC
-Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS
+Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA or Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS
 
 if Env.IS_CLASSIC_MISTS then
     Env.VERSION = C_AddOns.GetAddOnMetadata(select(1, ...), "Version")
@@ -19,7 +19,8 @@ Env.supportedClientNames = {
     "Classic: Mists of Pandaria",
     "Classic: Cataclysm",
     "Classic: WotLK",
-    "Classic: SoD (Export may work for Era, but sim is made for SoD only!)",
+    "Classic: SoD",
+    "Classic: Era/Anniversary",
 }
 
 -- SkillLine.db2
