@@ -340,13 +340,14 @@ function Env.GetHandTinker(unit)
         local region = regions[i]
         if region and region:GetObjectType() == "FontString" then
             local text = region:GetText()
-            if text and text:find(use_localized..".+1.?920.+"..cooldown_m_localized) then
+            -- some client have wierd character as separator, so hopefuly .?.? picks them all
+            if text and text:find(use_localized..".+1.?.?920.+"..cooldown_m_localized) then
                 return 4898 -- Synapse Srping
             end
-            if text and text:find(use_localized..".+2.?880.+"..cooldown_m_localized) then
+            if text and text:find(use_localized..".+2.?.?880.+"..cooldown_m_localized) then
                 return 4697 -- Phase Fingers
             end
-            if text and text:find(use_localized..".+42.?000.+63.?000.+"..cooldown_s_localized) then
+            if text and text:find(use_localized..".+42.?.?000.+63.?.?000.+"..cooldown_s_localized) then
                 return 4698 -- Incendiary Fireworks Launcher
             end
         end
