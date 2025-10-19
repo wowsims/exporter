@@ -229,8 +229,7 @@ function Env.GetSpec(unit)
                     return specData.spec, specData.url
                 end
             end
-        end
-         if not Env.IS_CLASSIC_MISTS then
+        else
             local spentTalentPoints
             spentTalentPoints = CountSpentTalentsPerTree(unit == "target")
             for _, specData in pairs(specializations[playerClass]) do
