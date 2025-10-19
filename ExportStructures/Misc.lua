@@ -36,8 +36,18 @@ function Env.CreateGlyphEntry(isInspect)
 
 end
 
+Env.profInspectTable = Env.profInspectTable or {}
+function Env.AddInspectedProfessions(name, entry)
+    Env.profInspectTable[name] = entry
+end
+
 ---Create professions table.
-function Env.CreateProfessionEntry()
+---@param isInspect boolean
+function Env.CreateProfessionEntry(isInspect)
+    if isInspect then
+        local unit = Env.inspectUnit
+        return Env.profInspectTable[UnitName(unit)]
+    end
     local professionNames = Env.professionNames
     local professions = {}
 

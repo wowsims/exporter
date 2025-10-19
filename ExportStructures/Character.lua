@@ -60,7 +60,7 @@ function CharacterMeta:FillForExport(isInspect)
     else
         self.talents = Env.CreateTalentString()
     end
-    self.professions = Env.CreateProfessionEntry()
+    self.professions = Env.CreateProfessionEntry(isInspect)
 
     local equipmentSet = Env.CreateEquipmentSpec()
     equipmentSet:UpdateEquippedItems(self.unit)

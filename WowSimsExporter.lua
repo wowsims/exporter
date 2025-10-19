@@ -11,7 +11,7 @@ local addonName, Env = ...
 
 local LibParse = LibStub("LibParse")
 
-local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
+local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "AceComm-3.0")
 
 local defaults = {
     profile = Env.SavedDataManager.defaults,
@@ -77,7 +77,15 @@ function WowSimsExporter:OnInitialize()
         end)
         self:SecureHook("InspectUnit", function (unit)
             Env.inspectUnit=unit
+            local name = UnitName(unit)
+            if Env.profInspectTable[name] == nil then
+                self:SendCommMessage("WSEProfession", "request", "WHISPER", name)
+            end
         end)
+        function self:OnCommReceived(prefix, text, sender, name)
+            self:handleAddonMessage(prefix, text, sender, name)
+        end
+        self:RegisterComm("WSEProfession")
     end
 
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
@@ -91,6 +99,26 @@ function WowSimsExporter:OnInitialize()
     if not Env.IS_CLIENT_SUPPORTED then
         self:Print("WARNING: Sim does not support your game version! Supported versions are:\n" ..
             table.concat(Env.supportedClientNames, "\n"))
+    end
+end
+
+function WowSimsExporter:handleAddonMessage(prefix, text, type, name)
+    if text == "request" then
+        local entry = Env.CreateProfessionEntry(false)
+        local msg = ""
+        for _, prof in pairs(entry) do
+            msg = msg..prof.name.."="..prof.level..", "
+        end
+        self:SendCommMessage("WSEProfession", msg, "WHISPER", name)
+    else -- received professions info
+        local entry = {}
+        for k, v in text:gmatch("(%w+)=(%w+)") do
+            table.insert(entry, {
+                name = k,
+                level = tonumber(v),
+            })
+        end
+        Env.AddInspectedProfessions(name, entry)
     end
 end
 
