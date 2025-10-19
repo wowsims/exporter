@@ -110,7 +110,7 @@ into the provided box and click "Import"
         end)
         container:AddChild(button)
 
-        --[[ local extraButton = AceGUI:Create("Button")
+        local extraButton = AceGUI:Create("Button")
         extraButton:SetText("Batch: Export Bag Items")
         extraButton:SetWidth(300)
         extraButton:SetCallback("OnClick", function()
@@ -118,7 +118,7 @@ into the provided box and click "Import"
                 UI:SetOutput(_outputGeneratorBags())
             end
         end)
-        container:AddChild(extraButton) ]]
+        container:AddChild(extraButton)
 
         local jsonbox = AceGUI:Create("MultiLineEditBox")
         jsonbox:SetLabel("Copy and paste into the websites importer!")
