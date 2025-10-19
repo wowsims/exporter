@@ -185,7 +185,7 @@ function SavedDataManager:OnCharacterChanged(event)
     end
     
     -- Generate and auto-save character data
-    character:FillForExport()
+    character:FillForExport(false)
     if character.level < GetMaxPlayerLevel() then
         return
     end

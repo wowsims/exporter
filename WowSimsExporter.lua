@@ -11,7 +11,7 @@ local addonName, Env = ...
 
 local LibParse = LibStub("LibParse")
 
-local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0")
+local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "AceComm-3.0")
 
 local defaults = {
     profile = Env.SavedDataManager.defaults,
@@ -66,6 +66,28 @@ function WowSimsExporter:OnInitialize()
         end
     end)
 
+    if Env.IS_CLASSIC_MISTS then
+        self:SecureHook("InspectFrame_LoadUI", function()
+            C_Timer.After(0.1, function()
+                Env.UI:CreateInspectButton(function ()
+                    self:CreateWindow(true, true)
+                end)
+                self:Unhook("InspectFrame_LoadUI")
+            end)
+        end)
+        self:SecureHook("InspectUnit", function (unit)
+            Env.inspectUnit=unit
+            local name = UnitName(unit)
+            if Env.profInspectTable[name] == nil then
+                self:SendCommMessage("WSEProfession", "request", "WHISPER", name)
+            end
+        end)
+        function self:OnCommReceived(prefix, text, sender, name)
+            self:handleAddonMessage(prefix, text, sender, name)
+        end
+        self:RegisterComm("WSEProfession")
+    end
+
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
 
     self:Print(addonName .. " " .. Env.VERSION .. " Initialized. Commands:\n" ..
@@ -80,22 +102,42 @@ function WowSimsExporter:OnInitialize()
     end
 end
 
+function WowSimsExporter:handleAddonMessage(prefix, text, type, name)
+    if text == "request" then
+        local entry = Env.CreateProfessionEntry(false)
+        local msg = ""
+        for _, prof in pairs(entry) do
+            msg = msg..prof.name.."="..prof.level..", "
+        end
+        self:SendCommMessage("WSEProfession", msg, "WHISPER", name)
+    else -- received professions info
+        local entry = {}
+        for k, v in text:gmatch("(%w+)=(%w+)") do
+            table.insert(entry, {
+                name = k,
+                level = tonumber(v),
+            })
+        end
+        Env.AddInspectedProfessions(name, entry)
+    end
+end
+
 function WowSimsExporter:OpenWindow(input)
     if not input or input:trim() == "" then
-        self:CreateWindow()
+        self:CreateWindow(false, false)
     elseif (input == "export") then
-        self:CreateWindow(true)
+        self:CreateWindow(true, false)
     elseif (input == "options") then
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
     end
 end
 
-local function GenerateOutput(character, exportBags)
-    character:FillForExport()
+local function GenerateOutput(character, isInspect, exportBags)
+    character:FillForExport(isInspect)
     local jsonExport = LibParse:JSONEncode(character)
     
-    if character.level == GetMaxPlayerLevel() then
+    if not isInspect and character.level == GetMaxPlayerLevel() then
         -- Automatically save to database using SavedDataManager
         Env.SavedDataManager:SaveCharacterData(jsonExport)
     end
@@ -111,21 +153,22 @@ local function GenerateOutputBags()
     return LibParse:JSONEncode(equipmentSpecBags)
 end
 
-function WowSimsExporter:CreateWindow(generate)
+function WowSimsExporter:CreateWindow(generate, isInspect)
     local character = Env.CreateCharacter()
-    character:SetUnit("player")
+    local unit = isInspect and Env.inspectUnit or "player"
+    character:SetUnit(unit)
     local classIsSupported = table.contains(Env.supportedClasses, character.class)
     local linkToSim = Env.prelink .. select(2, Env.GetSpec("player"))
 
     Env.UI:CreateMainWindow(classIsSupported, linkToSim)
     if not classIsSupported then return end
-    if generate then Env.UI:SetOutput(GenerateOutput(character)) end
+    if generate then Env.UI:SetOutput(GenerateOutput(character, isInspect)) end
 end
 
 Env.UI:SetOutputGenerator(function()
     local character = Env.CreateCharacter()
     character:SetUnit("player")
-    local output = GenerateOutput(character)
+    local output = GenerateOutput(character, false)
     return output
 end)
 
