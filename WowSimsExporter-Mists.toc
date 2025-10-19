@@ -1,7 +1,7 @@
 ## Title: WowSimsExporter |cff28ae7eMists of Pandaria|r
 ## Version: @project-version@
 ## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog, polynomix
-## Interface: 50500
+## Interface: 50501
 ## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/cata/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
