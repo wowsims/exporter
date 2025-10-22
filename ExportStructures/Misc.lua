@@ -46,7 +46,7 @@ end
 function Env.CreateProfessionEntry(isInspect)
     if isInspect then
         local unit = Env.inspectUnit
-        return Env.profInspectTable[UnitName(unit)]
+        return Env.profInspectTable[UnitName(unit)] or {}
     end
     local professionNames = Env.professionNames
     local professions = {}
