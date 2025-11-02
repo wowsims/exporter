@@ -110,6 +110,22 @@ function ItemSpecMeta:SetHandTinker(unit)
     if tinkerID ~= 0 then self.tinker = tinkerID end
 end
 
+function ItemSpecMeta:GetEnchant()
+    return self.enchant
+end
+
+function ItemSpecMeta:GetTinker()
+    return self.tinker
+end
+
+function ItemSpecMeta:GetGems()
+    return self.gems
+end
+
+function ItemSpecMeta:GetId()
+    return self.id
+end
+
 ---Create a new ItemSpec table.
 local function CreateItemSpec()
     return setmetatable({}, ItemSpecMeta)

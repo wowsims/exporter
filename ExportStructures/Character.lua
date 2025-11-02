@@ -60,11 +60,16 @@ function CharacterMeta:FillForExport(isInspect)
     else
         self.talents = Env.CreateTalentString()
     end
-    self.professions = Env.CreateProfessionEntry(isInspect)
 
     local equipmentSet = Env.CreateEquipmentSpec()
     equipmentSet:UpdateEquippedItems(self.unit)
     self.gear = equipmentSet
+
+    local professions = Env.CreateProfessionEntry(isInspect)
+    if isInspect and #professions == 0 then
+        professions = equipmentSet:InferProfessions()
+    end
+    self.professions = professions
 
     if not Env.IS_CLASSIC_ERA then
         self.glyphs = Env.CreateGlyphEntry(isInspect)
