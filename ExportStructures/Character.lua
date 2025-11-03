@@ -6,6 +6,7 @@ local Env = select(2, ...)
 local CharacterMeta = {
     version     = "",
     unit        = "",
+    id          = 0,
     name        = "",
     realm       = "",
     race        = "",
@@ -44,6 +45,7 @@ function CharacterMeta:SetUnit(unit)
 
     self.version = Env.VERSION
     self.unit = unit
+    self.id = UnitGUID(unit)
     self.name = name
     self.realm = realm
     self.race = getRace(unit, englishRace)
