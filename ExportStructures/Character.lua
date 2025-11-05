@@ -6,6 +6,7 @@ local Env = select(2, ...)
 local CharacterMeta = {
     version     = "",
     unit        = "",
+    id          = 0,
     name        = "",
     realm       = "",
     race        = "",
@@ -40,7 +41,8 @@ end
 ---@param unit "player"|"target" Target unit. "target" would need to be inspect target.
 function CharacterMeta:SetUnit(unit)
     local name, realm = UnitFullName(unit)
-    local _, englishClass, _, englishRace = GetPlayerInfoByGUID(UnitGUID(unit))
+    self.id = UnitGUID(unit)
+    local _, englishClass, _, englishRace = GetPlayerInfoByGUID(self.id)
 
     self.version = Env.VERSION
     self.unit = unit
