@@ -41,11 +41,11 @@ end
 ---@param unit "player"|"target" Target unit. "target" would need to be inspect target.
 function CharacterMeta:SetUnit(unit)
     local name, realm = UnitFullName(unit)
-    local _, englishClass, _, englishRace = GetPlayerInfoByGUID(UnitGUID(unit))
+    self.id = UnitGUID(unit)
+    local _, englishClass, _, englishRace = GetPlayerInfoByGUID(self.id)
 
     self.version = Env.VERSION
     self.unit = unit
-    self.id = UnitGUID(unit)
     self.name = name
     self.realm = realm
     self.race = getRace(unit, englishRace)
