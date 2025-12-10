@@ -1,0 +1,29 @@
+## Title: WowSimsExporter
+## Version: @project-version@
+## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog, polynomix
+## Interface: 50503, 40402, 38000, 11508
+## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/ for simulations.
+## SavedVariables: WSEDB
+## OptionalDeps: Ace3
+## X-Curse-Project-ID: 590920
+## X-Wago-ID: as3Dfg57
+## X-WoWI-ID: 26823
+
+#@non-debug@
+embeds.xml
+#@end-non-debug@
+
+extras.lua [AllowLoadGameType vanilla, wrath, cata]
+Shared.lua
+Conditional_Mists.lua [AllowLoadGameType mists]
+Conditional_Wrath.lua  [AllowLoadGameType wrath]
+Conditional_Vanilla.lua  [AllowLoadGameType vanilla]
+Conditional_Cata.lua [AllowLoadGameType cata]
+CataReforgeDetection.lua [AllowLoadGameType cata]
+SavedDataManager.lua
+ExportStructures/ItemSpec.lua
+ExportStructures/EquipmentSpec.lua
+ExportStructures/Misc.lua
+ExportStructures/Character.lua
+UI.lua
+WowSimsExporter.lua
