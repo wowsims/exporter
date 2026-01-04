@@ -1,7 +1,7 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_MISTS then return end
 
-Env.prelink = "https://wowsims.github.io/mop/"
+Env.prelink = "https://www.wowsims.com/mop/"
 
 Env.supportedClasses = {
     "hunter",

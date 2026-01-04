@@ -2,7 +2,7 @@
 ## Version: @project-version@
 ## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog
 ## Interface: 30405
-## Notes: This is an exporter written to quickly export your character to https://wowsims.github.io/wotlk/ for simulations.
+## Notes: This is an exporter written to quickly export your character to https://www.wowsims.com/wotlk/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
 ## X-Curse-Project-ID: 590920

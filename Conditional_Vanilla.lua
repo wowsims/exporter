@@ -1,7 +1,7 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_ERA then return end
 
-Env.prelink = "https://wowsims.github.io/sod/"
+Env.prelink = "https://www.wowsims.com/sod/"
 
 Env.supportedClasses = {
     "hunter",
