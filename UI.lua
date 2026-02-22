@@ -83,7 +83,7 @@ function UI:CreateMainWindow(classIsSupported, simLink)
 
         label:SetText([[
 
-To upload your character to the simuator, click on the url below that leads to the simuator website.
+To upload your character to the simulator, click on the url below that leads to the simulator website.
 
 You will find an Import button on the top right of the simulator named "Import". Click that and select the "Addon" tab, paste the data
 into the provided box and click "Import"
