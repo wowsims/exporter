@@ -58,7 +58,7 @@ function WowSimsExporter:OnInitialize()
             if Env.IS_CLASSIC_ERA_SOD then
                 self:RegisterEvent("RUNE_UPDATED", "OnCharacterChanged")
             end
-            if not Env.IS_CLASSIC_ERA then
+            if not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC then
                 self:RegisterEvent("GLYPH_ADDED", "OnCharacterChanged")
                 self:RegisterEvent("GLYPH_REMOVED", "OnCharacterChanged")
                 self:RegisterEvent("GLYPH_UPDATED", "OnCharacterChanged")

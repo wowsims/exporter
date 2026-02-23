@@ -23,6 +23,9 @@ if Env.IS_CLASSIC_ERA then
     if Env.IS_CLASSIC_ERA_SOD then
         protobufLayout.rune = "number"      -- int
     end
+elseif Env.IS_CLASSIC_TBC then
+    protobufLayout.random_suffix = "number" -- int
+    protobufLayout.gems = "table"           -- int[]
 elseif Env.IS_CLASSIC_WRATH then
     protobufLayout.gems = "table"           -- int[]
 elseif Env.IS_CLASSIC_CATA then

@@ -73,7 +73,7 @@ function CharacterMeta:FillForExport(isInspect)
     end
     self.professions = professions
 
-    if not Env.IS_CLASSIC_ERA then
+    if not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC then
         self.glyphs = Env.CreateGlyphEntry(isInspect)
     end
 end
