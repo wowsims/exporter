@@ -164,7 +164,7 @@ end
 -- Create a new EquipmentSpec table.
 local function CreateEquipmentSpec()
     local items = setmetatable({}, EquipmentSpecItemsMeta)
-    local equipment = setmetatable({ items = items, version = Env.VERSION }, EquipmentSpecMeta)
+    local equipment = setmetatable({ items = items }, EquipmentSpecMeta)
     return equipment
 end
 
