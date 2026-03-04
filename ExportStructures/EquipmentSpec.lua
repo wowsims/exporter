@@ -164,7 +164,13 @@ end
 -- Create a new EquipmentSpec table.
 local function CreateEquipmentSpec()
     local items = setmetatable({}, EquipmentSpecItemsMeta)
-    local equipment = setmetatable({ items = items, version = Env.VERSION }, EquipmentSpecMeta)
+
+    local equipment = nil;
+    if Env.IS_CLASSIC_TBC then    
+        equipment = setmetatable({ items = items}, EquipmentSpecMeta)
+    else
+        equipment = setmetatable({ items = items, version = Env.VERSION }, EquipmentSpecMeta)
+    end
     return equipment
 end
 
