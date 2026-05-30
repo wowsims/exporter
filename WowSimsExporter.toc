@@ -1,13 +1,24 @@
 ## Title: WowSimsExporter
 ## Version: @project-version@
 ## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog, polynomix
-## Interface: 50503, 40402, 38000, 20505, 11508
+## Interface: 50504, 50503, 40402, 38001, 20505, 11508
 ## Notes: This is an exporter written to quickly export your character to https://www.wowsims.com/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
 ## X-Curse-Project-ID: 590920
 ## X-Wago-ID: aN0Y936j
 ## X-WoWI-ID: 26823
+## Category: Development Tools
+## Category-deDE: Entwicklungstools
+## Category-esES: Herramientas de Desarrollo
+## Category-esMX: Herramientas de Desarrollo
+## Category-frFR: Outils de Développement
+## Category-itIT: Strumenti di sviluppo
+## Category-koKR: 개발 도구
+## Category-ptBR: Ferramentas de Desenvolvimento
+## Category-ruRU: Инструменты разработки
+## Category-zhCN: 开发工具
+## Category-zhTW: 開發工具
 
 #@non-debug@
 embeds.xml
