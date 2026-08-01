@@ -6,6 +6,7 @@
 -- Update Date : 2024-02-04 generalwrex (Natop on Old Blanchy) v2.6 - Minor fixes and version change
 -- Update Date : 2025-07-03 Polynomix & generalwrex v2.7
 -- Update Date : 2025-07-06 RaiN v2.8 - Added support for saving exported characters data in SavedVariables and added auto-save functionality.
+-- Update Date : 2026-08-01 generalwrex - Added option to toggle the character pane button, changed button to wowsims icon
 
 local addonName, Env = ...
 
@@ -26,9 +27,36 @@ local options = {
             type = "execute",
             name = "Open Exporter Window",
             desc = "Opens the exporter window",
-            func = function() WowSimsExporter:OpenWindow() end
+            func = function() WowSimsExporter:OpenWindow() end,
+            order = 1,
+            width = "full",
+        },
+        showCharacterButton = {
+            type = "toggle",
+            name = "Show Character Pane Button",
+            desc = "Show or hide the WowSims icon button on the character sheet.",
+            get = function(info)
+                -- Default to true
+                if WowSimsExporter.db.profile.showCharacterButton == nil then
+                    return true
+                end
+                return WowSimsExporter.db.profile.showCharacterButton
+            end,
+            set = function(info, value) 
+                WowSimsExporter.db.profile.showCharacterButton = value
+                -- show or hide
+                if WSECharacterFrameButton then
+                    if value then
+                        WSECharacterFrameButton:Show()
+                    else
+                        WSECharacterFrameButton:Hide()
+                    end
+                end
+            end,
+            order = 2,
         },
     },
+    
 }
 
 function WowSimsExporter:OnInitialize()
@@ -88,7 +116,10 @@ function WowSimsExporter:OnInitialize()
         self:RegisterComm("WSEProfession")
     end
 
-    Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func)
+    local showButton = self.db.profile.showCharacterButton
+    if showButton == nil then showButton = true end
+
+    Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func, showButton)
 
     self:Print(addonName .. " " .. Env.VERSION .. " Initialized. Commands:\n" ..
         "/wse - Open window\n" ..

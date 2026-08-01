@@ -181,7 +181,7 @@ into the provided box and click "Import"
         local savedCharsGroup = AceGUI:Create("InlineGroup")
         savedCharsGroup:SetTitle("Saved Characters")
         savedCharsGroup:SetFullWidth(true)
-        savedCharsGroup:SetLayout("Flow")
+        savedCharsGroup:SetLayout("list")
         scrollFrame:AddChild(savedCharsGroup)
 
         local function RefreshSavedCharsList()
@@ -247,33 +247,43 @@ end
 
 ---Create a button on the character panel that will call the provided function
 ---@param onClick fun()
-function UI:CreateCharacterPanelButton(onClick)
-    local openButton = CreateFrame("Button", nil, CharacterFrame, "UIPanelButtonTemplate")
-    if Env.IS_CLASSIC_CATA then
-        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
+function UI:CreateCharacterPanelButton(onClick, showInitially)
+
+    local openButton = CreateFrame("Button", "WSECharacterFrameButton", CharacterFrame)
+    openButton:SetSize(30, 30)
+    
+    -- using the wowsims icon instead, maybe it blends more?
+    openButton:SetNormalTexture("Interface\\AddOns\\wowsimsexporter\\Skins\\wowsims.tga")
+    openButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+    
+    -- statement to hide the button
+    if showInitially then
+        openButton:Show()
     else
-        openButton:SetPoint("RIGHT", CharacterFrameCloseButton, "RIGHT", 0, 0)
-        openButton:SetPoint("TOP", CharacterFrameTab1, "TOP", 0, 0)
+        openButton:Hide()
     end
-    openButton:Show()
-    openButton:SetText("WowSims")
-    openButton:SetSize(openButton:GetTextWidth() + 15, openButton:GetTextHeight() + 10)
+    
+    if Env.IS_CLASSIC_CATA then
+        openButton:SetPoint("TOPRIGHT", CharacterFrame, "TOPRIGHT", -6, -31)
+    else
+        openButton:SetPoint("TOPRIGHT", CharacterFrame, "TOPRIGHT", -6, -31)
+    end
+    
+    openButton:SetFrameLevel(CharacterFrame:GetFrameLevel() + 10)
+
     openButton:SetScript("OnClick", function(self)
         onClick()
     end)
     openButton:RegisterForClicks("AnyUp")
-end
 
-function UI:CreateInspectButton(onClick)
-    if not InspectFrame then return end
-
-    local inspectButton = CreateFrame("Button", "WSEInspectButton", InspectFrame, "UIPanelButtonTemplate")
-    inspectButton:SetSize(50, 24)
-    inspectButton:SetText("WowSims")
-    inspectButton:SetPoint("BOTTOMRIGHT", InspectFrame, "BOTTOMRIGHT", 0, 0)
-    inspectButton:SetSize(inspectButton:GetTextWidth() + 15, inspectButton:GetTextHeight() + 10)
-    inspectButton:SetScript("OnClick", function()
-        onClick()
+    -- tooltip!
+    openButton:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("Open WowSimsExporter")
+        GameTooltip:Show()
+    end)
+    openButton:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
     end)
 end
 
