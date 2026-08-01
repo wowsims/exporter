@@ -54,6 +54,7 @@ local options = {
                 end
             end,
             order = 2,
+            width = "double",
         },
     },
     
