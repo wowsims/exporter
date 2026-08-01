@@ -249,13 +249,10 @@ end
 ---@param onClick fun()
 function UI:CreateCharacterPanelButton(onClick, showInitially)
 
-    local openButton = CreateFrame("Button", "WSECharacterFrameButton", CharacterFrame)
+    local openButton = CreateFrame("Button", "WSECharacterFrameButton", CharacterFrame, "UIPanelButtonTemplate")
     openButton:SetSize(30, 30)
     
-    -- using the wowsims icon instead, maybe it blends more?
-    openButton:SetNormalTexture("Interface\\AddOns\\wowsimsexporter\\Skins\\wowsims.tga")
-    openButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
-    
+
     -- statement to hide the button
     if showInitially then
         openButton:Show()
@@ -264,13 +261,14 @@ function UI:CreateCharacterPanelButton(onClick, showInitially)
     end
     
     if Env.IS_CLASSIC_CATA then
-        openButton:SetPoint("TOPRIGHT", CharacterFrame, "TOPRIGHT", -6, -31)
+        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
     else
-        openButton:SetPoint("TOPRIGHT", CharacterFrame, "TOPRIGHT", -6, -31)
+        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
     end
     
     openButton:SetFrameLevel(CharacterFrame:GetFrameLevel() + 10)
-
+    openButton:SetText("WowSims")
+    openButton:SetSize(openButton:GetTextWidth() + 15, openButton:GetTextHeight() + 10)
     openButton:SetScript("OnClick", function(self)
         onClick()
     end)
