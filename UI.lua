@@ -262,6 +262,8 @@ function UI:CreateCharacterPanelButton(onClick, showInitially)
     
     if Env.IS_CLASSIC_CATA then
         openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
+    elseif Env.IS_CLASSIC_TBC then
+        openButton:SetPoint("TOPLEFT", CharacterFrameTab5, "TOPRIGHT", 0, 0)
     else
         openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
     end
