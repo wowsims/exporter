@@ -6,7 +6,8 @@ Env.IS_CLASSIC_WRATH = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 Env.IS_CLASSIC_CATA = WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC
 Env.IS_CLASSIC_MISTS = WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC
 Env.IS_CLASSIC_TBC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
-Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA or Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_TBC or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS
+Env.IS_FOREVER = WOW_PROJECT_ID == 18 -- unsure of the flag?? game spits 18
+Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA or Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_TBC or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS or Env.IS_FOREVER
 
 Env.VERSION = C_AddOns.GetAddOnMetadata(select(1, ...), "Version")
 Env.AUTHORS = C_AddOns.GetAddOnMetadata(select(1, ...), "Author")
@@ -18,6 +19,7 @@ Env.supportedClientNames = {
     "Classic: TBC",
     "Classic: SoD",
     "Classic: Era/Anniversary",
+    "Forever"
 }
 
 -- SkillLine.db2
@@ -186,17 +188,37 @@ function Env.GetEngravedRuneSpell(slotId, bagId)
     end
 end
 
+
 ---Counts spent talent points per tree.
 ---@param isInspect boolean If true use inspect target.
 ---@return table pointsPerTreeTable { tree1Count, tree2Count, tree3Count }
 local function CountSpentTalentsPerTree(isInspect)
-    local trees = {}
+    local trees = { 0, 0, 0 }
 
-    for tab = 1, GetNumTalentTabs(isInspect) do
-        trees[tab] = 0
-        for i = 1, GetNumTalents(tab, isInspect) do
-            local _, _, _, _, currentRank = GetTalentInfo(tab, i, isInspect)
-            trees[tab] = trees[tab] + currentRank
+    if GetNumTalentTabs and GetTalentTabInfo then
+        local numTabs = GetNumTalentTabs(isInspect) or 3
+        for tab = 1, numTabs do
+            local _, _, pointsSpent = nil, nil, 0
+            local res = { GetTalentTabInfo(tab, isInspect) }
+            pointsSpent = res[5] or 0
+
+            if pointsSpent == 0 and GetNumTalents and GetTalentInfo then
+                local numTalents = GetNumTalents(tab, isInspect) or 0
+                for i = 1, numTalents do
+                    local _, _, _, _, currentRank = GetTalentInfo(tab, i, isInspect)
+                    pointsSpent = pointsSpent + (currentRank or 0)
+                end
+            end
+
+            trees[tab] = pointsSpent
+        end
+        return trees
+    end
+
+    if C_SpecializationInfo and C_SpecializationInfo.GetSpecialization then
+        local currentSpec = C_SpecializationInfo.GetSpecialization()
+        if currentSpec and trees[currentSpec] ~= nil then
+            trees[currentSpec] = 1
         end
     end
 
