@@ -92,19 +92,44 @@ function EquipmentSpecMeta:UpdateEquippedItems(unit)
     end
 end
 
----Fill items with items from bag. Valid items are filtered by
----the Env.TreatItemAsPossibleUpgrade(itemLink) function.
+---Returns true if the bank window is currently open, meaning bank
+---container contents are available to C_Container queries.
+---@return boolean
+function Env.IsBankOpen()
+    return BankFrame ~= nil and BankFrame:IsShown()
+end
+
+---Build the list of container IDs to scan: backpack and equipped bags,
+---plus the main bank window and bank bags when the bank is open.
+---@return integer[]
+local function GetScannableContainerIds()
+    local ids = {}
+    for bagId = 0, NUM_BAG_SLOTS do
+        table.insert(ids, bagId)
+    end
+    if Env.IsBankOpen() then
+        table.insert(ids, BANK_CONTAINER)
+        for bankBag = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
+            table.insert(ids, bankBag)
+        end
+    end
+    return ids
+end
+
+---Fill items with items from bags (and the bank, if it is open).
+---Valid items are filtered by the Env.TreatItemAsPossibleUpgrade(itemLink) function.
 function EquipmentSpecMeta:FillFromBagItems()
     local GetContainerNumSlots = C_Container.GetContainerNumSlots
     local GetContainerItemLink = C_Container.GetContainerItemLink
     self:Reset()
-    for bagId = 0, NUM_BAG_SLOTS do
-        for slotId = 1, GetContainerNumSlots(bagId) do
+    for _, bagId in ipairs(GetScannableContainerIds()) do
+        local isBank = bagId < 0 or bagId > NUM_BAG_SLOTS
+        for slotId = 1, GetContainerNumSlots(bagId) or 0 do
             local itemLink = GetContainerItemLink(bagId, slotId)
             if itemLink and Env.TreatItemAsPossibleUpgrade(itemLink) then
                 local itemSpec = Env.CreateItemSpec()
                 itemSpec:FillFromItemLink(itemLink)
-                if Env.IS_CLASSIC_ERA_SOD then itemSpec:SetRuneSpellFromSlot(slotId, bagId) end
+                if Env.IS_CLASSIC_ERA_SOD and not isBank then itemSpec:SetRuneSpellFromSlot(slotId, bagId) end
                 table.insert(self.items, itemSpec)
             end
         end
