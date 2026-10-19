@@ -24,6 +24,9 @@
 embeds.xml
 #@end-non-debug@
 
+Locales/Locale.lua
+Locales/enUS.lua
+Locales/zhCN.lua
 Core/Flavor.lua
 Core/Util.lua
 Core/Tooltip.lua

@@ -1,6 +1,7 @@
 local Env = select(2, ...)
 
 local AceGUI = LibStub("AceGUI-3.0")
+local L = Env.L
 
 local UI = {}
 
@@ -17,8 +18,8 @@ end
 
 local function CreateCopyDialog(text)
     local frame = AceGUI:Create("Frame")
-    frame:SetTitle("WSE Copy Dialog")
-    frame:SetStatusText("Use CTRL+C to copy link")
+    frame:SetTitle(L["WSE Copy Dialog"])
+    frame:SetStatusText(L["Use CTRL+C to copy link"])
     frame:SetLayout("Flow")
     frame:SetWidth(400)
     frame:SetHeight(100)
@@ -44,7 +45,7 @@ function UI:CreateMainWindow(classIsSupported, simLink)
     local frame = AceGUI:Create("Frame")
     frame:SetCallback("OnClose", OnClose)
     frame:SetTitle("WowSimsExporter " .. Env.VERSION .. "")
-    frame:SetStatusText("Click 'Generate Data' to generate exportable data")
+    frame:SetStatusText(L["Click 'Generate Data' to generate exportable data"])
     frame:SetLayout("Fill")
 
     -- Add the frame as a global variable under the name `WowSimsExporter`
@@ -60,8 +61,8 @@ function UI:CreateMainWindow(classIsSupported, simLink)
     tabGroup:SetFullHeight(true)
     tabGroup:SetLayout("Flow")
     tabGroup:SetTabs({
-        { text = "Main", value = "main" },
-        { text = "Saved Data", value = "saveddata" },
+        { text = L["Main"], value = "main" },
+        { text = L["Saved Data"], value = "saveddata" },
     })
 
     local function CreateMainTab(container)
@@ -76,23 +77,20 @@ function UI:CreateMainWindow(classIsSupported, simLink)
         container:AddChild(label)
 
         if not classIsSupported then
-            label:SetText("Your characters class is currently unsupported. The supported classes are currently:\n" ..
-                table.concat(Env.Flavor.classes, "\n"))
+            local classNames = {}
+            for i, class in ipairs(Env.Flavor.classes) do
+                classNames[i] = LOCALIZED_CLASS_NAMES_MALE[class:upper()] or class
+            end
+            label:SetText(L["Your character's class is currently unsupported. The supported classes are currently:"] .. "\n" ..
+                table.concat(classNames, "\n"))
             return
         end
 
-        label:SetText([[
-
-To upload your character to the simulator, click on the url below that leads to the simulator website.
-
-You will find an Import button on the top right of the simulator named "Import". Click that and select the "Addon" tab, paste the data
-into the provided box and click "Import"
-
-]])
+        label:SetText(L["MAIN_INSTRUCTIONS"])
 
         if simLink then
             local ilabel = AceGUI:Create("InteractiveLabel")
-            ilabel:SetText("Click to copy: " .. simLink .. "\r\n")
+            ilabel:SetText(L["Click to copy: %s"]:format(simLink) .. "\r\n")
             ilabel:SetFullWidth(true)
             ilabel:SetCallback("OnClick", function()
                 CreateCopyDialog(simLink)
@@ -101,7 +99,7 @@ into the provided box and click "Import"
         end
 
         local button = AceGUI:Create("Button")
-        button:SetText("Generate Data (Equipped Only)")
+        button:SetText(L["Generate Data (Equipped Only)"])
         button:SetWidth(300)
         button:SetCallback("OnClick", function()
             if _outputGenerator then
@@ -111,7 +109,7 @@ into the provided box and click "Import"
         container:AddChild(button)
 
         local extraButton = AceGUI:Create("Button")
-        extraButton:SetText("Batch: Export Bag Items")
+        extraButton:SetText(L["Batch: Export Bag Items"])
         extraButton:SetWidth(300)
         extraButton:SetCallback("OnClick", function()
             if _outputGeneratorBags then
@@ -121,7 +119,7 @@ into the provided box and click "Import"
         container:AddChild(extraButton)
 
         local jsonbox = AceGUI:Create("MultiLineEditBox")
-        jsonbox:SetLabel("Copy and paste into the websites importer!")
+        jsonbox:SetLabel(L["Copy and paste into the websites importer!"])
         jsonbox:SetFullWidth(true)
         jsonbox:SetFullHeight(true)
         jsonbox:DisableButton(true)
@@ -143,43 +141,43 @@ into the provided box and click "Import"
         container:AddChild(scrollFrame)
 
         local label = AceGUI:Create("Label")
-        label:SetText("Saved Character Data Management")
+        label:SetText(L["Saved Character Data Management"])
         label:SetFontObject(GameFontNormalLarge)
         label:SetFullWidth(true)
         scrollFrame:AddChild(label)
 
         local autoSaveGroup = AceGUI:Create("InlineGroup")
-        autoSaveGroup:SetTitle("Auto-Save Settings")
+        autoSaveGroup:SetTitle(L["Auto-Save Settings"])
         autoSaveGroup:SetFullWidth(true)
         autoSaveGroup:SetLayout("Flow")
         scrollFrame:AddChild(autoSaveGroup)
 
         local autoSaveCheckbox = AceGUI:Create("CheckBox")
-        autoSaveCheckbox:SetLabel("Enable Auto-Save")
+        autoSaveCheckbox:SetLabel(L["Enable Auto-Save"])
         autoSaveCheckbox:SetValue(Env.SavedDataManager.db and Env.SavedDataManager.db.profile.autoSaveEnabled or false)
         autoSaveCheckbox:SetCallback("OnValueChanged", function(widget, event, value)
             if Env.SavedDataManager.db then
                 Env.SavedDataManager.db.profile.autoSaveEnabled = value
-                local status = value and "enabled" or "disabled"
-                DEFAULT_CHAT_FRAME:AddMessage("[WowSimsExporter] Auto-save " .. status .. ".")
+                local msg = value and L["Auto-save enabled."] or L["Auto-save disabled."]
+                DEFAULT_CHAT_FRAME:AddMessage("[WowSimsExporter] " .. msg)
             end
         end)
         autoSaveGroup:AddChild(autoSaveCheckbox)
 
         local messagesCheckbox = AceGUI:Create("CheckBox")
-        messagesCheckbox:SetLabel("Show Auto-Save Messages")
+        messagesCheckbox:SetLabel(L["Show Auto-Save Messages"])
         messagesCheckbox:SetValue(Env.SavedDataManager.db and Env.SavedDataManager.db.profile.showAutoSaveMessages or false)
         messagesCheckbox:SetCallback("OnValueChanged", function(widget, event, value)
             if Env.SavedDataManager.db then
                 Env.SavedDataManager.db.profile.showAutoSaveMessages = value
-                local status = value and "enabled" or "disabled"
-                DEFAULT_CHAT_FRAME:AddMessage("[WowSimsExporter] Auto-save messages " .. status .. ".")
+                local msg = value and L["Auto-save messages enabled."] or L["Auto-save messages disabled."]
+                DEFAULT_CHAT_FRAME:AddMessage("[WowSimsExporter] " .. msg)
             end
         end)
         autoSaveGroup:AddChild(messagesCheckbox)
 
         local savedCharsGroup = AceGUI:Create("InlineGroup")
-        savedCharsGroup:SetTitle("Saved Characters")
+        savedCharsGroup:SetTitle(L["Saved Characters"])
         savedCharsGroup:SetFullWidth(true)
         savedCharsGroup:SetLayout("list")
         scrollFrame:AddChild(savedCharsGroup)
@@ -191,7 +189,7 @@ into the provided box and click "Import"
             
             if #savedChars == 0 then
                 local noDataLabel = AceGUI:Create("Label")
-                noDataLabel:SetText("No saved characters found.")
+                noDataLabel:SetText(L["No saved characters found."])
                 noDataLabel:SetFullWidth(true)
                 savedCharsGroup:AddChild(noDataLabel)
                 return
@@ -205,12 +203,12 @@ into the provided box and click "Import"
                 savedCharsGroup:AddChild(charGroup)
 
                 local infoLabel = AceGUI:Create("Label")
-                infoLabel:SetText("Saved: " .. charData.dateString)
+                infoLabel:SetText(L["Saved: %s"]:format(charData.dateString))
                 infoLabel:SetWidth(200)
                 charGroup:AddChild(infoLabel)
 
                 local exportButton = AceGUI:Create("Button")
-                exportButton:SetText("Export")
+                exportButton:SetText(L["Export"])
                 exportButton:SetWidth(80)
                 exportButton:SetCallback("OnClick", function()
                     tabGroup:SelectTab("main")
@@ -219,7 +217,7 @@ into the provided box and click "Import"
                 charGroup:AddChild(exportButton)
 
                 local deleteButton = AceGUI:Create("Button")
-                deleteButton:SetText("Delete")
+                deleteButton:SetText(L["Delete"])
                 deleteButton:SetWidth(80)
                 deleteButton:SetCallback("OnClick", function()
                     Env.SavedDataManager:DeleteSavedCharacter(i)
@@ -274,7 +272,7 @@ function UI:CreateCharacterPanelButton(onClick, showInitially)
     -- tooltip!
     openButton:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText("Open WowSimsExporter")
+        GameTooltip:SetText(L["Open WowSimsExporter"])
         GameTooltip:Show()
     end)
     openButton:SetScript("OnLeave", function(self)
@@ -302,7 +300,7 @@ function UI:SetOutput(outputString)
     _jsonbox:SetText(outputString)
     _jsonbox:HighlightText()
     _jsonbox:SetFocus()
-    _frame:SetStatusText("Data Generated!")
+    _frame:SetStatusText(L["Data Generated!"])
 end
 
 ---Set the function that is used to get the output value when
