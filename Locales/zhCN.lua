@@ -15,6 +15,8 @@ Env.RegisterLocale("zhCN", {
 
 ]],
     ["Click to copy: %s"] = "点击复制：%s",
+    ["International site - click to copy: %s"] = "国际版（点击复制）：%s",
+    ["China site - click to copy: %s"] = "中国版（点击复制）：%s",
     ["Generate Data (Equipped Only)"] = "生成数据（仅已装备）",
     ["Batch: Export Bag Items"] = "批量：导出背包物品",
     ["Copy and paste into the websites importer!"] = "复制并粘贴到网站的导入器中！",

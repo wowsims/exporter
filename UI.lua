@@ -88,14 +88,21 @@ function UI:CreateMainWindow(classIsSupported, simLink)
 
         label:SetText(L["MAIN_INSTRUCTIONS"])
 
-        if simLink then
+        local function AddLinkLabel(text, link)
             local ilabel = AceGUI:Create("InteractiveLabel")
-            ilabel:SetText(L["Click to copy: %s"]:format(simLink) .. "\r\n")
+            ilabel:SetText(text .. "\r\n")
             ilabel:SetFullWidth(true)
             ilabel:SetCallback("OnClick", function()
-                CreateCopyDialog(simLink)
+                CreateCopyDialog(link)
             end)
             container:AddChild(ilabel)
+        end
+
+        if simLink and Env.Flavor.cnPrelink and Env.LOCALE == "zhCN" then
+            AddLinkLabel(L["International site - click to copy: %s"]:format(simLink), simLink)
+            AddLinkLabel(L["China site - click to copy: %s"]:format(Env.Flavor.cnPrelink), Env.Flavor.cnPrelink)
+        elseif simLink then
+            AddLinkLabel(L["Click to copy: %s"]:format(simLink), simLink)
         end
 
         local button = AceGUI:Create("Button")

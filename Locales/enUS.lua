@@ -17,6 +17,8 @@ into the provided box and click "Import"
 
 ]],
     ["Click to copy: %s"] = true,
+    ["International site - click to copy: %s"] = true,
+    ["China site - click to copy: %s"] = true,
     ["Generate Data (Equipped Only)"] = true,
     ["Batch: Export Bag Items"] = true,
     ["Copy and paste into the websites importer!"] = true,
