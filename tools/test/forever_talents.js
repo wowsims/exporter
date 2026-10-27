@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Checks the WoW Forever talent export in Conditional_Forever.lua against wowsims/forever.
+// Checks the WoW Forever talent export in Flavors/Forever/Flavor.lua against wowsims/forever.
 //
 // Every talent string in the sim's spec presets and saved builds (ui/specs/<class>/**), plus one
 // build per class with every talent maxed, is turned into mocked C_Traits data built from the sim's
@@ -20,7 +20,7 @@ if (!foreverDir) {
 	console.error('Usage: node tools/test/forever_talents.js <path to wowsims/forever checkout>');
 	process.exit(2);
 }
-const addonFile = path.join(__dirname, '..', '..', 'Conditional_Forever.lua');
+const addonFile = path.join(__dirname, '..', '..', 'Flavors', 'Forever', 'Flavor.lua');
 
 // Same rules as the sim's ui/sim/talents/talents_string.ts.
 const parseTalentsString = (trees, talentsString) => {

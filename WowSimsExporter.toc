@@ -24,15 +24,15 @@
 embeds.xml
 #@end-non-debug@
 
-extras.lua [AllowLoadGameType vanilla, tbc, wrath, cata]
-Shared.lua
-Conditional_Mists.lua [AllowLoadGameType mists]
-Conditional_Wrath.lua  [AllowLoadGameType wrath]
-Conditional_Vanilla.lua  [AllowLoadGameType vanilla]
-Conditional_Cata.lua [AllowLoadGameType cata]
-Conditional_TBC.lua [AllowLoadGameType tbc]
-Conditional_Forever.lua [AllowLoadGameType camelot]
-CataReforgeDetection.lua [AllowLoadGameType cata]
+Talents/ClassicTrees.lua [AllowLoadGameType vanilla, tbc, wrath, cata]
+Core/Shared.lua
+Flavors/Mists/Flavor.lua [AllowLoadGameType mists]
+Flavors/Wrath/Flavor.lua [AllowLoadGameType wrath]
+Flavors/Vanilla/Flavor.lua [AllowLoadGameType vanilla]
+Flavors/Cata/Flavor.lua [AllowLoadGameType cata]
+Flavors/TBC/Flavor.lua [AllowLoadGameType tbc]
+Flavors/Forever/Flavor.lua [AllowLoadGameType camelot]
+Flavors/Cata/Reforge.lua [AllowLoadGameType cata]
 SavedDataManager.lua
 ExportStructures/ItemSpec.lua
 ExportStructures/EquipmentSpec.lua
