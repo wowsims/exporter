@@ -13,6 +13,7 @@ local CharacterMeta = {
     class       = "",
     level       = 0,
     talents     = "",
+    talentTrees = "",
     professions = {},
     spec        = "",
     gear        = {},
@@ -59,6 +60,9 @@ function CharacterMeta:FillForExport(isInspect)
     assert(self.unit, "Unit was not yet set!")
     local flavor = Env.Flavor
     self.talents = flavor.CreateTalentString(isInspect)
+    if flavor.talentTrees then
+        self.talentTrees = flavor.talentTrees
+    end
 
     local equipmentSet = Env.CreateEquipmentSpec()
     equipmentSet:UpdateEquippedItems(self.unit)

@@ -35,6 +35,7 @@ Env.supportedClientNames = {
 ---@field events string[] Events besides the common ones that mean the character changed.
 ---@field characterButtonPoint table SetPoint arguments for the character pane button; the relative frame by global name.
 ---@field supportsInspect boolean Whether inspected players can be exported.
+---@field talentTrees string|nil Names the trees CreateTalentString is laid out for, so the sim can tell them apart from another version's.
 ---@field CreateTalentString fun(isInspect:boolean):string
 ---@field CountPointsPerTree (fun(unit:string):number[])|nil Points spent per talent tree, for AddSpec checks.
 ---@field GetSpecializationID (fun(unit:string):integer)|nil Used instead of CountPointsPerTree to match AddSpec spec IDs.
