@@ -42,12 +42,27 @@ const check = status => {
 	if (status !== lua.LUA_OK) throw new Error(lua.lua_tojsstring(L, -1));
 };
 
+// The first TraitDefinition ID of each Forever talent tree, as a Lua table literal, read from the
+// generated table so the fake Forever client always matches it.
+const foreverFirstTalents = () => {
+	const source = fs.readFileSync(path.join(ROOT, 'Flavors', 'Forever', 'Talents.lua'), 'utf8');
+	const block = source.slice(source.indexOf('-- BEGIN GENERATED TALENTS'), source.indexOf('-- END GENERATED TALENTS'));
+	const classes = [...block.matchAll(/^\s{4}([A-Z]+) = \{\r?\n((?:\s{8}\{[^\n]*\r?\n)+)/gm)].map(([, cls, trees]) => {
+		const firstIds = [...trees.matchAll(/^\s{8}\{ (\d+)/gm)].map(match => match[1]);
+		if (firstIds.length !== 3) throw new Error(`expected 3 Forever talent trees for ${cls}, found ${firstIds.length}`);
+		return `${cls} = { ${firstIds.join(', ')} }`;
+	});
+	if (classes.length === 0) throw new Error('no Forever talent table found in Flavors/Forever/Talents.lua');
+	return `FOREVER_FIRST_TALENTS = { ${classes.join(', ')} }`;
+};
+
 let L;
 const runFlavor = (flavor, gameType) => {
 	L = lauxlib.luaL_newstate();
 	lualib.luaL_openlibs(L);
 	lua.lua_pushstring(L, to_luastring(flavor));
 	lua.lua_setglobal(L, to_luastring('FLAVOR'));
+	check(lauxlib.luaL_dostring(L, to_luastring(foreverFirstTalents())));
 	check(lauxlib.luaL_dofile(L, to_luastring(path.join(__dirname, 'wow_mock.lua'))));
 
 	const runner = `

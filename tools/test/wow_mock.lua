@@ -310,14 +310,13 @@ if HAS_GLYPHS then
     end
 end
 
--- Forever: the first talent of each tree per class, as TraitDefinition IDs from wowsims/forever.
-local FOREVER_FIRST_TALENTS = {
-    DRUID = { 134384, 134399, 134418 }, HUNTER = { 134422, 134478, 134461 },
-    MAGE = { 135345, 135327, 135310 }, PALADIN = { 135164, 135155, 135237 },
-    PRIEST = { 142599, 135397, 142597 }, ROGUE = { 135272, 135238, 135286 },
-    SHAMAN = { 134234, 134218, 134200 }, WARLOCK = { 135452, 135436, 135412 },
-    WARRIOR = { 135489, 135469, 135505 },
-}
+-- Forever: the first talent of each tree per class, as TraitDefinition IDs. snapshots.js reads them
+-- from the generated table in Flavors/Forever/Talents.lua, so the Forever snapshot doesn't change
+-- when the daily sync regenerates that table.
+local FOREVER_FIRST_TALENTS = FOREVER_FIRST_TALENTS
+if flavor == "forever" then
+    assert(FOREVER_FIRST_TALENTS, "snapshots.js must set FOREVER_FIRST_TALENTS")
+end
 
 if flavor == "forever" then
     local function Nodes()

@@ -50,6 +50,11 @@ jobs:
           npm ci --prefix tools/test
           node tools/test/forever_talents.js .forever
 
+      # The sync PR is opened and merged with the workflow token, which starts no other workflows, so
+      # the Tests workflow never sees it. Run the export snapshots here before merging instead.
+      - name: Check export snapshots
+        run: node tools/test/snapshots.js
+
       - name: Open PR with the updated table
         id: pr
         if: github.event_name != 'pull_request'
