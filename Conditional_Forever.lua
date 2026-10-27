@@ -20,6 +20,7 @@ Env.supportedClasses = {
 -- C_Traits instead, so each tree is listed here by TraitDefinition ID in the sim's order.
 -- Regenerate with tools/gen_forever_talents.py when the sim's trees change.
 -- BEGIN GENERATED TALENTS
+-- Source: wowsims/forever@0d14cf7921bc
 local talentDefinitionIds = {
     DRUID = {
         { 134384, 134385, 134386, 134392, 134388, 134390, 134387, 134389, 134391, 134393, 134394, 142590, 134395, 134396, 134397, 134398 }, -- Balance
