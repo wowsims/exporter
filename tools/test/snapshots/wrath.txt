@@ -40,6 +40,7 @@
 }
 {
   "class": "deathknight",
+  "flavor": "wrath",
   "gear": {
     "items": [
       {

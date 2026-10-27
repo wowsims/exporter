@@ -5,6 +5,7 @@ local Env = select(2, ...)
 -- The metatable for a Character.
 local CharacterMeta = {
     version     = "",
+    flavor      = "",
     unit        = "",
     id          = 0,
     name        = "",
@@ -45,6 +46,7 @@ function CharacterMeta:SetUnit(unit)
     local _, englishClass, _, englishRace = GetPlayerInfoByGUID(self.id)
 
     self.version = Env.VERSION
+    self.flavor = Env.Flavor.name
     self.unit = unit
     self.name = name
     self.realm = realm

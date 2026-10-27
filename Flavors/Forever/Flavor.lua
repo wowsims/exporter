@@ -19,6 +19,7 @@ local function GetProfessionsFromProfessionAPI()
 end
 
 Env.RegisterFlavor({
+    name = "forever",
     prelink = "https://www.wowsims.com/forever/",
     classes = {
         "hunter",

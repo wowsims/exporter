@@ -38,6 +38,7 @@
 }
 {
   "class": "warlock",
+  "flavor": "sod",
   "gear": {
     "items": [
       {

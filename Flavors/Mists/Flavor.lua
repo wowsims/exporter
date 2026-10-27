@@ -2,6 +2,7 @@ local Env = select(2, ...)
 if not Env.IS_CLASSIC_MISTS then return end
 
 Env.RegisterFlavor({
+    name = "mists",
     prelink = "https://www.wowsims.com/mop/",
     classes = {
         "hunter",

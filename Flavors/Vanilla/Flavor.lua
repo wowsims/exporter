@@ -5,6 +5,7 @@ if not Env.IS_CLASSIC_ERA then return end
 local isSoD = Env.IS_CLASSIC_ERA_SOD
 
 Env.RegisterFlavor({
+    name = isSoD and "sod" or "era",
     prelink = "https://www.wowsims.com/sod/",
     classes = {
         "hunter",

@@ -38,6 +38,7 @@
 }
 {
   "class": "mage",
+  "flavor": "forever",
   "gear": {
     "items": [
       {
@@ -141,6 +142,7 @@
 }
 {
   "class": "mage",
+  "flavor": "forever",
   "gear": {
     "items": [
       {
@@ -228,6 +230,7 @@
 }
 {
   "class": "mage",
+  "flavor": "forever",
   "gear": {
     "items": [
       {

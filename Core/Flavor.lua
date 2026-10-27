@@ -29,6 +29,7 @@ Env.supportedClientNames = {
 -- from Env.Flavor instead of checking which client it runs on. Fields a flavor leaves out fall back
 -- to these defaults; optional hooks default to nil and are skipped.
 ---@class Flavor
+---@field name string Short name of the game version, exported as the character's flavor so a sim can tell where an export came from: era, sod, tbc, wrath, cata, mists or forever.
 ---@field prelink string Base URL of the sim, e.g. "https://www.wowsims.com/tbc/".
 ---@field classes string[] Lowercase class names the sim supports.
 ---@field itemFields table<string, string> ItemSpec fields the sim reads, besides id and enchant, with their Lua type.
@@ -46,6 +47,7 @@ Env.supportedClientNames = {
 ---@field DecorateBagItem (fun(itemSpec:table, bagId:integer, slotId:integer))|nil
 ---@field InferProfessions (fun(equipmentSpec:table):table[])|nil Guesses an inspected player's professions from gear.
 local defaults = {
+    name = "",
     prelink = "https://www.wowsims.com/",
     classes = {},
     itemFields = {},
