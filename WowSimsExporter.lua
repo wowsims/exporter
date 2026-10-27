@@ -180,8 +180,13 @@ end
 local function GenerateOutputBags()
     local equipmentSpecBags = Env.CreateEquipmentSpec()
     equipmentSpecBags:FillFromBagItems()
-    DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags."):format(#
-        equipmentSpecBags.items))
+    if Env.IsBankOpen() then
+        DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags and bank."):format(#
+            equipmentSpecBags.items))
+    else
+        DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags. (Open the bank to include bank items.)"):format(#
+            equipmentSpecBags.items))
+    end
     return LibParse:JSONEncode(equipmentSpecBags)
 end
 
