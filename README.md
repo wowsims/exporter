@@ -3,7 +3,9 @@ An exporter addon for World Of Warcraft: Classic Sims at https://www.wowsims.com
 
 Supports Classic Era/Anniversary, Season of Discovery, TBC, WotLK, Cataclysm and Mists of Pandaria Classic, and WoW Forever (https://www.wowsims.com/forever/).
 
-The WoW Forever talent table in `Conditional_Forever.lua` is generated from the sim's talent trees. Regenerate it with `python3 tools/gen_forever_talents.py <path to a wowsims/forever checkout>` when they change, and check it with `npm ci --prefix tools/forever_talents_test && node tools/forever_talents_test/test.js <same path>`, which replays every talent string from the sim's presets through the export. The Forever talents workflow does both daily and opens a PR when the table changes.
+The WoW Forever talent table in `Conditional_Forever.lua` is generated from the sim's talent trees. Regenerate it with `python3 tools/gen_forever_talents.py <path to a wowsims/forever checkout>` when they change, and check it with `npm ci --prefix tools/forever_talents_test && node tools/forever_talents_test/test.js <same path>`, which replays every talent string from the sim's presets through the export. The Forever talents workflow does both daily, and opens and merges a PR when the table changes.
+
+The Interface versions workflow checks Blizzard's version service daily and opens a PR (for review) adding the interface number of any new client build to the TOC. Run it locally with `python3 tools/update_interface_versions.py`.
 
 There is a channel on the wowsims discord call integrations to talking real time to people, please don't use the discord for support if it can be avoided please use the issue tracker. we may request to talk to you in the integrations channel involving a pull request or an issue though that's fine.
 
