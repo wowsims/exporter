@@ -1,0 +1,174 @@
+## Events
+[
+  "ACTIVE_COMBAT_CONFIG_CHANGED",
+  "ENCHANT_SPELL_COMPLETED",
+  "PLAYER_EQUIPMENT_CHANGED",
+  "PLAYER_TALENT_UPDATE",
+  "TRAIT_CONFIG_UPDATED"
+]
+
+## Hooks
+{}
+
+## Comms
+{}
+
+## Chat commands
+[
+  "wse",
+  "wowsimsexporter",
+  "wsexporter"
+]
+
+## Character pane button
+[
+  {
+    "point": "TOPRIGHT",
+    "relativePoint": "BOTTOMRIGHT",
+    "relativeTo": "CharacterFrame",
+    "x": 0,
+    "y": 0
+  }
+]
+
+## Export: MAGE tree 2
+{
+  "classIsSupported": true,
+  "link": "https://www.wowsims.com/forever/mage/dps"
+}
+{
+  "class": "mage",
+  "gear": {
+    "items": [
+      {
+        "id": 1001
+      },
+      {
+        "id": 1002
+      },
+      {
+        "enchant": 2003,
+        "id": 1003
+      },
+      {
+        "enchant": 2015,
+        "id": 1015,
+        "random_suffix": -15
+      },
+      {
+        "id": 1005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "id": 1009
+      },
+      {
+        "id": 1010,
+        "random_suffix": -10
+      },
+      {
+        "enchant": 2006,
+        "id": 1006
+      },
+      {
+        "id": 1007
+      },
+      {
+        "id": 1008
+      },
+      {
+        "id": 1011
+      },
+      {
+        "enchant": 2012,
+        "id": 1012
+      },
+      {
+        "id": 1013
+      },
+      {
+        "id": 1014
+      },
+      {
+        "id": 1016
+      },
+      {
+        "id": 1017
+      }
+    ]
+  },
+  "id": "Player-1-00000001",
+  "level": 60,
+  "name": "Tester",
+  "professions": [
+    {
+      "level": 300,
+      "name": "Herbalism"
+    },
+    {
+      "level": 290,
+      "name": "Enchanting"
+    }
+  ],
+  "race": "NightElf",
+  "realm": "TestRealm",
+  "spec": "fire",
+  "talents": "2-5-2",
+  "unit": "player",
+  "version": "test-version"
+}
+
+## Bag export
+{
+  "items": [
+    {
+      "enchant": 2500,
+      "id": 7001
+    },
+    {
+      "id": 7005
+    },
+    {
+      "id": 7006
+    }
+  ]
+}
+
+## Spec matrix
+WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/forever/warrior/dps
+WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/forever/warrior/dps
+WARRIOR 3: supported=true spec=protection link=https://www.wowsims.com/forever/warrior/protection
+PALADIN 1: supported=true spec=holy link=https://www.wowsims.com/forever/paladin/holy
+PALADIN 2: supported=true spec=protection link=https://www.wowsims.com/forever/paladin/protection
+PALADIN 3: supported=true spec=retribution link=https://www.wowsims.com/forever/paladin/retribution
+HUNTER 1: supported=true spec=beast_mastery link=https://www.wowsims.com/forever/hunter/dps
+HUNTER 2: supported=true spec=marksman link=https://www.wowsims.com/forever/hunter/dps
+HUNTER 3: supported=true spec=survival link=https://www.wowsims.com/forever/hunter/dps
+ROGUE 1: supported=true spec=assassination link=https://www.wowsims.com/forever/rogue/dps
+ROGUE 2: supported=true spec=combat link=https://www.wowsims.com/forever/rogue/dps
+ROGUE 3: supported=true spec=subtlety link=https://www.wowsims.com/forever/rogue/dps
+PRIEST 1: supported=true spec=holy_disc link=https://www.wowsims.com/forever/priest/healer
+PRIEST 2: supported=true spec=holy_disc link=https://www.wowsims.com/forever/priest/healer
+PRIEST 3: supported=true spec=shadow link=https://www.wowsims.com/forever/priest/dps
+SHAMAN 1: supported=true spec=elemental link=https://www.wowsims.com/forever/shaman/elemental
+SHAMAN 2: supported=true spec=enhancement link=https://www.wowsims.com/forever/shaman/enhancement
+SHAMAN 3: supported=true spec=restoration link=https://www.wowsims.com/forever/shaman/restoration
+MAGE 1: supported=true spec=arcane link=https://www.wowsims.com/forever/mage/dps
+MAGE 2: supported=true spec=fire link=https://www.wowsims.com/forever/mage/dps
+MAGE 3: supported=true spec=frost link=https://www.wowsims.com/forever/mage/dps
+WARLOCK 1: supported=true spec=affliction link=https://www.wowsims.com/forever/warlock/dps
+WARLOCK 2: supported=true spec=demonology link=https://www.wowsims.com/forever/warlock/dps
+WARLOCK 3: supported=true spec=destruction link=https://www.wowsims.com/forever/warlock/dps
+DRUID 1: supported=true spec=balance link=https://www.wowsims.com/forever/druid/balance
+DRUID 2: supported=true spec=feral link=https://www.wowsims.com/forever/druid/feralcat
+DRUID 3: supported=true spec=restoration link=https://www.wowsims.com/forever/druid/restoration
+
+## Prints
+WowSimsExporter test-version Initialized. Commands:
+/wse - Open window
+/wse export - Export character (auto-saves)
+Auto-save: ENABLED
+|cff008000Credits go to test-authors|r
+Character data saved for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.

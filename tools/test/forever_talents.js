@@ -6,7 +6,7 @@
 // tree files. The addon's export must give back the same string the sim would write, and the same
 // points per tree.
 //
-// Usage: node tools/forever_talents_test/test.js <path to wowsims/forever checkout>
+// Usage: node tools/test/forever_talents.js <path to wowsims/forever checkout>
 
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +17,7 @@ const TALENTS_STRING = /talentsString"?\s*:\s*['"]([0-9-]*)['"]/g;
 
 const foreverDir = process.argv[2];
 if (!foreverDir) {
-	console.error('Usage: node tools/forever_talents_test/test.js <path to wowsims/forever checkout>');
+	console.error('Usage: node tools/test/forever_talents.js <path to wowsims/forever checkout>');
 	process.exit(2);
 }
 const addonFile = path.join(__dirname, '..', '..', 'Conditional_Forever.lua');

@@ -13,7 +13,7 @@ on:
     paths:
       - Conditional_Forever.lua
       - tools/gen_forever_talents.py
-      - tools/forever_talents_test/**
+      - tools/test/**
       - .github/workflows/forever-talents.yml
 
 permissions:
@@ -47,8 +47,8 @@ jobs:
 
       - name: Check export against the sim's presets
         run: |
-          npm ci --prefix tools/forever_talents_test
-          node tools/forever_talents_test/test.js .forever
+          npm ci --prefix tools/test
+          node tools/test/forever_talents.js .forever
 
       - name: Open PR with the updated table
         id: pr

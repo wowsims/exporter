@@ -1,0 +1,12 @@
+{
+  "name": "wowsimsexporter-tests",
+  "private": true,
+  "description": "Offline tests for WowSimsExporter: export snapshots per game version and the Forever talent table",
+  "scripts": {
+    "snapshots": "node snapshots.js",
+    "snapshots:update": "node snapshots.js --update"
+  },
+  "dependencies": {
+    "fengari": "0.1.4"
+  }
+}
