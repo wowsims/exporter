@@ -1,7 +1,7 @@
 ## Title: WowSimsExporter
 ## Version: @project-version@
 ## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog, polynomix
-## Interface: 50504, 50503, 40402, 38001, 20505, 11508
+## Interface: 50504, 50503, 40402, 38002, 38001, 20506, 20505, 11509, 11508
 ## Notes: This is an exporter written to quickly export your character to https://www.wowsims.com/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
