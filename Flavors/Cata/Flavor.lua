@@ -34,7 +34,7 @@ local TblMaxValIdx = Env.TableMaxValIndex
 
 Env.AddSpec("shaman", "elemental", "shaman/elemental", function(t) return TblMaxValIdx(t) == 1 end)
 Env.AddSpec("shaman", "enhancement", "shaman/enhancement", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("shaman", "enhancement", "shaman/restoration", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("shaman", "restoration", "shaman/restoration", function(t) return TblMaxValIdx(t) == 3 end)
 
 Env.AddSpec("hunter", "beast_mastery", "hunter/beast_mastery", function(t) return TblMaxValIdx(t) == 1 end)
 Env.AddSpec("hunter", "marksman", "hunter/marksmanship", function(t) return TblMaxValIdx(t) == 2 end)
@@ -51,7 +51,7 @@ Env.AddSpec("druid", "guardian", "druid/guardian", function(t)
         and Env.GetTalentRankOrdered(2, 1) == 3 -- https://www.wowhead.com/cata/spell=16929/thick-hide
 end) 
 ]]
-Env.AddSpec("druid", "balance", "druid/Restoration", function(t) return TblMaxValIdx(t) == 3 end)
+Env.AddSpec("druid", "restoration", "druid/restoration", function(t) return TblMaxValIdx(t) == 3 end)
 
 Env.AddSpec("warlock", "affliction", "warlock/affliction", function(t) return TblMaxValIdx(t) == 1 end)
 Env.AddSpec("warlock", "demonology", "warlock/demonology", function(t) return TblMaxValIdx(t) == 2 end)
@@ -69,7 +69,7 @@ Env.AddSpec("warrior", "arms", "warrior/arms", function(t) return TblMaxValIdx(t
 Env.AddSpec("warrior", "fury", "warrior/fury", function(t) return TblMaxValIdx(t) == 2 end)
 Env.AddSpec("warrior", "protection", "warrior/protection", function(t) return TblMaxValIdx(t) == 3 end)
 
-Env.AddSpec("paladin", "protection", "paladin/holy", function(t) return TblMaxValIdx(t) == 1 end)
+Env.AddSpec("paladin", "holy", "paladin/holy", function(t) return TblMaxValIdx(t) == 1 end)
 Env.AddSpec("paladin", "protection", "paladin/protection", function(t) return TblMaxValIdx(t) == 2 end)
 Env.AddSpec("paladin", "retribution", "paladin/retribution", function(t) return TblMaxValIdx(t) == 3 end)
 
