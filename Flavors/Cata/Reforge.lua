@@ -1,4 +1,5 @@
 local Env = select(2, ...)
+if not Env.IS_CLASSIC_CATA then return end
 
 -- Map stat IDs used in reforging to their localised (tooltip) strings.
 ---@type table<integer, {statString:string, statStringNoVar:string}>

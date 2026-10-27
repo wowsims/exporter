@@ -1,4 +1,5 @@
 local Env = select(2, ...)
+if not (Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS) then return end
 
 ---Create glyphs table from Wrath's glyph sockets.
 ---@return table
