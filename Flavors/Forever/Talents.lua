@@ -56,11 +56,25 @@ local talentDefinitionIds = {
 }
 -- END GENERATED TALENTS
 
+---Get the active talent config. C_ClassTalents is the documented API; the spec group lookup is a fallback.
+---@return integer|nil configID nil if the client has no talent config API.
+local function GetActiveTalentConfigID()
+    if C_ClassTalents and C_ClassTalents.GetActiveConfigID then
+        return C_ClassTalents.GetActiveConfigID()
+    end
+    if C_SpecializationInfo and C_SpecializationInfo.GetCombatConfigIDForSpecGroup then
+        local specGroup = C_SpecializationInfo.GetActiveSpecGroup and C_SpecializationInfo.GetActiveSpecGroup() or 1
+        return C_SpecializationInfo.GetCombatConfigIDForSpecGroup(specGroup)
+    end
+    return nil
+end
+
 ---Get the ranks of all purchased talents in the active spec group.
+---Returns nil instead of failing when talents can't be read, so the rest of the export still works.
 ---@return table<integer, integer>|nil ranks TraitDefinition ID to rank, nil if the client has no talent data yet.
 function Env.GetForeverTalentRanks()
-    local specGroup = C_SpecializationInfo.GetActiveSpecGroup and C_SpecializationInfo.GetActiveSpecGroup() or 1
-    local configID = C_SpecializationInfo.GetCombatConfigIDForSpecGroup(specGroup)
+    if not C_Traits then return nil end
+    local configID = GetActiveTalentConfigID()
     if not configID then return nil end
 
     local configInfo = C_Traits.GetConfigInfo(configID)
