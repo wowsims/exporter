@@ -11,7 +11,70 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="ExportStructures/UI.lua">
+    <Content Include="WowSimsExporter.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="embeds.xml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Flavor.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Util.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Tooltip.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Professions.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Items.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Spec.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Talents/ClassicTrees.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Talents/Glyphs.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Vanilla/Runes.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Vanilla/Flavor.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/TBC/Flavor.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Wrath/Flavor.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Cata/Reforge.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Cata/Flavor.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Mists/Items.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Mists/Talents.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Mists/Flavor.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Forever/Talents.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Flavors/Forever/Flavor.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="SavedDataManager.lua">
       <SubType>Code</SubType>
     </Content>
     <Content Include="ExportStructures/ItemSpec.lua">
@@ -20,34 +83,13 @@
     <Content Include="ExportStructures/EquipmentSpec.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="ExportStructures/Misc.lua">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="ExportStructures/Character.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="WowSimsExporter-Vanilla.toc">
-      <SubType>TableOfContents</SubType>
-    </Content>
-    <Content Include="extras.lua">
+    <Content Include="UI.lua">
       <SubType>Code</SubType>
-    </Content>
-    <Content Include="Shared.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Conditional_Wrath.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Conditional_Vanilla.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="WowSimsExporter-Wrath.toc">
-      <SubType>TableOfContents</SubType>
     </Content>
     <Content Include="WowSimsExporter.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="embeds.xml">
       <SubType>Code</SubType>
     </Content>
   </ItemGroup>
@@ -187,10 +229,41 @@
     <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Slider.lua">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Libs/LibParse/LibParse.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Libs/AceComm-3.0/AceComm-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Libs/AceComm-3.0/AceComm-3.0.xml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Libs/AceComm-3.0/ChatThrottleLib.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Libs/AceHook-3.0/AceHook-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Libs/AceHook-3.0/AceHook-3.0.xml">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\" />
+    <Folder Include="ExportStructures\" />
+    <Folder Include="Flavors\" />
+    <Folder Include="Flavors\Cata\" />
+    <Folder Include="Flavors\Forever\" />
+    <Folder Include="Flavors\Mists\" />
+    <Folder Include="Flavors\TBC\" />
+    <Folder Include="Flavors\Vanilla\" />
+    <Folder Include="Flavors\Wrath\" />
+    <Folder Include="Talents\" />
     <Folder Include="Libs\" />
     <Folder Include="Libs\AceAddon-3.0\" />
+    <Folder Include="Libs\AceComm-3.0\" />
+    <Folder Include="Libs\AceHook-3.0\" />
+    <Folder Include="Libs\LibParse\" />
     <Folder Include="Libs\AceConfig-3.0\" />
     <Folder Include="Libs\AceConfig-3.0\AceConfigCmd-3.0\" />
     <Folder Include="Libs\AceConfig-3.0\AceConfigDialog-3.0\" />
