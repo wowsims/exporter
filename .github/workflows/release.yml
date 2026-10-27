@@ -24,7 +24,8 @@ jobs:
     # specify the environment variables used by the packager, matching the secrets from the project on GitHub
     env:
       CF_API_KEY: ${{ secrets.CF_API_KEY }}
-      WOWI_API_TOKEN: ${{ secrets.WI_API_KEY }}
+      # WoWInterface uploads fail with curl HTTP/2 PROTOCOL_ERROR (likely stale WI_API_KEY); disabled until the token is regenerated
+      # WOWI_API_TOKEN: ${{ secrets.WI_API_KEY }}
       WAGO_API_TOKEN: ${{ secrets.WAGO_API_KEY }}
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}  # "GITHUB_TOKEN" is a secret always provided to the workflow
                                                  # for your own token, the name cannot start with "GITHUB_"
@@ -34,7 +35,7 @@ jobs:
 
       # we first have to clone the AddOn project, this is a required step
       - name: Clone project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
         with:
           # you can specify how much of the commit history you want to fetch,
           # which is useful for controlling the length of the automated changelog
