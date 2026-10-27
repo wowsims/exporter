@@ -702,6 +702,23 @@ function MOCK.RunScenario(root, files)
         MOCK.inspectVariant = nil
     end
 
+    if flavor == "forever" then
+        -- The talent config API isn't confirmed on the live client: read it through C_ClassTalents
+        -- instead, then with no talent API at all, where the export must still hold the gear.
+        local GetCombatConfigIDForSpecGroup = C_SpecializationInfo.GetCombatConfigIDForSpecGroup
+        C_SpecializationInfo.GetCombatConfigIDForSpecGroup = nil
+        C_ClassTalents = { GetActiveConfigID = function() return 7 end }
+        for _, variant in ipairs({ "C_ClassTalents", "no talent API" }) do
+            MOCK.class, MOCK.tree = REPRESENTATIVE_CLASS[flavor], 2
+            addon:CreateWindow(true, false)
+            Section("Export (" .. variant .. "): " .. MOCK.class .. " tree 2", Serialize({
+                link = window.link,
+            }) .. "\n" .. window.output)
+            C_ClassTalents = nil
+        end
+        C_SpecializationInfo.GetCombatConfigIDForSpecGroup = GetCombatConfigIDForSpecGroup
+    end
+
     local matrix = {}
     for _, class in ipairs(MOCK.classes) do
         for tree = 1, MOCK.SpecCount(class) do

@@ -1,4 +1,5 @@
 local Env = select(2, ...)
+if not (Env.IS_CLASSIC_ERA or Env.IS_CLASSIC_TBC or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA) then return end
 
 -- Borrowed from rating buster!!
 -- As of Classic Patch 3.4.0, GetTalentInfo indices no longer correlate

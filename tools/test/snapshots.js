@@ -26,6 +26,12 @@ const FLAVORS = {
 	forever: 'camelot',
 };
 
+// AllowLoadGameType values each client recognises. A client loads a file whose types it recognises
+// none of, so the classic clients, which predate Forever, load the Forever files and rely on their
+// IS_FOREVER guard.
+const CLASSIC_GAME_TYPES = ['vanilla', 'tbc', 'wrath', 'cata', 'mists'];
+const knownGameTypes = gameType => (gameType === 'camelot' ? [...CLASSIC_GAME_TYPES, 'camelot'] : CLASSIC_GAME_TYPES);
+
 const tocFiles = gameType =>
 	fs
 		.readFileSync(path.join(ROOT, 'WowSimsExporter.toc'), 'utf8')
@@ -34,7 +40,10 @@ const tocFiles = gameType =>
 		.filter(line => line && !line.startsWith('#') && !line.endsWith('.xml'))
 		.filter(line => {
 			const match = line.match(/\[AllowLoadGameType ([^\]]+)\]/);
-			return !match || match[1].split(',').map(type => type.trim()).includes(gameType);
+			if (!match) return true;
+			const types = match[1].split(',').map(type => type.trim());
+			const known = knownGameTypes(gameType);
+			return types.includes(gameType) || !types.some(type => known.includes(type));
 		})
 		.map(line => line.replace(/\s*\[.*$/, '').replace(/\\/g, '/'));
 
