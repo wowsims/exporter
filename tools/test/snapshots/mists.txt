@@ -374,6 +374,7 @@ WARLOCK 3: supported=true spec=destruction link=https://www.wowsims.com/mop/warl
 DRUID 1: supported=true spec=balance link=https://www.wowsims.com/mop/druid/balance
 DRUID 2: supported=true spec=feral link=https://www.wowsims.com/mop/druid/feral
 DRUID 3: supported=true spec=guardian link=https://www.wowsims.com/mop/druid/guardian
+DRUID 4: supported=true spec=restoration link=https://www.wowsims.com/mop/druid/restoration
 DEATHKNIGHT 1: supported=true spec=blood link=https://www.wowsims.com/mop/death_knight/blood
 DEATHKNIGHT 2: supported=true spec=frost link=https://www.wowsims.com/mop/death_knight/frost
 DEATHKNIGHT 3: supported=true spec=unholy link=https://www.wowsims.com/mop/death_knight/unholy

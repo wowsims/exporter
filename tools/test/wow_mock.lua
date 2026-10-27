@@ -284,6 +284,12 @@ local MISTS_SPEC_IDS = {
     DEATHKNIGHT = { 250, 251, 252 }, MONK = { 268, 270, 269 },
 }
 
+-- How many talent trees, or MoP specializations, the spec matrix tries for a class.
+function MOCK.SpecCount(class)
+    if flavor == "mists" then return #MISTS_SPEC_IDS[class] end
+    return 3
+end
+
 if flavor == "cata" or flavor == "mists" or flavor == "forever" then
     C_SpecializationInfo = { GetActiveSpecGroup = function() return 1 end }
 end
@@ -679,7 +685,7 @@ function MOCK.RunScenario(root, files)
 
     local matrix = {}
     for _, class in ipairs(MOCK.classes) do
-        for tree = 1, 3 do
+        for tree = 1, MOCK.SpecCount(class) do
             MOCK.class, MOCK.tree = class, tree
             addon:CreateWindow(false, false)
             local character = Env.CreateCharacter()
