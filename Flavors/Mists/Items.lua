@@ -56,39 +56,59 @@ function Env.GetHandTinker(unit)
     return 0
 end
 
+local GetItemNumSockets = C_Item.GetItemNumSockets
+
+-- Gems only jewelcrafters can socket.
+local jewelcraftingGems = { 83141, 83147, 83150, 83151, 83152 }
+
 ---Attempt to infer an inspected player's professions from gear
 ---@param equipmentSpec table
----@return table
-local GetItemNumSockets = C_Item.GetItemNumSockets
+---@return table professions Empty if the gear suggests more than two, since then a guess is wrong.
 function Env.InferProfessionsFromGear(equipmentSpec)
+    local function Enchant(slotId)
+        local item = equipmentSpec:GetItemInSlot(slotId)
+        return item and item:GetEnchant()
+    end
+    -- Blacksmiths add a socket to their bracers and gloves.
+    local function HasExtraSocket(slotId)
+        local item = equipmentSpec:GetItemInSlot(slotId)
+        return item ~= nil and #(item:GetGems() or {}) > GetItemNumSockets(item:GetId())
+    end
+
     local professions = {}
-    if equipmentSpec:GetItemInSlot(INVSLOT_FINGER1):GetEnchant() or equipmentSpec:GetItemInSlot(INVSLOT_FINGER2):GetEnchant() then
+    if Enchant(INVSLOT_FINGER1) or Enchant(INVSLOT_FINGER2) then
         table.insert(professions,{name = "Enchanting", level = 600})
     end
-    if #equipmentSpec:GetItemInSlot(INVSLOT_HAND):GetGems() > GetItemNumSockets(equipmentSpec:GetItemInSlot(INVSLOT_HAND):GetId()) or
-       #equipmentSpec:GetItemInSlot(INVSLOT_WRIST):GetGems() > GetItemNumSockets(equipmentSpec:GetItemInSlot(INVSLOT_WRIST):GetId()) then
+    if HasExtraSocket(INVSLOT_HAND) or HasExtraSocket(INVSLOT_WRIST) then
         table.insert(professions,{name = "Blacksmithing", level = 600})
     end
-    if table.contains({4880,4881,4882}, equipmentSpec:GetItemInSlot(INVSLOT_LEGS):GetEnchant()) or table.contains({4875,4877,4878,4879}, equipmentSpec:GetItemInSlot(INVSLOT_WRIST):GetEnchant()) then
+    if table.contains({4880,4881,4882}, Enchant(INVSLOT_LEGS)) or table.contains({4875,4877,4878,4879}, Enchant(INVSLOT_WRIST)) then
         table.insert(professions,{name = "Leatherworking", level = 600})
     end
-    if table.contains({4895,4896}, equipmentSpec:GetItemInSlot(INVSLOT_LEGS):GetEnchant()) or table.contains({4892,4893,4894}, equipmentSpec:GetItemInSlot(INVSLOT_BACK):GetEnchant()) then
+    if table.contains({4895,4896}, Enchant(INVSLOT_LEGS)) or table.contains({4892,4893,4894}, Enchant(INVSLOT_BACK)) then
         table.insert(professions,{name = "Tailoring", level = 600})
     end
-    if equipmentSpec:GetItemInSlot(INVSLOT_HAND):GetTinker() ~= nil then
+    local hands = equipmentSpec:GetItemInSlot(INVSLOT_HAND)
+    if hands and hands:GetTinker() ~= nil then
         table.insert(professions,{name = "Engineering", level = 600})
     end
-    for _, item in ipairs(equipmentSpec.items) do
-        if table.contains({83141,83147,83150,83151,83152}, item:GetGems()) then
-            table.insert(professions,{name = "Jewelcrafting", level = 600})
-            break
+    -- pairs, not ipairs: empty slots leave gaps in items.
+    local hasJewelcraftingGem = false
+    for _, item in pairs(equipmentSpec.items) do
+        for _, gemId in pairs(item:GetGems() or {}) do
+            if table.contains(jewelcraftingGems, gemId) then
+                hasJewelcraftingGem = true
+            end
         end
     end
-    if table.contains({4912,4913,4914,4915}, equipmentSpec:GetItemInSlot(INVSLOT_SHOULDER):GetEnchant()) then
+    if hasJewelcraftingGem then
+        table.insert(professions,{name = "Jewelcrafting", level = 600})
+    end
+    if table.contains({4912,4913,4914,4915}, Enchant(INVSLOT_SHOULDER)) then
         table.insert(professions,{name = "Inscription", level = 600})
     end
     if #professions > 2 then
-        error("Too many professions detected !")
+        return {}
     end
     return professions
 end

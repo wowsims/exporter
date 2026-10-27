@@ -404,18 +404,29 @@ local function ItemLink(id, enchant, gems, suffix, reforge)
         suffix or "", info.level, reforge or "", id)
 end
 
+-- The inspected player's gear has a ring enchant (Enchanting) and a leg enchant (Leatherworking).
+-- MOCK.inspectVariant changes it: "gaps" empties the head and first ring slots, drops the leg
+-- enchant and adds a Jewelcrafting-only gem; "conflict" only adds the gem, for three professions.
 local INSPECT_ENCHANTS = { [INVSLOT_FINGER1] = 4359, [INVSLOT_LEGS] = 4880 }
 
 function GetInventoryItemLink(unit, slot)
     if slot == INVSLOT_RANGED or slot == INVSLOT_BODY or slot == INVSLOT_TABARD then
         return nil
     end
-    local base = unit == "player" and 1000 or 5000
+    local inspected = unit ~= "player"
+    local variant = inspected and MOCK.inspectVariant
+    if variant == "gaps" and (slot == INVSLOT_HEAD or slot == INVSLOT_FINGER1) then
+        return nil
+    end
+    local base = inspected and 5000 or 1000
     local enchant = slot % 3 == 0 and tostring(2000 + slot) or nil
-    if unit ~= "player" and INSPECT_ENCHANTS[slot] then
+    if inspected and INSPECT_ENCHANTS[slot] and not (variant == "gaps" and slot == INVSLOT_LEGS) then
         enchant = tostring(INSPECT_ENCHANTS[slot])
     end
     local gems = slot % 4 == 0 and { "3001", nil, "3003" } or {}
+    if variant and slot == INVSLOT_NECK then
+        gems = { "83141" }
+    end
     local suffix = slot % 5 == 0 and tostring(-slot) or nil
     local reforge = slot % 2 == 0 and tostring(113 + slot) or nil
     return ItemLink(base + slot, enchant, gems, suffix, reforge)
@@ -681,6 +692,14 @@ function MOCK.RunScenario(root, files)
         addon.hooks.InspectUnit("target")
         addon:CreateWindow(true, true)
         Section("Inspect export: " .. MOCK.class .. " tree 2", window.output)
+
+        for _, variant in ipairs({ "gaps", "conflict" }) do
+            MOCK.inspectVariant = variant
+            window.output = nil
+            addon:CreateWindow(true, true)
+            Section("Inspect export (" .. variant .. "): " .. MOCK.class .. " tree 2", window.output)
+        end
+        MOCK.inspectVariant = nil
     end
 
     local matrix = {}
