@@ -63,12 +63,3 @@ Env.AddSpec("deathknight", "unholy", "death_knight/unholy", function(t) return G
 Env.AddSpec("monk", "brewmaster", "monk/brewmaster", function(t) return GetSpecialization() == 1 end, 268)
 Env.AddSpec("monk", "mistweaver", "monk/mistweaver", function(t) return GetSpecialization() == 2 end, 270)
 Env.AddSpec("monk", "windwalker", "monk/windwalker", function(t) return GetSpecialization() == 3 end, 269)
-
-function table.contains(table, element)
-    for _, value in pairs(table) do
-        if value == element then
-            return true
-        end
-    end
-    return false
-end

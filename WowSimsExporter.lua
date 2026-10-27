@@ -60,11 +60,21 @@ local options = {
     
 }
 
+---Register an event, skipping events the client doesn't have (registering one of those throws).
+---@param event string
+---@param handler string
+function WowSimsExporter:RegisterEventIfValid(event, handler)
+    if C_EventUtils and C_EventUtils.IsEventValid and not C_EventUtils.IsEventValid(event) then
+        return
+    end
+    self:RegisterEvent(event, handler)
+end
+
 function WowSimsExporter:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("WSEDB", defaults, true)
 
     LibStub("AceConfig-3.0"):RegisterOptionsTable("WowSimsExporter", options)
-    self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("WowSimsExporter", "WowSimsExporter")
+    self.optionsFrame, self.optionsCategoryID = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("WowSimsExporter", "WowSimsExporter")
 
     local profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
     LibStub("AceConfig-3.0"):RegisterOptionsTable("WowSimsExporter_Profiles", profiles)
@@ -80,14 +90,17 @@ function WowSimsExporter:OnInitialize()
     -- Register events for automatic character saving
     self:RegisterEvent("PLAYER_ENTERING_WORLD", function (event, isInitialLogin, isReloadingUI)
         if isInitialLogin then
-            self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", "OnCharacterChanged")
-            self:RegisterEvent("CHARACTER_POINTS_CHANGED", "OnCharacterChanged") 
-            self:RegisterEvent("PLAYER_TALENT_UPDATE", "OnCharacterChanged")
-            self:RegisterEvent("ENCHANT_SPELL_COMPLETED", "OnCharacterChanged")
+            self:RegisterEventIfValid("PLAYER_EQUIPMENT_CHANGED", "OnCharacterChanged")
+            self:RegisterEventIfValid("CHARACTER_POINTS_CHANGED", "OnCharacterChanged")
+            self:RegisterEventIfValid("PLAYER_TALENT_UPDATE", "OnCharacterChanged")
+            self:RegisterEventIfValid("ENCHANT_SPELL_COMPLETED", "OnCharacterChanged")
             if Env.IS_CLASSIC_ERA_SOD then
                 self:RegisterEvent("RUNE_UPDATED", "OnCharacterChanged")
             end
-            if not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC then
+            if Env.IS_FOREVER then
+                self:RegisterEventIfValid("TRAIT_CONFIG_UPDATED", "OnCharacterChanged")
+                self:RegisterEventIfValid("ACTIVE_COMBAT_CONFIG_CHANGED", "OnCharacterChanged")
+            elseif not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC then
                 self:RegisterEvent("GLYPH_ADDED", "OnCharacterChanged")
                 self:RegisterEvent("GLYPH_REMOVED", "OnCharacterChanged")
                 self:RegisterEvent("GLYPH_UPDATED", "OnCharacterChanged")
@@ -160,8 +173,12 @@ function WowSimsExporter:OpenWindow(input)
     elseif (input == "export") then
         self:CreateWindow(true, false)
     elseif (input == "options") then
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        if InterfaceOptionsFrame_OpenToCategory then
+            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        else
+            Settings.OpenToCategory(self.optionsCategoryID or self.optionsFrame.name)
+        end
     end
 end
 

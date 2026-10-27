@@ -38,6 +38,8 @@ elseif Env.IS_CLASSIC_MISTS then
     protobufLayout.reforging = "number"     -- int
     protobufLayout.upgrade_step = "number"  -- int
     protobufLayout.tinker = "number"        -- int
+elseif Env.IS_FOREVER then
+    protobufLayout.random_suffix = "number" -- int
 end
 
 local ItemSpecMeta = { isItemSpec = true, _structure = protobufLayout }

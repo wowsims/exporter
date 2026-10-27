@@ -6,7 +6,10 @@ Env.IS_CLASSIC_WRATH = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 Env.IS_CLASSIC_CATA = WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC
 Env.IS_CLASSIC_MISTS = WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC
 Env.IS_CLASSIC_TBC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
-Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA or Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_TBC or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS
+-- WoW Forever runs on the retail client. WOW_PROJECT_CAMELOT only exists there, and the nil check
+-- keeps nil == nil from matching on clients that define neither.
+Env.IS_FOREVER = WOW_PROJECT_CAMELOT ~= nil and WOW_PROJECT_ID == WOW_PROJECT_CAMELOT
+Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA or Env.IS_CLASSIC_ERA_SOD or Env.IS_CLASSIC_TBC or Env.IS_CLASSIC_WRATH or Env.IS_CLASSIC_CATA or Env.IS_CLASSIC_MISTS or Env.IS_FOREVER
 
 Env.VERSION = C_AddOns.GetAddOnMetadata(select(1, ...), "Version")
 Env.AUTHORS = C_AddOns.GetAddOnMetadata(select(1, ...), "Author")
@@ -18,7 +21,34 @@ Env.supportedClientNames = {
     "Classic: TBC",
     "Classic: SoD",
     "Classic: Era/Anniversary",
+    "WoW Forever",
 }
+
+-- The retail client (WoW Forever) only has the C_Item versions of these.
+local GetItemInfo = GetItemInfo or C_Item.GetItemInfo
+local IsEquippableItem = IsEquippableItem or C_Item.IsEquippableItem
+
+-- table extension contains
+function table.contains(table, element)
+    for _, value in pairs(table) do
+        if value == element then
+            return true
+        end
+    end
+    return false
+end
+
+---Return the index of the biggest value in a numerically keyed table of numbers.
+---@param table number[]
+function Env.TableMaxValIndex(table)
+    local idxMax = 1
+    for i = 2, #table do
+        if table[i] > table[idxMax] then
+            idxMax = i
+        end
+    end
+    return idxMax
+end
 
 -- SkillLine.db2
 local professionSkillLineIDs = {
@@ -36,7 +66,9 @@ local professionSkillLineIDs = {
 }
 
 Env.professionNames = {}
+Env.professionEngNameBySkillLine = {}
 for engName, skillLine in pairs(professionSkillLineIDs) do
+    Env.professionEngNameBySkillLine[skillLine] = engName
     local localizedName = C_TradeSkillUI.GetTradeSkillDisplayName(skillLine)
     if localizedName then
         Env.professionNames[localizedName] = {
@@ -74,7 +106,7 @@ function Env.TreatItemAsPossibleUpgrade(itemLink)
     local itemLevel = itemInfo[4]
     local itemClassId = itemInfo[12]
 
-    if Env.IS_CLASSIC_ERA then
+    if Env.IS_CLASSIC_ERA or Env.IS_FOREVER then
         local minIlvl = UnitLevel("player") - 15
         if itemLevel <= minIlvl
             or itemRarity < Enum.ItemQuality.Good then
@@ -228,7 +260,11 @@ function Env.GetSpec(unit)
             end
         else
             local spentTalentPoints
-            spentTalentPoints = CountSpentTalentsPerTree(unit == "target")
+            if Env.IS_FOREVER then
+                spentTalentPoints = Env.CountForeverPointsPerTree()
+            else
+                spentTalentPoints = CountSpentTalentsPerTree(unit == "target")
+            end
             for _, specData in pairs(specializations[playerClass]) do
                 if specData.isCurrentSpec(spentTalentPoints) then
                     return specData.spec, specData.url

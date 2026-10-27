@@ -1,7 +1,7 @@
 ## Title: WowSimsExporter
 ## Version: @project-version@
 ## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog, polynomix
-## Interface: 50504, 50503, 40402, 38001, 20505, 11508
+## Interface: 50504, 50503, 40402, 38001, 20505, 11508, 16001
 ## Notes: This is an exporter written to quickly export your character to https://www.wowsims.com/ for simulations.
 ## SavedVariables: WSEDB
 ## OptionalDeps: Ace3
@@ -31,6 +31,7 @@ Conditional_Wrath.lua  [AllowLoadGameType wrath]
 Conditional_Vanilla.lua  [AllowLoadGameType vanilla]
 Conditional_Cata.lua [AllowLoadGameType cata]
 Conditional_TBC.lua [AllowLoadGameType tbc]
+Conditional_Forever.lua [AllowLoadGameType camelot]
 CataReforgeDetection.lua [AllowLoadGameType cata]
 SavedDataManager.lua
 ExportStructures/ItemSpec.lua

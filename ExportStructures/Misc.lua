@@ -48,9 +48,25 @@ function Env.CreateProfessionEntry(isInspect)
         local unit = Env.inspectUnit
         return Env.profInspectTable[UnitName(unit)] or {}
     end
-    local professionNames = Env.professionNames
     local professions = {}
 
+    -- The retail client (WoW Forever) has no skill line list, only the profession API.
+    if Env.IS_FOREVER then
+        local prof1, prof2 = GetProfessions()
+        for _, index in pairs({ prof1, prof2 }) do
+            local _, _, skillLevel, _, _, _, skillLine = GetProfessionInfo(index)
+            local engName = Env.professionEngNameBySkillLine[skillLine]
+            if engName then
+                table.insert(professions, {
+                    name = engName,
+                    level = skillLevel,
+                })
+            end
+        end
+        return professions
+    end
+
+    local professionNames = Env.professionNames
     for i = 1, GetNumSkillLines() do
         local name, _, _, skillLevel = GetSkillLineInfo(i)
         if professionNames[name] then

@@ -59,6 +59,8 @@ function CharacterMeta:FillForExport(isInspect)
     assert(self.unit, "Unit was not yet set!")
     if Env.IS_CLASSIC_MISTS then
         self.talents = Env.CreateMistsTalentString(isInspect)
+    elseif Env.IS_FOREVER then
+        self.talents = Env.CreateForeverTalentString()
     else
         self.talents = Env.CreateTalentString()
     end
@@ -73,7 +75,7 @@ function CharacterMeta:FillForExport(isInspect)
     end
     self.professions = professions
 
-    if not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC then
+    if not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC and not Env.IS_FOREVER then
         self.glyphs = Env.CreateGlyphEntry(isInspect)
     end
 end

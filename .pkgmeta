@@ -17,6 +17,7 @@ externals:
 ignore:
   - *.wowproj
   - *.wowsln
+  - tools
 
 plain-copy:
   - LICENSE
