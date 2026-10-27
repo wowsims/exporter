@@ -2,6 +2,7 @@ local Env = select(2, ...)
 if not Env.IS_CLASSIC_CATA then return end
 
 Env.RegisterFlavor({
+    name = "cata",
     prelink = "https://www.wowsims.com/cata/",
     classes = {
         "hunter",

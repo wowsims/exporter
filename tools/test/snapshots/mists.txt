@@ -45,6 +45,7 @@
 }
 {
   "class": "monk",
+  "flavor": "mists",
   "gear": {
     "items": [
       {
@@ -208,6 +209,7 @@
 ## Inspect export: MONK tree 2
 {
   "class": "monk",
+  "flavor": "mists",
   "gear": {
     "items": [
       {
@@ -349,6 +351,7 @@
 ## Inspect export (gaps): MONK tree 2
 {
   "class": "monk",
+  "flavor": "mists",
   "gear": {
     "items": {
       [2]: {
@@ -481,6 +484,7 @@
 ## Inspect export (conflict): MONK tree 2
 {
   "class": "monk",
+  "flavor": "mists",
   "gear": {
     "items": [
       {

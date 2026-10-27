@@ -19,6 +19,7 @@ local function GetProfessionsFromProfessionAPI()
 end
 
 Env.RegisterFlavor({
+    name = "forever",
     prelink = "https://www.wowsims.com/forever/",
     classes = {
         "hunter",
@@ -35,8 +36,6 @@ Env.RegisterFlavor({
         random_suffix = "number",
     },
     events = { "TRAIT_CONFIG_UPDATED", "ACTIVE_COMBAT_CONFIG_CHANGED" },
-    -- The talent string follows the Forever sim's trees, not Era's; the sim only applies marked strings.
-    talentTrees = "forever",
     CreateTalentString = Env.CreateForeverTalentString,
     CountPointsPerTree = Env.CountForeverPointsPerTree,
     GetProfessions = GetProfessionsFromProfessionAPI,

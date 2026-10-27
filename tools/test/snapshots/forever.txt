@@ -38,6 +38,7 @@
 }
 {
   "class": "mage",
+  "flavor": "forever",
   "gear": {
     "items": [
       {
@@ -114,7 +115,6 @@
   "race": "NightElf",
   "realm": "TestRealm",
   "spec": "fire",
-  "talentTrees": "forever",
   "talents": "2-5-2",
   "unit": "player",
   "version": "test-version"
@@ -142,6 +142,7 @@
 }
 {
   "class": "mage",
+  "flavor": "forever",
   "gear": {
     "items": [
       {
@@ -218,7 +219,6 @@
   "race": "NightElf",
   "realm": "TestRealm",
   "spec": "fire",
-  "talentTrees": "forever",
   "talents": "2-5-2",
   "unit": "player",
   "version": "test-version"
@@ -230,6 +230,7 @@
 }
 {
   "class": "mage",
+  "flavor": "forever",
   "gear": {
     "items": [
       {
@@ -306,7 +307,6 @@
   "race": "NightElf",
   "realm": "TestRealm",
   "spec": "arcane",
-  "talentTrees": "forever",
   "talents": "",
   "unit": "player",
   "version": "test-version"

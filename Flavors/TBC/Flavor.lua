@@ -2,6 +2,7 @@ local Env = select(2, ...)
 if not Env.IS_CLASSIC_TBC then return end
 
 Env.RegisterFlavor({
+    name = "tbc",
     prelink = "https://www.wowsims.com/tbc/",
     classes = {
         "hunter",

@@ -5,6 +5,7 @@ local Env = select(2, ...)
 -- The metatable for a Character.
 local CharacterMeta = {
     version     = "",
+    flavor      = "",
     unit        = "",
     id          = 0,
     name        = "",
@@ -13,7 +14,6 @@ local CharacterMeta = {
     class       = "",
     level       = 0,
     talents     = "",
-    talentTrees = "",
     professions = {},
     spec        = "",
     gear        = {},
@@ -46,6 +46,7 @@ function CharacterMeta:SetUnit(unit)
     local _, englishClass, _, englishRace = GetPlayerInfoByGUID(self.id)
 
     self.version = Env.VERSION
+    self.flavor = Env.Flavor.name
     self.unit = unit
     self.name = name
     self.realm = realm
@@ -60,9 +61,6 @@ function CharacterMeta:FillForExport(isInspect)
     assert(self.unit, "Unit was not yet set!")
     local flavor = Env.Flavor
     self.talents = flavor.CreateTalentString(isInspect)
-    if flavor.talentTrees then
-        self.talentTrees = flavor.talentTrees
-    end
 
     local equipmentSet = Env.CreateEquipmentSpec()
     equipmentSet:UpdateEquippedItems(self.unit)
