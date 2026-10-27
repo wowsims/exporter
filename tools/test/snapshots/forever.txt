@@ -135,6 +135,180 @@
   ]
 }
 
+## Export (C_ClassTalents): MAGE tree 2
+{
+  "link": "https://www.wowsims.com/forever/mage/dps"
+}
+{
+  "class": "mage",
+  "gear": {
+    "items": [
+      {
+        "id": 1001
+      },
+      {
+        "id": 1002
+      },
+      {
+        "enchant": 2003,
+        "id": 1003
+      },
+      {
+        "enchant": 2015,
+        "id": 1015,
+        "random_suffix": -15
+      },
+      {
+        "id": 1005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "id": 1009
+      },
+      {
+        "id": 1010,
+        "random_suffix": -10
+      },
+      {
+        "enchant": 2006,
+        "id": 1006
+      },
+      {
+        "id": 1007
+      },
+      {
+        "id": 1008
+      },
+      {
+        "id": 1011
+      },
+      {
+        "enchant": 2012,
+        "id": 1012
+      },
+      {
+        "id": 1013
+      },
+      {
+        "id": 1014
+      },
+      {
+        "id": 1016
+      },
+      {
+        "id": 1017
+      }
+    ]
+  },
+  "id": "Player-1-00000001",
+  "level": 60,
+  "name": "Tester",
+  "professions": [
+    {
+      "level": 300,
+      "name": "Herbalism"
+    },
+    {
+      "level": 290,
+      "name": "Enchanting"
+    }
+  ],
+  "race": "NightElf",
+  "realm": "TestRealm",
+  "spec": "fire",
+  "talents": "2-5-2",
+  "unit": "player",
+  "version": "test-version"
+}
+
+## Export (no talent API): MAGE tree 2
+{
+  "link": "https://www.wowsims.com/forever/mage/dps"
+}
+{
+  "class": "mage",
+  "gear": {
+    "items": [
+      {
+        "id": 1001
+      },
+      {
+        "id": 1002
+      },
+      {
+        "enchant": 2003,
+        "id": 1003
+      },
+      {
+        "enchant": 2015,
+        "id": 1015,
+        "random_suffix": -15
+      },
+      {
+        "id": 1005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "id": 1009
+      },
+      {
+        "id": 1010,
+        "random_suffix": -10
+      },
+      {
+        "enchant": 2006,
+        "id": 1006
+      },
+      {
+        "id": 1007
+      },
+      {
+        "id": 1008
+      },
+      {
+        "id": 1011
+      },
+      {
+        "enchant": 2012,
+        "id": 1012
+      },
+      {
+        "id": 1013
+      },
+      {
+        "id": 1014
+      },
+      {
+        "id": 1016
+      },
+      {
+        "id": 1017
+      }
+    ]
+  },
+  "id": "Player-1-00000001",
+  "level": 60,
+  "name": "Tester",
+  "professions": [
+    {
+      "level": 300,
+      "name": "Herbalism"
+    },
+    {
+      "level": 290,
+      "name": "Enchanting"
+    }
+  ],
+  "race": "NightElf",
+  "realm": "TestRealm",
+  "spec": "arcane",
+  "talents": "",
+  "unit": "player",
+  "version": "test-version"
+}
+
 ## Spec matrix
 WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/forever/warrior/dps
 WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/forever/warrior/dps
@@ -172,3 +346,5 @@ Auto-save: ENABLED
 |cff008000Credits go to test-authors|r
 Character data saved for Tester-TestRealm
 chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.
+Updated saved character data for Tester-TestRealm
+Updated saved character data for Tester-TestRealm
