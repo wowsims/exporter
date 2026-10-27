@@ -106,6 +106,9 @@ function Env.TreatItemAsPossibleUpgrade(itemLink)
     local itemLevel = itemInfo[4]
     local itemClassId = itemInfo[12]
 
+    -- Item data isn't cached yet.
+    if not itemLevel then return false end
+
     if Env.IS_CLASSIC_ERA or Env.IS_FOREVER then
         local minIlvl = UnitLevel("player") - 15
         if itemLevel <= minIlvl

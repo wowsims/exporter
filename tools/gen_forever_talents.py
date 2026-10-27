@@ -24,6 +24,9 @@ def render(trees_dir: pathlib.Path) -> str:
     lines = [BEGIN, "local talentDefinitionIds = {"]
     for cls in CLASSES:
         trees = json.loads((trees_dir / f"{cls}.json").read_text(encoding="utf-8"))
+        # Spec detection in Conditional_Forever.lua counts points in exactly three trees.
+        if len(trees) != 3:
+            sys.exit(f"{cls}.json has {len(trees)} trees, expected 3")
         lines.append(f"    {cls.upper()} = {{")
         for tree in trees:
             ids = ", ".join(str(int(t["definitionId"])) for t in tree["talents"])

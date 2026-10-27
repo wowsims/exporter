@@ -83,10 +83,12 @@ function Env.GetForeverTalentRanks()
     for _, treeID in ipairs(configInfo.treeIDs) do
         for _, nodeID in ipairs(C_Traits.GetTreeNodes(treeID)) do
             local node = C_Traits.GetNodeInfo(configID, nodeID)
-            if node and node.ranksPurchased and node.ranksPurchased > 0 and node.activeEntry then
+            -- currentRank also counts ranks granted without spending points.
+            local rank = node and (node.currentRank or node.ranksPurchased) or 0
+            if rank > 0 and node.activeEntry then
                 local entry = C_Traits.GetEntryInfo(configID, node.activeEntry.entryID)
                 if entry and entry.definitionID then
-                    ranks[entry.definitionID] = node.currentRank or node.ranksPurchased
+                    ranks[entry.definitionID] = rank
                 end
             end
         end
