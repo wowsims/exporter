@@ -1,63 +1,84 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_ERA then return end
 
-Env.prelink = "https://www.wowsims.com/sod/"
+-- Season of Discovery runes, including the shoulder Soul Engravings.
 
-Env.supportedClasses = {
-    "hunter",
-    "mage",
-    "shaman",
-    "priest",
-    "rogue",
-    "druid",
-    "warrior",
-    "warlock",
-    "paladin",
+-- Some runes learn multiple spells, i.e. the learnedAbilitySpellIDs array of the
+-- rune data returned by C_Engraving.GetRuneForEquipmentSlot and C_Engraving.GetRuneForInventorySlot
+-- has multiple entries. The sim uses one of those Ids to indentify runes.
+-- Map the first spell Id to the expected spell Id for runes that do not have it at position 1.
+local runeSpellRemap = {
+    [407993] = 407995, -- Mangle: The bear version is expected.
 }
 
-local TblMaxValIdx = Env.TableMaxValIndex
+-- Ring Runes don't provide a Spell ID like other runes do. We have to convert the Enchant ID back to the Spell ID manually.
+-- Ordered by spell name
+local enchantmentIDToSpellID = {
+    [7514] = 442893, -- Arcane Specialization
+    [7508] = 442876, -- Axe Specialization
+    [7510] = 442887, -- Dagger Specialization
+    [7555] = 459312, -- Defense Specialization
+    [7520] = 453622, -- Feral Combat Specialization
+    [7515] = 442894, -- Fire Specialization
+    [7511] = 442890, -- Fist Weapon Specialization
+    [7516] = 442895, -- Frost Specialization
+    [7519] = 442898, -- Holy Specialization
+    [7509] = 442881, -- Mace Specialization
+    [7517] = 442896, -- Nature Specialization
+    [7513] = 442892, -- Pole Weapon Specialization
+    [7512] = 442891, -- Ranged Weapon Specialization
+    [7518] = 442897, -- Shadow Specialization
+    [7507] = 442813, -- Sword Specialization
+}
 
-Env.AddSpec("shaman", "elemental", "elemental_shaman", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("shaman", "enhancement", "enhancement_shaman", function(t) return TblMaxValIdx(t) == 2 end)
+---Get rune spell from an item in a slot, if item has a rune engraved.
+---@param slotId integer
+---@param bagId integer|nil If not nil check bag items instead of equipped items.
+---@return integer|nil abilitySpellId The first spell id granted by the rune, or nil if no rune engraved.
+function Env.GetEngravedRuneSpell(slotId, bagId)
+    -- After first login the whole engraving stuff may not be loaded yet!
+    -- GetNumRunesKnown will return 0 for maximum runes available in that case.
+    if select(2, C_Engraving.GetNumRunesKnown()) == 0 then
+        LoadAddOn("Blizzard_EngravingUI")
+        C_Engraving.RefreshRunesList()
+    end
 
-Env.AddSpec("hunter", "beast_mastery", "hunter", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("hunter", "marksman", "hunter", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("hunter", "survival", "hunter", function(t) return TblMaxValIdx(t) == 3 end)
+    -- The shoulder "runes" are special and don't use the C_Engraving API
+    -- Instead they override a special spell "Soul Engraving" (1219955)
+    if bagId == nil then
+        if slotId == INVSLOT_SHOULDER then
+            return FindSpellOverrideByID(1219955)
+        end
+    else
+        local itemLocation = ItemLocation:CreateFromBagAndSlot(bagId, slotId)
+        local inventoryType = C_Item.GetItemInventoryType(itemLocation)
+        if inventoryType == Enum.InventoryType.IndexShoulderType then
+            return Env.GetSoulEngravingSpellID(slotId, bagId)
+        end
+    end
 
-Env.AddSpec("druid", "balance", "balance_druid", function(t)
-    -- feral may have more points in balance too, so check int stat too
-    return TblMaxValIdx(t) == 1
-        and Env.StatBiggerThanStat("int", "agi")
-end)
-Env.AddSpec("druid", "feral", "feral_druid", function(t)
-    -- Currently feral may have more points in other trees, check stats too
-    return (TblMaxValIdx(t) == 2)
-        or Env.StatBiggerThanStat("agi", "int")
-        or Env.StatBiggerThanStat("str", "int")
-end)
+    local runeData
+    if bagId == nil then
+        runeData = C_Engraving.GetRuneForEquipmentSlot(slotId)
+    else
+        runeData = C_Engraving.GetRuneForInventorySlot(bagId, slotId)
+    end
 
-local function HasMetamorphRune()
-    return Env.GetEngravedRuneSpell(10) == 403789
+    if runeData then
+        local firstSpellId = runeData.learnedAbilitySpellIDs[1]
+        if firstSpellId == nil then
+            -- Fall back to re-mapping the enchant ID.
+            -- Should only apply to ring specializations for now.
+            return enchantmentIDToSpellID[runeData.itemEnchantmentID]
+        else
+            -- All non-ring runes should have a Spell ID
+            if runeSpellRemap[firstSpellId] then
+                return runeSpellRemap[firstSpellId]
+            end
+            return firstSpellId
+        end
+    end
 end
-Env.AddSpec("warlock", "affliction", "warlock", function(t) return not HasMetamorphRune() and TblMaxValIdx(t) == 1 end)
-Env.AddSpec("warlock", "demonology", "warlock", function(t) return not HasMetamorphRune() and TblMaxValIdx(t) == 2 end)
-Env.AddSpec("warlock", "destruction", "warlock", function(t) return not HasMetamorphRune() and TblMaxValIdx(t) == 3 end)
-Env.AddSpec("warlock", "warlocktank", "tank_warlock", function(t) return HasMetamorphRune() end)
-
-Env.AddSpec("rogue", "assassination", "rogue", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("rogue", "combat", "rogue", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("rogue", "subtlety", "rogue", function(t) return TblMaxValIdx(t) == 3 end)
-
-Env.AddSpec("mage", "arcane", "mage", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("mage", "fire", "mage", function(t) return TblMaxValIdx(t) == 2 end)
-Env.AddSpec("mage", "frost", "mage", function(t) return TblMaxValIdx(t) == 3 end)
-
-Env.AddSpec("warrior", "arms", "warrior", function(t) return TblMaxValIdx(t) == 1 end)
-Env.AddSpec("warrior", "fury", "warrior", function(t) return TblMaxValIdx(t) == 2 end)
-
-Env.AddSpec("paladin", "retribution", "retribution_paladin", function(t) return true end)
-
-Env.AddSpec("priest", "shadow", "shadow_priest", function(t) return true end)
 
 -- TODO re-dump these when Wago has SpellEffect.db2 for 1.15.6 processed
 -- Current map was obtained by decrementing SpellItemEnchantment:EffectArg1 by one

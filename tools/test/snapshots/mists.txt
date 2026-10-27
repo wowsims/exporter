@@ -1,0 +1,659 @@
+## Events
+[
+  "CHARACTER_POINTS_CHANGED",
+  "ENCHANT_SPELL_COMPLETED",
+  "GLYPH_ADDED",
+  "GLYPH_REMOVED",
+  "GLYPH_UPDATED",
+  "PLAYER_EQUIPMENT_CHANGED",
+  "PLAYER_TALENT_UPDATE"
+]
+
+## Hooks
+[
+  "InspectFrame_LoadUI",
+  "InspectUnit"
+]
+
+## Comms
+[
+  "WSEProfession"
+]
+
+## Chat commands
+[
+  "wse",
+  "wowsimsexporter",
+  "wsexporter"
+]
+
+## Character pane button
+[
+  {
+    "point": "TOPRIGHT",
+    "relativePoint": "BOTTOMRIGHT",
+    "relativeTo": "CharacterFrame",
+    "x": 0,
+    "y": 0
+  }
+]
+
+## Export: MONK tree 2
+{
+  "classIsSupported": true,
+  "link": "https://www.wowsims.com/mop/monk/mistweaver"
+}
+{
+  "class": "monk",
+  "gear": {
+    "items": [
+      {
+        "gems": {},
+        "id": 1001,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 1002,
+        "reforging": 115
+      },
+      {
+        "enchant": 2003,
+        "gems": {},
+        "id": 1003
+      },
+      {
+        "enchant": 2015,
+        "gems": {},
+        "id": 1015,
+        "random_suffix": -15
+      },
+      {
+        "gems": {},
+        "id": 1005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "gems": {},
+        "id": 1009
+      },
+      {
+        "gems": {},
+        "id": 1010,
+        "random_suffix": -10,
+        "reforging": 123,
+        "tinker": 4898,
+        "upgrade_step": 1
+      },
+      {
+        "enchant": 2006,
+        "gems": {},
+        "id": 1006,
+        "reforging": 119
+      },
+      {
+        "gems": {},
+        "id": 1007,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1008,
+        "reforging": 121
+      },
+      {
+        "gems": {},
+        "id": 1011
+      },
+      {
+        "enchant": 2012,
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1012,
+        "reforging": 125
+      },
+      {
+        "gems": {},
+        "id": 1013,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 1014,
+        "reforging": 127
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1016,
+        "reforging": 129,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 1017
+      }
+    ]
+  },
+  "glyphs": {
+    "major": [
+      {
+        "spellID": 60001
+      },
+      {
+        "spellID": 60004
+      }
+    ],
+    "minor": [
+      {
+        "spellID": 60002
+      },
+      {
+        "spellID": 60005
+      }
+    ]
+  },
+  "id": "Player-1-00000001",
+  "level": 90,
+  "name": "Tester",
+  "professions": [
+    {
+      "level": 300,
+      "name": "Blacksmithing"
+    },
+    {
+      "level": 275,
+      "name": "Mining"
+    }
+  ],
+  "race": "Pandaren (A)",
+  "realm": "TestRealm",
+  "spec": "mistweaver",
+  "talents": "123123",
+  "unit": "player",
+  "version": "test-version"
+}
+
+## Bag export
+{
+  "items": [
+    {
+      "enchant": 2500,
+      "gems": {},
+      "id": 7001
+    },
+    {
+      "gems": {},
+      "id": 7002
+    },
+    {
+      "gems": {},
+      "id": 7005
+    },
+    {
+      "gems": {},
+      "id": 7006
+    }
+  ]
+}
+
+## Inspect export: MONK tree 2
+{
+  "class": "monk",
+  "gear": {
+    "items": [
+      {
+        "gems": {},
+        "id": 5001,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 5002,
+        "reforging": 115
+      },
+      {
+        "enchant": 2003,
+        "gems": {},
+        "id": 5003
+      },
+      {
+        "enchant": 2015,
+        "gems": {},
+        "id": 5015,
+        "random_suffix": -15
+      },
+      {
+        "gems": {},
+        "id": 5005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "gems": {},
+        "id": 5009
+      },
+      {
+        "gems": {},
+        "id": 5010,
+        "random_suffix": -10,
+        "reforging": 123,
+        "upgrade_step": 1
+      },
+      {
+        "enchant": 2006,
+        "gems": {},
+        "id": 5006,
+        "reforging": 119
+      },
+      {
+        "enchant": 4880,
+        "gems": {},
+        "id": 5007,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5008,
+        "reforging": 121
+      },
+      {
+        "enchant": 4359,
+        "gems": {},
+        "id": 5011
+      },
+      {
+        "enchant": 2012,
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5012,
+        "reforging": 125
+      },
+      {
+        "gems": {},
+        "id": 5013,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 5014,
+        "reforging": 127
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5016,
+        "reforging": 129,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 5017
+      }
+    ]
+  },
+  "glyphs": {
+    "major": [
+      {
+        "spellID": 60001
+      },
+      {
+        "spellID": 60004
+      }
+    ],
+    "minor": [
+      {
+        "spellID": 60002
+      },
+      {
+        "spellID": 60005
+      }
+    ]
+  },
+  "id": "Player-1-00000002",
+  "level": 90,
+  "name": "Inspected",
+  "professions": [
+    {
+      "level": 600,
+      "name": "Enchanting"
+    },
+    {
+      "level": 600,
+      "name": "Leatherworking"
+    }
+  ],
+  "race": "Pandaren (A)",
+  "realm": "TestRealm",
+  "spec": "mistweaver",
+  "talents": "123123",
+  "unit": "target",
+  "version": "test-version"
+}
+
+## Inspect export (gaps): MONK tree 2
+{
+  "class": "monk",
+  "gear": {
+    "items": {
+      [2]: {
+        "gems": [
+          83141
+        ],
+        "id": 5002,
+        "reforging": 115
+      },
+      [3]: {
+        "enchant": 2003,
+        "gems": {},
+        "id": 5003
+      },
+      [4]: {
+        "enchant": 2015,
+        "gems": {},
+        "id": 5015,
+        "random_suffix": -15
+      },
+      [5]: {
+        "gems": {},
+        "id": 5005,
+        "random_suffix": -5
+      },
+      [6]: {
+        "enchant": 2009,
+        "gems": {},
+        "id": 5009
+      },
+      [7]: {
+        "gems": {},
+        "id": 5010,
+        "random_suffix": -10,
+        "reforging": 123,
+        "upgrade_step": 1
+      },
+      [8]: {
+        "enchant": 2006,
+        "gems": {},
+        "id": 5006,
+        "reforging": 119
+      },
+      [9]: {
+        "gems": {},
+        "id": 5007,
+        "upgrade_step": 1
+      },
+      [10]: {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5008,
+        "reforging": 121
+      },
+      [12]: {
+        "enchant": 2012,
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5012,
+        "reforging": 125
+      },
+      [13]: {
+        "gems": {},
+        "id": 5013,
+        "upgrade_step": 1
+      },
+      [14]: {
+        "gems": {},
+        "id": 5014,
+        "reforging": 127
+      },
+      [15]: {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5016,
+        "reforging": 129,
+        "upgrade_step": 1
+      },
+      [16]: {
+        "gems": {},
+        "id": 5017
+      }
+    }
+  },
+  "glyphs": {
+    "major": [
+      {
+        "spellID": 60001
+      },
+      {
+        "spellID": 60004
+      }
+    ],
+    "minor": [
+      {
+        "spellID": 60002
+      },
+      {
+        "spellID": 60005
+      }
+    ]
+  },
+  "id": "Player-1-00000002",
+  "level": 90,
+  "name": "Inspected",
+  "professions": [
+    {
+      "level": 600,
+      "name": "Enchanting"
+    },
+    {
+      "level": 600,
+      "name": "Jewelcrafting"
+    }
+  ],
+  "race": "Pandaren (A)",
+  "realm": "TestRealm",
+  "spec": "mistweaver",
+  "talents": "123123",
+  "unit": "target",
+  "version": "test-version"
+}
+
+## Inspect export (conflict): MONK tree 2
+{
+  "class": "monk",
+  "gear": {
+    "items": [
+      {
+        "gems": {},
+        "id": 5001,
+        "upgrade_step": 1
+      },
+      {
+        "gems": [
+          83141
+        ],
+        "id": 5002,
+        "reforging": 115
+      },
+      {
+        "enchant": 2003,
+        "gems": {},
+        "id": 5003
+      },
+      {
+        "enchant": 2015,
+        "gems": {},
+        "id": 5015,
+        "random_suffix": -15
+      },
+      {
+        "gems": {},
+        "id": 5005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "gems": {},
+        "id": 5009
+      },
+      {
+        "gems": {},
+        "id": 5010,
+        "random_suffix": -10,
+        "reforging": 123,
+        "upgrade_step": 1
+      },
+      {
+        "enchant": 2006,
+        "gems": {},
+        "id": 5006,
+        "reforging": 119
+      },
+      {
+        "enchant": 4880,
+        "gems": {},
+        "id": 5007,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5008,
+        "reforging": 121
+      },
+      {
+        "enchant": 4359,
+        "gems": {},
+        "id": 5011
+      },
+      {
+        "enchant": 2012,
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5012,
+        "reforging": 125
+      },
+      {
+        "gems": {},
+        "id": 5013,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 5014,
+        "reforging": 127
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 5016,
+        "reforging": 129,
+        "upgrade_step": 1
+      },
+      {
+        "gems": {},
+        "id": 5017
+      }
+    ]
+  },
+  "glyphs": {
+    "major": [
+      {
+        "spellID": 60001
+      },
+      {
+        "spellID": 60004
+      }
+    ],
+    "minor": [
+      {
+        "spellID": 60002
+      },
+      {
+        "spellID": 60005
+      }
+    ]
+  },
+  "id": "Player-1-00000002",
+  "level": 90,
+  "name": "Inspected",
+  "professions": {},
+  "race": "Pandaren (A)",
+  "realm": "TestRealm",
+  "spec": "mistweaver",
+  "talents": "123123",
+  "unit": "target",
+  "version": "test-version"
+}
+
+## Spec matrix
+WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/mop/warrior/arms
+WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/mop/warrior/fury
+WARRIOR 3: supported=true spec=protection link=https://www.wowsims.com/mop/warrior/protection
+PALADIN 1: supported=true spec=holy link=https://www.wowsims.com/mop/paladin/holy
+PALADIN 2: supported=true spec=protection link=https://www.wowsims.com/mop/paladin/protection
+PALADIN 3: supported=true spec=retribution link=https://www.wowsims.com/mop/paladin/retribution
+HUNTER 1: supported=true spec=beast_mastery link=https://www.wowsims.com/mop/hunter/beast_mastery
+HUNTER 2: supported=true spec=marksman link=https://www.wowsims.com/mop/hunter/marksmanship
+HUNTER 3: supported=true spec=survival link=https://www.wowsims.com/mop/hunter/survival
+ROGUE 1: supported=true spec=assassination link=https://www.wowsims.com/mop/rogue/assassination
+ROGUE 2: supported=true spec=combat link=https://www.wowsims.com/mop/rogue/combat
+ROGUE 3: supported=true spec=subtlety link=https://www.wowsims.com/mop/rogue/subtlety
+PRIEST 1: supported=true spec=disc link=https://www.wowsims.com/mop/priest/discipline
+PRIEST 2: supported=true spec=holy link=https://www.wowsims.com/mop/priest/holy
+PRIEST 3: supported=true spec=shadow link=https://www.wowsims.com/mop/priest/shadow
+SHAMAN 1: supported=true spec=elemental link=https://www.wowsims.com/mop/shaman/elemental
+SHAMAN 2: supported=true spec=enhancement link=https://www.wowsims.com/mop/shaman/enhancement
+SHAMAN 3: supported=true spec=restoration link=https://www.wowsims.com/mop/shaman/restoration
+MAGE 1: supported=true spec=arcane link=https://www.wowsims.com/mop/mage/arcane
+MAGE 2: supported=true spec=fire link=https://www.wowsims.com/mop/mage/fire
+MAGE 3: supported=true spec=frost link=https://www.wowsims.com/mop/mage/frost
+WARLOCK 1: supported=true spec=affliction link=https://www.wowsims.com/mop/warlock/affliction
+WARLOCK 2: supported=true spec=demonology link=https://www.wowsims.com/mop/warlock/demonology
+WARLOCK 3: supported=true spec=destruction link=https://www.wowsims.com/mop/warlock/destruction
+DRUID 1: supported=true spec=balance link=https://www.wowsims.com/mop/druid/balance
+DRUID 2: supported=true spec=feral link=https://www.wowsims.com/mop/druid/feral
+DRUID 3: supported=true spec=guardian link=https://www.wowsims.com/mop/druid/guardian
+DRUID 4: supported=true spec=restoration link=https://www.wowsims.com/mop/druid/restoration
+DEATHKNIGHT 1: supported=true spec=blood link=https://www.wowsims.com/mop/death_knight/blood
+DEATHKNIGHT 2: supported=true spec=frost link=https://www.wowsims.com/mop/death_knight/frost
+DEATHKNIGHT 3: supported=true spec=unholy link=https://www.wowsims.com/mop/death_knight/unholy
+MONK 1: supported=true spec=brewmaster link=https://www.wowsims.com/mop/monk/brewmaster
+MONK 2: supported=true spec=mistweaver link=https://www.wowsims.com/mop/monk/mistweaver
+MONK 3: supported=true spec=windwalker link=https://www.wowsims.com/mop/monk/windwalker
+
+## Prints
+WowSimsExporter test-version Initialized. Commands:
+/wse - Open window
+/wse export - Export character (auto-saves)
+Auto-save: ENABLED
+|cff008000Credits go to test-authors|r
+Character data saved for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 4 items from bags.
+comm: WSEProfession request WHISPER Inspected

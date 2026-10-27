@@ -1,0 +1,26 @@
+# Runs the addon's export for every supported game version against a fake client and compares the
+# result with tools/test/snapshots. After an intended change, run `node tools/test/snapshots.js
+# --update` and commit the new snapshots with it.
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  snapshots:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check export snapshots
+        run: |
+          npm ci --prefix tools/test
+          node tools/test/snapshots.js

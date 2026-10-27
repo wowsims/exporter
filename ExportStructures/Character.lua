@@ -57,26 +57,21 @@ end
 ---Fill remaining data needed for export.
 function CharacterMeta:FillForExport(isInspect)
     assert(self.unit, "Unit was not yet set!")
-    if Env.IS_CLASSIC_MISTS then
-        self.talents = Env.CreateMistsTalentString(isInspect)
-    elseif Env.IS_FOREVER then
-        self.talents = Env.CreateForeverTalentString()
-    else
-        self.talents = Env.CreateTalentString()
-    end
+    local flavor = Env.Flavor
+    self.talents = flavor.CreateTalentString(isInspect)
 
     local equipmentSet = Env.CreateEquipmentSpec()
     equipmentSet:UpdateEquippedItems(self.unit)
     self.gear = equipmentSet
 
     local professions = Env.CreateProfessionEntry(isInspect)
-    if isInspect and #professions == 0 then
-        professions = equipmentSet:InferProfessions()
+    if isInspect and #professions == 0 and flavor.InferProfessions then
+        professions = flavor.InferProfessions(equipmentSet)
     end
     self.professions = professions
 
-    if not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC and not Env.IS_FOREVER then
-        self.glyphs = Env.CreateGlyphEntry(isInspect)
+    if flavor.CreateGlyphEntry then
+        self.glyphs = flavor.CreateGlyphEntry(isInspect)
     end
 end
 
