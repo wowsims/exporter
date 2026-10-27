@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the talent definition ID table in Flavors/Forever/Flavor.lua.
+"""Generate the talent definition ID table in Flavors/Forever/Talents.lua.
 
 The wowsims Forever sim reads talents as a positional string: digit i of tree t is
 talents[i] of tree t in ui/sim/talents/trees/<class>.json. The client exposes talents
@@ -7,7 +7,7 @@ through C_Traits, so the addon maps each purchased node's TraitDefinition ID bac
 position. This script copies the definitionId order out of a wowsims/forever checkout.
 
 Usage: python3 tools/gen_forever_talents.py <path to wowsims/forever checkout>
-Rewrites the block between the GENERATED markers in Flavors/Forever/Flavor.lua. The block is
+Rewrites the block between the GENERATED markers in Flavors/Forever/Talents.lua. The block is
 left untouched when the table itself is unchanged, so a newer checkout with the same trees
 doesn't only bump the source commit.
 """
@@ -55,7 +55,7 @@ def main() -> None:
     if len(sys.argv) != 2:
         sys.exit(__doc__)
     checkout = pathlib.Path(sys.argv[1])
-    target = pathlib.Path(__file__).resolve().parent.parent / "Flavors/Forever/Flavor.lua"
+    target = pathlib.Path(__file__).resolve().parent.parent / "Flavors/Forever/Talents.lua"
     source = target.read_text(encoding="utf-8")
     pattern = re.compile(re.escape(BEGIN) + r"\n(.*?)" + re.escape(END), re.DOTALL)
     match = pattern.search(source)

@@ -77,7 +77,7 @@ function UI:CreateMainWindow(classIsSupported, simLink)
 
         if not classIsSupported then
             label:SetText("Your characters class is currently unsupported. The supported classes are currently:\n" ..
-                table.concat(Env.supportedClasses, "\n"))
+                table.concat(Env.Flavor.classes, "\n"))
             return
         end
 
@@ -260,13 +260,8 @@ function UI:CreateCharacterPanelButton(onClick, showInitially)
         openButton:Hide()
     end
     
-    if Env.IS_CLASSIC_CATA then
-        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
-    elseif Env.IS_CLASSIC_TBC then
-        openButton:SetPoint("TOPLEFT", CharacterFrameTab5, "TOPRIGHT", 0, 0)
-    else
-        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", 0, 0)
-    end
+    local point, relativeTo, relativePoint, x, y = unpack(Env.Flavor.characterButtonPoint)
+    openButton:SetPoint(point, _G[relativeTo], relativePoint, x, y)
     
     openButton:SetFrameLevel(CharacterFrame:GetFrameLevel() + 10)
     openButton:SetText("WowSims")

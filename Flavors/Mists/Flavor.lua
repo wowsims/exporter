@@ -1,21 +1,58 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_MISTS then return end
 
-Env.prelink = "https://www.wowsims.com/mop/"
-
-Env.supportedClasses = {
-    "hunter",
-    "mage",
-    "shaman",
-    "priest",
-    "rogue",
-    "druid",
-    "warrior",
-    "warlock",
-    "paladin",
-    "deathknight",
-    "monk",
-}
+Env.RegisterFlavor({
+    prelink = "https://www.wowsims.com/mop/",
+    classes = {
+        "hunter",
+        "mage",
+        "shaman",
+        "priest",
+        "rogue",
+        "druid",
+        "warrior",
+        "warlock",
+        "paladin",
+        "deathknight",
+        "monk",
+    },
+    itemFields = {
+        gems = "table",
+        random_suffix = "number",
+        reforging = "number",
+        upgrade_step = "number",
+        tinker = "number",
+    },
+    events = { "GLYPH_ADDED", "GLYPH_REMOVED", "GLYPH_UPDATED" },
+    supportsInspect = true,
+    CreateTalentString = Env.CreateMistsTalentString,
+    GetSpecializationID = function(unit)
+        if unit == "player" then
+            local activeSpec = C_SpecializationInfo.GetSpecialization()
+            return (C_SpecializationInfo.GetSpecializationInfo(activeSpec))
+        end
+        return GetInspectSpecialization(unit)
+    end,
+    CreateGlyphEntry = function(isInspect)
+        local glyphs = Env.CreateSpecGroupGlyphEntry(isInspect)
+        -- Mists has no prime glyphs.
+        glyphs.prime = nil
+        return glyphs
+    end,
+    FillFromItemLink = function(itemSpec, itemLink)
+        local reforgeId = select(11, strsplit(":", itemLink))
+        itemSpec.reforging = tonumber(reforgeId)
+    end,
+    DecorateEquippedItem = function(itemSpec, unit, slotId)
+        local upgradeStep = Env.GetItemUpgradeLevel(unit, slotId)
+        if upgradeStep ~= -1 then itemSpec.upgrade_step = upgradeStep end
+        if slotId == INVSLOT_HAND then
+            local tinkerID = Env.GetHandTinker(unit)
+            if tinkerID ~= 0 then itemSpec.tinker = tinkerID end
+        end
+    end,
+    InferProfessions = Env.InferProfessionsFromGear,
+})
 
 local GetSpecialization = C_SpecializationInfo.GetSpecialization
 

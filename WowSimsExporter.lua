@@ -18,6 +18,14 @@ local defaults = {
     profile = Env.SavedDataManager.defaults,
 }
 
+-- Events on every client that mean the character changed; flavors add their own.
+local characterChangedEvents = {
+    "PLAYER_EQUIPMENT_CHANGED",
+    "CHARACTER_POINTS_CHANGED",
+    "PLAYER_TALENT_UPDATE",
+    "ENCHANT_SPELL_COMPLETED",
+}
+
 local options = {
     name = addonName,
     handler = WowSimsExporter,
@@ -90,25 +98,16 @@ function WowSimsExporter:OnInitialize()
     -- Register events for automatic character saving
     self:RegisterEvent("PLAYER_ENTERING_WORLD", function (event, isInitialLogin, isReloadingUI)
         if isInitialLogin then
-            self:RegisterEventIfValid("PLAYER_EQUIPMENT_CHANGED", "OnCharacterChanged")
-            self:RegisterEventIfValid("CHARACTER_POINTS_CHANGED", "OnCharacterChanged")
-            self:RegisterEventIfValid("PLAYER_TALENT_UPDATE", "OnCharacterChanged")
-            self:RegisterEventIfValid("ENCHANT_SPELL_COMPLETED", "OnCharacterChanged")
-            if Env.IS_CLASSIC_ERA_SOD then
-                self:RegisterEvent("RUNE_UPDATED", "OnCharacterChanged")
+            for _, characterEvent in ipairs(characterChangedEvents) do
+                self:RegisterEventIfValid(characterEvent, "OnCharacterChanged")
             end
-            if Env.IS_FOREVER then
-                self:RegisterEventIfValid("TRAIT_CONFIG_UPDATED", "OnCharacterChanged")
-                self:RegisterEventIfValid("ACTIVE_COMBAT_CONFIG_CHANGED", "OnCharacterChanged")
-            elseif not Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_TBC then
-                self:RegisterEvent("GLYPH_ADDED", "OnCharacterChanged")
-                self:RegisterEvent("GLYPH_REMOVED", "OnCharacterChanged")
-                self:RegisterEvent("GLYPH_UPDATED", "OnCharacterChanged")
+            for _, characterEvent in ipairs(Env.Flavor.events) do
+                self:RegisterEventIfValid(characterEvent, "OnCharacterChanged")
             end
         end
     end)
 
-    if Env.IS_CLASSIC_MISTS then
+    if Env.Flavor.supportsInspect then
         self:SecureHook("InspectFrame_LoadUI", function()
             C_Timer.After(0.1, function()
                 Env.UI:CreateInspectButton(function ()
@@ -206,8 +205,8 @@ function WowSimsExporter:CreateWindow(generate, isInspect)
     local character = Env.CreateCharacter()
     local unit = isInspect and Env.inspectUnit or "player"
     character:SetUnit(unit)
-    local classIsSupported = table.contains(Env.supportedClasses, character.class)
-    local linkToSim = Env.prelink .. select(2, Env.GetSpec("player"))
+    local classIsSupported = table.contains(Env.Flavor.classes, character.class)
+    local linkToSim = Env.Flavor.prelink .. select(2, Env.GetSpec("player"))
 
     Env.UI:CreateMainWindow(classIsSupported, linkToSim)
     if not classIsSupported then return end

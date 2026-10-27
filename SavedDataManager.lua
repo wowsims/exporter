@@ -186,7 +186,7 @@ function SavedDataManager:AutoSave(event)
     -- Only auto-save for supported classes
     local character = Env.CreateCharacter()
     character:SetUnit("player")
-    if not table.contains(Env.supportedClasses, character.class) then
+    if not table.contains(Env.Flavor.classes, character.class) then
         return
     end
     

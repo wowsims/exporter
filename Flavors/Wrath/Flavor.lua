@@ -1,24 +1,33 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_WRATH then return end
 
-Env.prelink = "https://www.wowsims.com/wotlk/"
+Env.RegisterFlavor({
+    prelink = "https://www.wowsims.com/wotlk/",
+    classes = {
+        "hunter",
+        "mage",
+        "shaman",
+        "priest",
+        "rogue",
+        "druid",
+        "warrior",
+        "warlock",
+        "paladin",
+        "deathknight",
+    },
+    itemFields = {
+        gems = "table",
+    },
+    events = { "GLYPH_ADDED", "GLYPH_REMOVED", "GLYPH_UPDATED" },
+    CreateTalentString = Env.CreateClassicTalentString,
+    CountPointsPerTree = Env.CountClassicPointsPerTree,
+    CreateGlyphEntry = Env.CreateWrathGlyphEntry,
+    IsBagUpgradeCandidate = Env.IsBagUpgradeAboveTBC,
+})
 
-Env.supportedClasses = {
-    "hunter",
-    "mage",
-    "shaman",
-    "priest",
-    "rogue",
-    "druid",
-    "warrior",
-    "warlock",
-    "paladin",
-    "deathknight",
-}
-
+-- Wrath's client has no trade skill display names for these two.
 Env.professionNames[GetSpellInfo(25229)] = { skillLine = 755, engName = "Jewelcrafting" }
 Env.professionNames[GetSpellInfo(45357)] = { skillLine = 773, engName = "Inscription" }
-
 
 local TblMaxValIdx = Env.TableMaxValIndex
 

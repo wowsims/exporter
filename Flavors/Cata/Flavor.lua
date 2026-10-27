@@ -1,20 +1,34 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_CATA then return end
 
-Env.prelink = "https://www.wowsims.com/cata/"
-
-Env.supportedClasses = {
-    "hunter",
-    "mage",
-    "shaman",
-    "priest",
-    "rogue",
-    "druid",
-    "warrior",
-    "warlock",
-    "paladin",
-    "deathknight",
-}
+Env.RegisterFlavor({
+    prelink = "https://www.wowsims.com/cata/",
+    classes = {
+        "hunter",
+        "mage",
+        "shaman",
+        "priest",
+        "rogue",
+        "druid",
+        "warrior",
+        "warlock",
+        "paladin",
+        "deathknight",
+    },
+    itemFields = {
+        gems = "table",
+        random_suffix = "number",
+        reforging = "number",
+    },
+    events = { "GLYPH_ADDED", "GLYPH_REMOVED", "GLYPH_UPDATED" },
+    CreateTalentString = Env.CreateClassicTalentString,
+    CountPointsPerTree = Env.CountClassicPointsPerTree,
+    CreateGlyphEntry = Env.CreateSpecGroupGlyphEntry,
+    IsBagUpgradeCandidate = Env.IsBagUpgradeAboveTBC,
+    DecorateEquippedItem = function(itemSpec, unit, slotId)
+        itemSpec.reforging = Env.GetReforgeId(unit, slotId)
+    end,
+})
 
 local TblMaxValIdx = Env.TableMaxValIndex
 

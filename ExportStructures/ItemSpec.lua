@@ -5,10 +5,10 @@
 --
 -- To use: Create with CreateItemSpec() instead of manually creating a table.
 -- It can be used like any normal table, but it will throw errors if setting invalid keys,
--- i.e. keys that are not defined in the respective protobufLayout that is chosen depending on the client version.
+-- i.e. keys that are not defined in protobufLayout, which adds the running flavor's itemFields to id and enchant.
 --
--- The helper functions ItemSpecMeta:FillFromItemLink(itemLink) and ItemSpecMeta:SetRuneSpellFromSlot(slotId, bagId)
--- should be all that is needed to setup an item.
+-- ItemSpecMeta:FillFromItemLink(itemLink) fills everything the item link holds; flavors set the rest
+-- (runes, reforges, upgrades) through their item hooks.
 
 local Env = select(2, ...)
 
@@ -18,28 +18,8 @@ local protobufLayout = {
     enchant = "number", -- int
 }
 
-if Env.IS_CLASSIC_ERA then
-    protobufLayout.random_suffix = "number" -- int
-    if Env.IS_CLASSIC_ERA_SOD then
-        protobufLayout.rune = "number"      -- int
-    end
-elseif Env.IS_CLASSIC_TBC then
-    protobufLayout.random_suffix = "number" -- int
-    protobufLayout.gems = "table"           -- int[]
-elseif Env.IS_CLASSIC_WRATH then
-    protobufLayout.gems = "table"           -- int[]
-elseif Env.IS_CLASSIC_CATA then
-    protobufLayout.gems = "table"           -- int[]
-    protobufLayout.random_suffix = "number" -- int
-    protobufLayout.reforging = "number"     -- int
-elseif Env.IS_CLASSIC_MISTS then
-    protobufLayout.gems = "table"           -- int[]
-    protobufLayout.random_suffix = "number" -- int
-    protobufLayout.reforging = "number"     -- int
-    protobufLayout.upgrade_step = "number"  -- int
-    protobufLayout.tinker = "number"        -- int
-elseif Env.IS_FOREVER then
-    protobufLayout.random_suffix = "number" -- int
+for field, fieldType in pairs(Env.Flavor.itemFields) do
+    protobufLayout[field] = fieldType
 end
 
 local ItemSpecMeta = { isItemSpec = true, _structure = protobufLayout }
@@ -60,7 +40,7 @@ end
 ---Fill values from an item link.
 ---@param itemLink string See https://wowpedia.fandom.com/wiki/ItemLink
 function ItemSpecMeta:FillFromItemLink(itemLink)
-    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId, _, _, reforgeId, _, upgrades = strsplit(":", itemLink)
+    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId = strsplit(":", itemLink)
 
     self.id = tonumber(itemId)
     self.enchant = tonumber(enchantId)
@@ -77,42 +57,9 @@ function ItemSpecMeta:FillFromItemLink(itemLink)
     if self._structure.random_suffix then
         self.random_suffix = tonumber(suffixId)
     end
-    if Env.IS_CLASSIC_MISTS and self._structure.reforging then
-        self.reforging = tonumber(reforgeId)
+    if Env.Flavor.FillFromItemLink then
+        Env.Flavor.FillFromItemLink(self, itemLink)
     end
-end
-
----Set rune spell from an item in a slot, if item has a rune engraved.
----@param slotId integer
----@param bagId integer|nil If not nil check bag items instead of equipped items.
-function ItemSpecMeta:SetRuneSpellFromSlot(slotId, bagId)
-    if not self._structure.rune then return end
-    self.rune = Env.GetEngravedRuneSpell(slotId, bagId)
-end
-
----Set reforge ID from an equipped item, if item is reforged.
----@param unit string
----@param slotId integer
-function ItemSpecMeta:SetReforge(unit, slotId)
-    if not self._structure.reforging then return end
-    self.reforging = Env.GetReforgeId(unit, slotId)
-end
-
----Set upgrade level from an equipped item, 0 if no upgrade path.
----@param unit string
----@param slotId integer
-function ItemSpecMeta:SetUpgrade(unit, slotId)
-    if not self._structure.upgrade_step then return end
-    local upgrade_step = Env.GetItemUpgradeLevel(unit, slotId)
-    if upgrade_step ~= -1 then self.upgrade_step = upgrade_step end
-end
-
----Set tinker enchant ID from equipped hand item
----@param unit string
-function ItemSpecMeta:SetHandTinker(unit)
-    if not self._structure.tinker then return end
-    local tinkerID = Env.GetHandTinker(unit)
-    if tinkerID ~= 0 then self.tinker = tinkerID end
 end
 
 function ItemSpecMeta:GetEnchant()

@@ -24,19 +24,28 @@
 embeds.xml
 #@end-non-debug@
 
+Core/Flavor.lua
+Core/Util.lua
+Core/Tooltip.lua
+Core/Professions.lua
+Core/Items.lua
+Core/Spec.lua
 Talents/ClassicTrees.lua [AllowLoadGameType vanilla, tbc, wrath, cata]
-Core/Shared.lua
-Flavors/Mists/Flavor.lua [AllowLoadGameType mists]
-Flavors/Wrath/Flavor.lua [AllowLoadGameType wrath]
+Talents/Glyphs.lua [AllowLoadGameType wrath, cata, mists]
+Flavors/Vanilla/Runes.lua [AllowLoadGameType vanilla]
 Flavors/Vanilla/Flavor.lua [AllowLoadGameType vanilla]
-Flavors/Cata/Flavor.lua [AllowLoadGameType cata]
 Flavors/TBC/Flavor.lua [AllowLoadGameType tbc]
-Flavors/Forever/Flavor.lua [AllowLoadGameType camelot]
+Flavors/Wrath/Flavor.lua [AllowLoadGameType wrath]
 Flavors/Cata/Reforge.lua [AllowLoadGameType cata]
+Flavors/Cata/Flavor.lua [AllowLoadGameType cata]
+Flavors/Mists/Items.lua [AllowLoadGameType mists]
+Flavors/Mists/Talents.lua [AllowLoadGameType mists]
+Flavors/Mists/Flavor.lua [AllowLoadGameType mists]
+Flavors/Forever/Talents.lua [AllowLoadGameType camelot]
+Flavors/Forever/Flavor.lua [AllowLoadGameType camelot]
 SavedDataManager.lua
 ExportStructures/ItemSpec.lua
 ExportStructures/EquipmentSpec.lua
-ExportStructures/Misc.lua
 ExportStructures/Character.lua
 UI.lua
 WowSimsExporter.lua
