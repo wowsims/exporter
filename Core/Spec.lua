@@ -35,7 +35,7 @@ end
 ---@param playerClass string
 ---@param spec string The name of the spec, e.g. "feral".
 ---@param url string The URL part of the spec, e.g. "feral_druid"
----@param checkFunc fun(spentTanlents:number[]):boolean
+---@param checkFunc (fun(spentTanlents:number[]):boolean)|nil Not used by flavors that match by specId.
 ---@param specId integer|nil The SpecializationID of the spec
 function Env.AddSpec(playerClass, spec, url, checkFunc, specId)
     playerClass = playerClass:upper()

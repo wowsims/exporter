@@ -33,6 +33,12 @@ local itemLayout = {
     -- INVSLOT_AMMO, -- Not supported as item
 }
 
+-- Position of each slot in EquipmentSpec.items.
+local itemIndexBySlot = {}
+for itemIndex, slotId in ipairs(itemLayout) do
+    itemIndexBySlot[slotId] = itemIndex
+end
+
 -- Metatable for the base EquipmentSpec table.
 local EquipmentSpecMeta = { isEquipmentSpec = true }
 EquipmentSpecMeta.__index = EquipmentSpecMeta
@@ -64,6 +70,13 @@ function EquipmentSpecMeta:UpdateEquippedItems(unit)
             self.items[itemIndex] = itemSpec
         end
     end
+end
+
+---Get the item in an equipment slot.
+---@param slotId integer
+---@return table|nil itemSpec nil if the slot is empty.
+function EquipmentSpecMeta:GetItemInSlot(slotId)
+    return self.items[itemIndexBySlot[slotId]]
 end
 
 ---Fill items with items from bag. Valid items are filtered by
