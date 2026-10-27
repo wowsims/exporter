@@ -1,0 +1,221 @@
+## Events
+[
+  "CHARACTER_POINTS_CHANGED",
+  "ENCHANT_SPELL_COMPLETED",
+  "GLYPH_ADDED",
+  "GLYPH_REMOVED",
+  "GLYPH_UPDATED",
+  "PLAYER_EQUIPMENT_CHANGED",
+  "PLAYER_TALENT_UPDATE"
+]
+
+## Hooks
+{}
+
+## Comms
+{}
+
+## Chat commands
+[
+  "wse",
+  "wowsimsexporter",
+  "wsexporter"
+]
+
+## Character pane button
+[
+  {
+    "point": "TOPRIGHT",
+    "relativePoint": "BOTTOMRIGHT",
+    "relativeTo": "CharacterFrame",
+    "x": 0,
+    "y": 0
+  }
+]
+
+## Export: DEATHKNIGHT tree 2
+{
+  "classIsSupported": true,
+  "link": "https://www.wowsims.com/wotlk/deathknight"
+}
+{
+  "class": "deathknight",
+  "gear": {
+    "items": [
+      {
+        "gems": {},
+        "id": 1001
+      },
+      {
+        "gems": {},
+        "id": 1002
+      },
+      {
+        "enchant": 2003,
+        "gems": {},
+        "id": 1003
+      },
+      {
+        "enchant": 2015,
+        "gems": {},
+        "id": 1015
+      },
+      {
+        "gems": {},
+        "id": 1005
+      },
+      {
+        "enchant": 2009,
+        "gems": {},
+        "id": 1009
+      },
+      {
+        "gems": {},
+        "id": 1010
+      },
+      {
+        "enchant": 2006,
+        "gems": {},
+        "id": 1006
+      },
+      {
+        "gems": {},
+        "id": 1007
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1008
+      },
+      {
+        "gems": {},
+        "id": 1011
+      },
+      {
+        "enchant": 2012,
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1012
+      },
+      {
+        "gems": {},
+        "id": 1013
+      },
+      {
+        "gems": {},
+        "id": 1014
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1016
+      },
+      {
+        "gems": {},
+        "id": 1017
+      }
+    ]
+  },
+  "glyphs": {
+    "major": [
+      {
+        "spellID": 50001
+      },
+      {
+        "spellID": 50003
+      },
+      {
+        "spellID": 50005
+      }
+    ],
+    "minor": [
+      {
+        "spellID": 50002
+      },
+      {
+        "spellID": 50004
+      },
+      {
+        "spellID": 50006
+      }
+    ],
+    "prime": {}
+  },
+  "id": "Player-1-00000001",
+  "level": 80,
+  "name": "Tester",
+  "professions": [
+    {
+      "level": 300,
+      "name": "Jewelcrafting"
+    },
+    {
+      "level": 275,
+      "name": "Mining"
+    }
+  ],
+  "race": "Dwarf",
+  "realm": "TestRealm",
+  "spec": "frost",
+  "talents": "10000100001000010000100000000-301230123012301230123012302301-0010000100001000010000100000000",
+  "unit": "player",
+  "version": "test-version"
+}
+
+## Bag export
+{
+  "items": [
+    {
+      "enchant": 2500,
+      "gems": {},
+      "id": 7001
+    }
+  ]
+}
+
+## Spec matrix
+WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/wotlk/warrior
+WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/wotlk/warrior
+WARRIOR 3: supported=true spec=protection link=https://www.wowsims.com/wotlk/protection_warrior
+PALADIN 1: supported=true spec= link=https://www.wowsims.com/wotlk/
+PALADIN 2: supported=true spec=protection link=https://www.wowsims.com/wotlk/protection_paladin
+PALADIN 3: supported=true spec=retribution link=https://www.wowsims.com/wotlk/retribution_paladin
+HUNTER 1: supported=true spec=beast_mastery link=https://www.wowsims.com/wotlk/hunter
+HUNTER 2: supported=true spec=marksman link=https://www.wowsims.com/wotlk/hunter
+HUNTER 3: supported=true spec=survival link=https://www.wowsims.com/wotlk/hunter
+ROGUE 1: supported=true spec=assassination link=https://www.wowsims.com/wotlk/rogue
+ROGUE 2: supported=true spec=combat link=https://www.wowsims.com/wotlk/rogue
+ROGUE 3: supported=true spec=subtlety link=https://www.wowsims.com/wotlk/rogue
+PRIEST 1: supported=true spec=holy_disc link=https://www.wowsims.com/wotlk/healing_priest
+PRIEST 2: supported=true spec=holy_disc link=https://www.wowsims.com/wotlk/healing_priest
+PRIEST 3: supported=true spec=shadow link=https://www.wowsims.com/wotlk/shadow_priest
+SHAMAN 1: supported=true spec=elemental link=https://www.wowsims.com/wotlk/elemental_shaman
+SHAMAN 2: supported=true spec=enhancement link=https://www.wowsims.com/wotlk/enhancement_shaman
+SHAMAN 3: supported=true spec= link=https://www.wowsims.com/wotlk/
+MAGE 1: supported=true spec=arcane link=https://www.wowsims.com/wotlk/mage
+MAGE 2: supported=true spec=fire link=https://www.wowsims.com/wotlk/mage
+MAGE 3: supported=true spec=frost link=https://www.wowsims.com/wotlk/mage
+WARLOCK 1: supported=true spec=affliction link=https://www.wowsims.com/wotlk/warlock
+WARLOCK 2: supported=true spec=demonology link=https://www.wowsims.com/wotlk/warlock
+WARLOCK 3: supported=true spec=destruction link=https://www.wowsims.com/wotlk/warlock
+DRUID 1: supported=true spec=balance link=https://www.wowsims.com/wotlk/balance_druid
+DRUID 2: supported=true spec=feral link=https://www.wowsims.com/wotlk/feral_druid
+DRUID 3: supported=true spec= link=https://www.wowsims.com/wotlk/
+DEATHKNIGHT 1: supported=true spec=blood link=https://www.wowsims.com/wotlk/deathknight
+DEATHKNIGHT 2: supported=true spec=frost link=https://www.wowsims.com/wotlk/deathknight
+DEATHKNIGHT 3: supported=true spec=unholy link=https://www.wowsims.com/wotlk/deathknight
+
+## Prints
+WowSimsExporter test-version Initialized. Commands:
+/wse - Open window
+/wse export - Export character (auto-saves)
+Auto-save: ENABLED
+|cff008000Credits go to test-authors|r
+Character data saved for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 1 items from bags.

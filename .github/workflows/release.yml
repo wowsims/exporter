@@ -41,6 +41,17 @@ jobs:
           # which is useful for controlling the length of the automated changelog
           fetch-depth: 50
 
+      # don't ship a tag whose export differs from the snapshots in tools/test/snapshots
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check export snapshots
+        run: |
+          npm ci --prefix tools/test
+          node tools/test/snapshots.js
+
       # once cloned, we just run the GitHub Action for the packager project
       - name: Package and release
         uses: BigWigsMods/packager@v2

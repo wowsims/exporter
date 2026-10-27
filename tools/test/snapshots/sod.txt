@@ -1,0 +1,181 @@
+## Events
+[
+  "CHARACTER_POINTS_CHANGED",
+  "ENCHANT_SPELL_COMPLETED",
+  "PLAYER_EQUIPMENT_CHANGED",
+  "PLAYER_TALENT_UPDATE",
+  "RUNE_UPDATED"
+]
+
+## Hooks
+{}
+
+## Comms
+{}
+
+## Chat commands
+[
+  "wse",
+  "wowsimsexporter",
+  "wsexporter"
+]
+
+## Character pane button
+[
+  {
+    "point": "TOPRIGHT",
+    "relativePoint": "BOTTOMRIGHT",
+    "relativeTo": "CharacterFrame",
+    "x": 0,
+    "y": 0
+  }
+]
+
+## Export: WARLOCK tree 2
+{
+  "classIsSupported": true,
+  "link": "https://www.wowsims.com/sod/warlock"
+}
+{
+  "class": "warlock",
+  "gear": {
+    "items": [
+      {
+        "id": 1001
+      },
+      {
+        "id": 1002
+      },
+      {
+        "enchant": 2003,
+        "id": 1003,
+        "rune": 1219962
+      },
+      {
+        "enchant": 2015,
+        "id": 1015,
+        "random_suffix": -15
+      },
+      {
+        "id": 1005,
+        "random_suffix": -5,
+        "rune": 401000
+      },
+      {
+        "enchant": 2009,
+        "id": 1009
+      },
+      {
+        "id": 1010,
+        "random_suffix": -10,
+        "rune": 403000
+      },
+      {
+        "enchant": 2006,
+        "id": 1006
+      },
+      {
+        "id": 1007,
+        "rune": 407995
+      },
+      {
+        "id": 1008
+      },
+      {
+        "id": 1011,
+        "rune": 442893
+      },
+      {
+        "enchant": 2012,
+        "id": 1012
+      },
+      {
+        "id": 1013
+      },
+      {
+        "id": 1014
+      },
+      {
+        "id": 1016
+      },
+      {
+        "id": 1017
+      }
+    ]
+  },
+  "id": "Player-1-00000001",
+  "level": 60,
+  "name": "Tester",
+  "professions": [
+    {
+      "level": 300,
+      "name": "Blacksmithing"
+    },
+    {
+      "level": 275,
+      "name": "Mining"
+    }
+  ],
+  "race": "Human",
+  "realm": "TestRealm",
+  "spec": "demonology",
+  "talents": "10000100001000010000100000000-301230123012301230123012302301-0010000100001000010000100000000",
+  "unit": "player",
+  "version": "test-version"
+}
+
+## Bag export
+{
+  "items": [
+    {
+      "enchant": 2500,
+      "id": 7001,
+      "rune": 407995
+    },
+    {
+      "id": 7005,
+      "rune": 1219960
+    },
+    {
+      "id": 7006
+    }
+  ]
+}
+
+## Spec matrix
+WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/sod/warrior
+WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/sod/warrior
+WARRIOR 3: supported=true spec= link=https://www.wowsims.com/sod/
+PALADIN 1: supported=true spec=retribution link=https://www.wowsims.com/sod/retribution_paladin
+PALADIN 2: supported=true spec=retribution link=https://www.wowsims.com/sod/retribution_paladin
+PALADIN 3: supported=true spec=retribution link=https://www.wowsims.com/sod/retribution_paladin
+HUNTER 1: supported=true spec=beast_mastery link=https://www.wowsims.com/sod/hunter
+HUNTER 2: supported=true spec=marksman link=https://www.wowsims.com/sod/hunter
+HUNTER 3: supported=true spec=survival link=https://www.wowsims.com/sod/hunter
+ROGUE 1: supported=true spec=assassination link=https://www.wowsims.com/sod/rogue
+ROGUE 2: supported=true spec=combat link=https://www.wowsims.com/sod/rogue
+ROGUE 3: supported=true spec=subtlety link=https://www.wowsims.com/sod/rogue
+PRIEST 1: supported=true spec=shadow link=https://www.wowsims.com/sod/shadow_priest
+PRIEST 2: supported=true spec=shadow link=https://www.wowsims.com/sod/shadow_priest
+PRIEST 3: supported=true spec=shadow link=https://www.wowsims.com/sod/shadow_priest
+SHAMAN 1: supported=true spec=elemental link=https://www.wowsims.com/sod/elemental_shaman
+SHAMAN 2: supported=true spec=enhancement link=https://www.wowsims.com/sod/enhancement_shaman
+SHAMAN 3: supported=true spec= link=https://www.wowsims.com/sod/
+MAGE 1: supported=true spec=arcane link=https://www.wowsims.com/sod/mage
+MAGE 2: supported=true spec=fire link=https://www.wowsims.com/sod/mage
+MAGE 3: supported=true spec=frost link=https://www.wowsims.com/sod/mage
+WARLOCK 1: supported=true spec=affliction link=https://www.wowsims.com/sod/warlock
+WARLOCK 2: supported=true spec=demonology link=https://www.wowsims.com/sod/warlock
+WARLOCK 3: supported=true spec=warlocktank link=https://www.wowsims.com/sod/tank_warlock
+DRUID 1: supported=true spec=balance link=https://www.wowsims.com/sod/balance_druid
+DRUID 2: supported=true spec=feral link=https://www.wowsims.com/sod/feral_druid
+DRUID 3: supported=true spec=feral link=https://www.wowsims.com/sod/feral_druid
+
+## Prints
+WowSimsExporter test-version Initialized. Commands:
+/wse - Open window
+/wse export - Export character (auto-saves)
+Auto-save: ENABLED
+|cff008000Credits go to test-authors|r
+Character data saved for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.

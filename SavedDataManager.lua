@@ -14,8 +14,8 @@ local SavedDataManager = {}
 Env.SavedDataManager = SavedDataManager
 
 -- Constants
-local AUTO_SAVE_THROTTLE = 1 -- seconds between auto-saves
-local lastAutoSaveTime = 0
+local AUTO_SAVE_DELAY = 1 -- seconds after the last change event before auto-saving
+local pendingAutoSave
 
 -- Default configuration for saved data
 SavedDataManager.defaults = {
@@ -170,17 +170,23 @@ function SavedDataManager:OnCharacterChanged(event)
         return
     end
     
-    -- Throttle auto-saves to prevent spam
-    local currentTime = time()
-    if currentTime - lastAutoSaveTime < AUTO_SAVE_THROTTLE then
-        return
+    -- Debounce: one change often fires several events in a row (e.g. a talent point and a talent
+    -- update), so save once after the last of them, when the client data is up to date.
+    if pendingAutoSave then
+        pendingAutoSave:Cancel()
     end
-    lastAutoSaveTime = currentTime
-    
+    pendingAutoSave = C_Timer.NewTimer(AUTO_SAVE_DELAY, function()
+        pendingAutoSave = nil
+        self:AutoSave(event)
+    end)
+end
+
+-- Save the player's current character data
+function SavedDataManager:AutoSave(event)
     -- Only auto-save for supported classes
     local character = Env.CreateCharacter()
     character:SetUnit("player")
-    if not table.contains(Env.supportedClasses, character.class) then
+    if not table.contains(Env.Flavor.classes, character.class) then
         return
     end
     

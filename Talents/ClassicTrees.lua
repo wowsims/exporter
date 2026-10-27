@@ -49,24 +49,37 @@ function Env.GetNumTalentsFixed(tab)
     return #orderedTalentCache[tab]
 end
 
--- table extension contains
-function table.contains(table, element)
-    for _, value in pairs(table) do
-        if value == element then
-            return true
+---Create a string in the format "000..000-000..000-000..000". Used for Pre-Mists classic
+---@return string
+function Env.CreateClassicTalentString()
+    local GetTalentRank = Env.GetTalentRankOrdered
+    local GetNumTalents = Env.GetNumTalentsFixed
+    local tabs = {}
+    for tab = 1, GetNumTalentTabs() do
+        local talents = {}
+        for i = 1, GetNumTalents(tab) do
+            local currRank = GetTalentRank(tab, i)
+            table.insert(talents, tostring(currRank))
         end
+        table.insert(tabs, table.concat(talents))
     end
-    return false
+    return table.concat(tabs, "-")
 end
 
----Return the index of the biggest value in a numerically keyed table of numbers.
----@param table number[]
-function Env.TableMaxValIndex(table)
-    local idxMax = 1
-    for i = 2, #table do
-        if table[i] > table[idxMax] then
-            idxMax = i
+---Counts spent talent points per tree.
+---@param unit string "player", or "target" for the inspect target.
+---@return table pointsPerTreeTable { tree1Count, tree2Count, tree3Count }
+function Env.CountClassicPointsPerTree(unit)
+    local isInspect = unit == "target"
+    local trees = {}
+
+    for tab = 1, GetNumTalentTabs(isInspect) do
+        trees[tab] = 0
+        for i = 1, GetNumTalents(tab, isInspect) do
+            local _, _, _, _, currentRank = GetTalentInfo(tab, i, isInspect)
+            trees[tab] = trees[tab] + currentRank
         end
     end
-    return idxMax
+
+    return trees
 end

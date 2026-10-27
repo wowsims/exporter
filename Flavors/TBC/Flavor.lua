@@ -1,19 +1,27 @@
 local Env = select(2, ...)
 if not Env.IS_CLASSIC_TBC then return end
 
-Env.prelink = "https://www.wowsims.com/tbc/"
-
-Env.supportedClasses = {
-    "hunter",
-    "mage",
-    "shaman",
-    "priest",
-    "rogue",
-    "druid",
-    "warrior",
-    "warlock",
-    "paladin",
-}
+Env.RegisterFlavor({
+    prelink = "https://www.wowsims.com/tbc/",
+    classes = {
+        "hunter",
+        "mage",
+        "shaman",
+        "priest",
+        "rogue",
+        "druid",
+        "warrior",
+        "warlock",
+        "paladin",
+    },
+    itemFields = {
+        random_suffix = "number",
+        gems = "table",
+    },
+    characterButtonPoint = { "TOPLEFT", "CharacterFrameTab5", "TOPRIGHT", 0, 0 },
+    CreateTalentString = Env.CreateClassicTalentString,
+    CountPointsPerTree = Env.CountClassicPointsPerTree,
+})
 
 local TblMaxValIdx = Env.TableMaxValIndex
 

@@ -1,0 +1,235 @@
+## Events
+[
+  "CHARACTER_POINTS_CHANGED",
+  "ENCHANT_SPELL_COMPLETED",
+  "GLYPH_ADDED",
+  "GLYPH_REMOVED",
+  "GLYPH_UPDATED",
+  "PLAYER_EQUIPMENT_CHANGED",
+  "PLAYER_TALENT_UPDATE"
+]
+
+## Hooks
+{}
+
+## Comms
+{}
+
+## Chat commands
+[
+  "wse",
+  "wowsimsexporter",
+  "wsexporter"
+]
+
+## Character pane button
+[
+  {
+    "point": "TOPRIGHT",
+    "relativePoint": "BOTTOMRIGHT",
+    "relativeTo": "CharacterFrame",
+    "x": 0,
+    "y": 0
+  }
+]
+
+## Export: DRUID tree 2
+{
+  "classIsSupported": true,
+  "link": "https://www.wowsims.com/cata/druid/feral"
+}
+{
+  "class": "druid",
+  "gear": {
+    "items": [
+      {
+        "gems": {},
+        "id": 1001
+      },
+      {
+        "gems": {},
+        "id": 1002
+      },
+      {
+        "enchant": 2003,
+        "gems": {},
+        "id": 1003
+      },
+      {
+        "enchant": 2015,
+        "gems": {},
+        "id": 1015,
+        "random_suffix": -15
+      },
+      {
+        "gems": {},
+        "id": 1005,
+        "random_suffix": -5,
+        "reforging": 115
+      },
+      {
+        "enchant": 2009,
+        "gems": {},
+        "id": 1009
+      },
+      {
+        "gems": {},
+        "id": 1010,
+        "random_suffix": -10
+      },
+      {
+        "enchant": 2006,
+        "gems": {},
+        "id": 1006
+      },
+      {
+        "gems": {},
+        "id": 1007
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1008
+      },
+      {
+        "gems": {},
+        "id": 1011
+      },
+      {
+        "enchant": 2012,
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1012
+      },
+      {
+        "gems": {},
+        "id": 1013
+      },
+      {
+        "gems": {},
+        "id": 1014
+      },
+      {
+        "gems": {
+          [1]: 3001,
+          [3]: 3003
+        },
+        "id": 1016
+      },
+      {
+        "gems": {},
+        "id": 1017
+      }
+    ]
+  },
+  "glyphs": {
+    "major": [
+      {
+        "spellID": 60001
+      },
+      {
+        "spellID": 60004
+      },
+      {
+        "spellID": 60007
+      }
+    ],
+    "minor": [
+      {
+        "spellID": 60002
+      },
+      {
+        "spellID": 60005
+      },
+      {
+        "spellID": 60008
+      }
+    ],
+    "prime": [
+      {
+        "spellID": 60003
+      },
+      {
+        "spellID": 60006
+      },
+      {
+        "spellID": 60009
+      }
+    ]
+  },
+  "id": "Player-1-00000001",
+  "level": 85,
+  "name": "Tester",
+  "professions": [
+    {
+      "level": 300,
+      "name": "Blacksmithing"
+    },
+    {
+      "level": 275,
+      "name": "Mining"
+    }
+  ],
+  "race": "Worgen",
+  "realm": "TestRealm",
+  "spec": "feral",
+  "talents": "10000100001000010000100000000-301230123012301230123012302301-0010000100001000010000100000000",
+  "unit": "player",
+  "version": "test-version"
+}
+
+## Bag export
+{
+  "items": [
+    {
+      "enchant": 2500,
+      "gems": {},
+      "id": 7001
+    }
+  ]
+}
+
+## Spec matrix
+WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/cata/warrior/arms
+WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/cata/warrior/fury
+WARRIOR 3: supported=true spec=protection link=https://www.wowsims.com/cata/warrior/protection
+PALADIN 1: supported=true spec=holy link=https://www.wowsims.com/cata/paladin/holy
+PALADIN 2: supported=true spec=protection link=https://www.wowsims.com/cata/paladin/protection
+PALADIN 3: supported=true spec=retribution link=https://www.wowsims.com/cata/paladin/retribution
+HUNTER 1: supported=true spec=beast_mastery link=https://www.wowsims.com/cata/hunter/beast_mastery
+HUNTER 2: supported=true spec=marksman link=https://www.wowsims.com/cata/hunter/marksmanship
+HUNTER 3: supported=true spec=survival link=https://www.wowsims.com/cata/hunter/survival
+ROGUE 1: supported=true spec=assassination link=https://www.wowsims.com/cata/rogue/assassination
+ROGUE 2: supported=true spec=combat link=https://www.wowsims.com/cata/rogue/combat
+ROGUE 3: supported=true spec=subtlety link=https://www.wowsims.com/cata/rogue/subtlety
+PRIEST 1: supported=true spec=disc link=https://www.wowsims.com/cata/priest/discipline
+PRIEST 2: supported=true spec=holy link=https://www.wowsims.com/cata/priest/holy
+PRIEST 3: supported=true spec=shadow link=https://www.wowsims.com/cata/priest/shadow
+SHAMAN 1: supported=true spec=elemental link=https://www.wowsims.com/cata/shaman/elemental
+SHAMAN 2: supported=true spec=enhancement link=https://www.wowsims.com/cata/shaman/enhancement
+SHAMAN 3: supported=true spec=restoration link=https://www.wowsims.com/cata/shaman/restoration
+MAGE 1: supported=true spec=arcane link=https://www.wowsims.com/cata/mage/arcane
+MAGE 2: supported=true spec=fire link=https://www.wowsims.com/cata/mage/fire
+MAGE 3: supported=true spec=frost link=https://www.wowsims.com/cata/mage/frost
+WARLOCK 1: supported=true spec=affliction link=https://www.wowsims.com/cata/warlock/affliction
+WARLOCK 2: supported=true spec=demonology link=https://www.wowsims.com/cata/warlock/demonology
+WARLOCK 3: supported=true spec=destruction link=https://www.wowsims.com/cata/warlock/destruction
+DRUID 1: supported=true spec=balance link=https://www.wowsims.com/cata/druid/balance
+DRUID 2: supported=true spec=feral link=https://www.wowsims.com/cata/druid/feral
+DRUID 3: supported=true spec=restoration link=https://www.wowsims.com/cata/druid/restoration
+DEATHKNIGHT 1: supported=true spec=blood link=https://www.wowsims.com/cata/death_knight/blood
+DEATHKNIGHT 2: supported=true spec=frost link=https://www.wowsims.com/cata/death_knight/frost
+DEATHKNIGHT 3: supported=true spec=unholy link=https://www.wowsims.com/cata/death_knight/unholy
+
+## Prints
+WowSimsExporter test-version Initialized. Commands:
+/wse - Open window
+/wse export - Export character (auto-saves)
+Auto-save: ENABLED
+|cff008000Credits go to test-authors|r
+Character data saved for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 1 items from bags.
