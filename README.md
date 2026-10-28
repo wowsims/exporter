@@ -57,6 +57,10 @@ a fake client and compares it with `tools/test/snapshots/`. After an intended ch
 
 It was created using World of Warcraft Addon Creator 2015, its a very good IDE based on visual studio, its not required to be used, but if new files are added, please adjust the project file to match if not using WoWAC2015.
 
+**Translations**
+
+User-facing strings live in `Locales/`. Strings are keyed by their English text in `Locales/enUS.lua`; to add a language, copy `Locales/zhCN.lua`, change the locale code passed to `Env.RegisterLocale`, translate the values and add the file to `WowSimsExporter.toc`. Missing keys fall back to English.
+
 #Contributors
 generalwrex
 zku

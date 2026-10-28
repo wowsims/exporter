@@ -21,6 +21,8 @@ end
 Env.RegisterFlavor({
     name = "forever",
     prelink = "https://www.wowsims.com/forever/",
+    -- Only the root is served there; spec sub-paths are not.
+    cnPrelink = "https://wowsimscn.com/",
     classes = {
         "hunter",
         "mage",

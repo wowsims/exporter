@@ -11,6 +11,7 @@
 local addonName, Env = ...
 
 local LibParse = LibStub("LibParse")
+local L = Env.L
 
 local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "AceComm-3.0")
 
@@ -33,16 +34,16 @@ local options = {
     args = {
         openExporterButton = {
             type = "execute",
-            name = "Open Exporter Window",
-            desc = "Opens the exporter window",
+            name = L["Open Exporter Window"],
+            desc = L["Opens the exporter window"],
             func = function() WowSimsExporter:OpenWindow() end,
             order = 1,
             width = "full",
         },
         showCharacterButton = {
             type = "toggle",
-            name = "Show Character Pane Button",
-            desc = "Show or hide the WowSims icon button on the character sheet.",
+            name = L["Show Character Pane Button"],
+            desc = L["Show or hide the WowSims icon button on the character sheet."],
             get = function(info)
                 -- Default to true
                 if WowSimsExporter.db.profile.showCharacterButton == nil then
@@ -86,7 +87,7 @@ function WowSimsExporter:OnInitialize()
 
     local profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
     LibStub("AceConfig-3.0"):RegisterOptionsTable("WowSimsExporter_Profiles", profiles)
-    LibStub("AceConfigDialog-3.0"):AddToBlizOptions("WowSimsExporter_Profiles", "Profiles", "WowSimsExporter")
+    LibStub("AceConfigDialog-3.0"):AddToBlizOptions("WowSimsExporter_Profiles", L["Profiles"], "WowSimsExporter")
 
     -- Initialize the SavedDataManager
     Env.SavedDataManager:Initialize(self.db, self)
@@ -134,14 +135,14 @@ function WowSimsExporter:OnInitialize()
 
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func, showButton)
 
-    self:Print(addonName .. " " .. Env.VERSION .. " Initialized. Commands:\n" ..
-        "/wse - Open window\n" ..
-        "/wse export - Export character (auto-saves)\n" ..
-        "Auto-save: " .. (self.db.profile.autoSaveEnabled and "ENABLED" or "DISABLED") .. "\n" ..
-        "\124cff008000Credits go to " .. Env.AUTHORS.."\124r")
+    self:Print(L["%s %s Initialized. Commands:"]:format(addonName, Env.VERSION) .. "\n" ..
+        L["/wse - Open window"] .. "\n" ..
+        L["/wse export - Export character (auto-saves)"] .. "\n" ..
+        L["Auto-save: %s"]:format(self.db.profile.autoSaveEnabled and L["ENABLED"] or L["DISABLED"]) .. "\n" ..
+        "\124cff008000" .. L["Credits go to %s"]:format(Env.AUTHORS) .. "\124r")
 
     if not Env.IS_CLIENT_SUPPORTED then
-        self:Print("WARNING: Sim does not support your game version! Supported versions are:\n" ..
+        self:Print(L["WARNING: Sim does not support your game version! Supported versions are:"] .. "\n" ..
             table.concat(Env.supportedClientNames, "\n"))
     end
 end
@@ -196,7 +197,7 @@ end
 local function GenerateOutputBags()
     local equipmentSpecBags = Env.CreateEquipmentSpec()
     equipmentSpecBags:FillFromBagItems()
-    DEFAULT_CHAT_FRAME:AddMessage(("[|cffFFFF00WowSimsExporter|r] Exported %d items from bags."):format(#
+    DEFAULT_CHAT_FRAME:AddMessage("[|cffFFFF00WowSimsExporter|r] " .. L["Exported %d items from bags."]:format(#
         equipmentSpecBags.items))
     return LibParse:JSONEncode(equipmentSpecBags)
 end

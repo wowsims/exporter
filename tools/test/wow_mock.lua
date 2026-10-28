@@ -235,6 +235,7 @@ function UnitGUID(unit) return unit == "player" and "Player-1-00000001" or "Play
 function UnitFullName(unit) return unit == "player" and "Tester" or "Inspected", "TestRealm" end
 function UnitName(unit) return (UnitFullName(unit)) end
 function GetRealmName() return "TestRealm" end
+function GetLocale() return "enUS" end
 function UnitLevel() return info.level end
 function GetMaxPlayerLevel() return info.level end
 function UnitFactionGroup() return "Alliance", "Alliance" end

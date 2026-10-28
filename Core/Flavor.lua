@@ -14,14 +14,16 @@ Env.IS_CLIENT_SUPPORTED = Env.IS_CLASSIC_ERA or Env.IS_CLASSIC_ERA_SOD or Env.IS
 Env.VERSION = C_AddOns.GetAddOnMetadata(select(1, ...), "Version")
 Env.AUTHORS = C_AddOns.GetAddOnMetadata(select(1, ...), "Author")
 
+local L = Env.L
+
 Env.supportedClientNames = {
-    "Classic: Mists of Pandaria",
-    "Classic: Cataclysm",
-    "Classic: WotLK",
-    "Classic: TBC",
-    "Classic: SoD",
-    "Classic: Era/Anniversary",
-    "WoW Forever",
+    L["Classic: Mists of Pandaria"],
+    L["Classic: Cataclysm"],
+    L["Classic: WotLK"],
+    L["Classic: TBC"],
+    L["Classic: SoD"],
+    L["Classic: Era/Anniversary"],
+    L["WoW Forever"],
 }
 
 -- A flavor describes everything about one game version that the shared code needs. Each
@@ -31,6 +33,7 @@ Env.supportedClientNames = {
 ---@class Flavor
 ---@field name string Short name of the game version, exported as the character's flavor so a sim can tell where an export came from: era, sod, tbc, wrath, cata, mists or forever.
 ---@field prelink string Base URL of the sim, e.g. "https://www.wowsims.com/tbc/".
+---@field cnPrelink string|nil China mirror of the sim, offered next to prelink on zhCN clients. Only its root is linked.
 ---@field classes string[] Lowercase class names the sim supports.
 ---@field itemFields table<string, string> ItemSpec fields the sim reads, besides id and enchant, with their Lua type.
 ---@field events string[] Events besides the common ones that mean the character changed.
