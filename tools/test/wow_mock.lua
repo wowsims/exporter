@@ -119,6 +119,7 @@ ITEM_MOD_MASTERY_RATING_SHORT = "Mastery"
 
 UISpecialFrames = {}
 WorldFrame = { name = "WorldFrame" }
+UIParent = { name = "UIParent" }
 
 C_AddOns = {
     GetAddOnMetadata = function(_, field)
@@ -168,6 +169,12 @@ local function NewFrame(frameType, name, parent)
     function frame:Show() self.shown = true end
     function frame:Hide() self.shown = false end
     function frame:SetText(text) self.text = text end
+    function frame:SetShown(shown) self.shown = shown and true or false end
+    function frame:IsShown() return self.shown end
+    function frame:GetParent() return self.parent end
+    function frame:SetChecked(checked) self.checked = checked end
+    function frame:GetChecked() return self.checked end
+    function frame:CreateTexture() return NewFrame("Texture") end
     function frame:CreateFontString() return NewFrame("FontString") end
     setmetatable(frame, { __index = function() return function() end end })
     if name then _G[name] = frame end
@@ -616,13 +623,6 @@ WSEDB = {
     },
 }
 
--- UI.lua still builds its windows with AceGUI, which the scenario replaces.
-local LIBRARIES = {
-    ["AceGUI-3.0"] = {},
-}
-
-function LibStub(name) return assert(LIBRARIES[name], "no mock for library " .. name) end
-
 --------------------------------------------------------------------------------
 -- Scenario
 --------------------------------------------------------------------------------
@@ -643,6 +643,7 @@ function MOCK.RunScenario(root, files)
     local Env = {}
     local window = {}
     local addon, addonFrame
+    local realUI = {}
 
     for _, file in ipairs(files) do
         local chunk = assert(loadfile(root .. "/" .. file))
@@ -657,8 +658,11 @@ function MOCK.RunScenario(root, files)
                 return addon
             end
         elseif file == "UI.lua" then
-            -- Capture what the addon would show instead of building AceGUI windows.
+            -- Capture what the addon would show; the real window is driven at the end.
             local UI = Env.UI
+            for _, name in ipairs({ "CreateMainWindow", "SetOutput", "SetOutputGenerator", "SetOutputGeneratorBags" }) do
+                realUI[name] = UI[name]
+            end
             UI.CreateMainWindow = function(_, classIsSupported, link)
                 window.classIsSupported = classIsSupported
                 window.link = link
@@ -705,8 +709,10 @@ function MOCK.RunScenario(root, files)
         classIsSupported = window.classIsSupported,
         link = window.link,
     }) .. "\n" .. JSON(window.output))
+    local exportOutput = window.output
 
-    Section("Bag export", JSON(MOCK.bagGenerator()))
+    local bagOutput = MOCK.bagGenerator()
+    Section("Bag export", JSON(bagOutput))
 
     if MOCK.hooks.InspectUnit then
         window.output = nil
@@ -770,6 +776,52 @@ function MOCK.RunScenario(root, files)
             savedCharacters = savedNames,
         },
     }))
+
+    -- Drive the real window: open it, generate both exports, use the Saved Data tab and the copy
+    -- dialog, then close it with Escape.
+    for name, fn in pairs(realUI) do Env.UI[name] = fn end
+    Env.UI:SetOutputGenerator(MOCK.generator)
+    Env.UI:SetOutputGeneratorBags(MOCK.bagGenerator)
+    local function Click(button) button.scripts.OnClick(button) end
+    local function ShownRows(tab)
+        local names = {}
+        for _, row in ipairs(tab.rows) do
+            if row.shown then table.insert(names, row.name.text) end
+        end
+        return names
+    end
+
+    MOCK.class, MOCK.tree = REPRESENTATIVE_CLASS[flavor], 2
+    addon:CreateWindow(false, false)
+    local frame = WowSimsExporter
+    local mainTab, savedTab = frame.tabs.main, frame.tabs.saveddata
+    local facts = { title = frame.title.text, opened = frame.shown, status = frame.status.text, links = {} }
+    for _, link in ipairs(mainTab.links) do
+        if link.shown then table.insert(facts.links, { text = link.label.text, url = link.url }) end
+    end
+
+    Click(mainTab.generateButton)
+    facts.generateShowsExport = frame.editBox.text == exportOutput
+    facts.statusAfterGenerate = frame.status.text
+    Click(mainTab.bagsButton)
+    facts.bagsShowsBagExport = frame.editBox.text == bagOutput
+
+    Click(frame.tabButtons.saveddata)
+    facts.savedTabShown = savedTab.shown and not mainTab.shown
+    facts.savedRows = ShownRows(savedTab)
+    Click(savedTab.rows[2].exportButton)
+    facts.rowExport = { mainTabShown = mainTab.shown, output = frame.editBox.text }
+    Click(frame.tabButtons.saveddata)
+    Click(savedTab.rows[2].deleteButton)
+    facts.savedRowsAfterDelete = ShownRows(savedTab)
+
+    Click(frame.tabButtons.main)
+    Click(mainTab.links[1])
+    facts.copyDialog = { shown = WSECopyDialog.shown, text = WSECopyDialog.editBox.text }
+
+    frame.editBox.scripts.OnEscapePressed(frame.editBox)
+    facts.closedByEscape = not frame.shown
+    Section("Window", Serialize(facts))
 
     Section("Prints", table.concat(MOCK.prints, "\n"))
 

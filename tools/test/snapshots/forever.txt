@@ -362,6 +362,39 @@ DRUID 3: supported=true spec=restoration link=https://www.wowsims.com/forever/dr
   ]
 }
 
+## Window
+{
+  "bagsShowsBagExport": true,
+  "closedByEscape": true,
+  "copyDialog": {
+    "shown": true,
+    "text": "https://www.wowsims.com/forever/mage/dps"
+  },
+  "generateShowsExport": true,
+  "links": [
+    {
+      "text": "Click to copy: https://www.wowsims.com/forever/mage/dps",
+      "url": "https://www.wowsims.com/forever/mage/dps"
+    }
+  ],
+  "opened": true,
+  "rowExport": {
+    "mainTabShown": true,
+    "output": "{}"
+  },
+  "savedRows": [
+    "Tester-TestRealm",
+    "Old-TestRealm"
+  ],
+  "savedRowsAfterDelete": [
+    "Tester-TestRealm"
+  ],
+  "savedTabShown": true,
+  "status": "Click 'Generate Data' to generate exportable data",
+  "statusAfterGenerate": "Data Generated!",
+  "title": "WowSimsExporter test-version"
+}
+
 ## Prints
 chat: |cff33ff99WowSimsExporter|r: WowSimsExporter test-version Initialized. Commands:
 /wse - Open window
@@ -372,3 +405,6 @@ chat: |cff33ff99WowSimsExporter|r: Character data saved for Tester-TestRealm
 chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.
 chat: |cff33ff99WowSimsExporter|r: Updated saved character data for Tester-TestRealm
 chat: |cff33ff99WowSimsExporter|r: Updated saved character data for Tester-TestRealm
+chat: |cff33ff99WowSimsExporter|r: Updated saved character data for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.
+chat: |cff33ff99WowSimsExporter|r: Deleted saved character: Old-TestRealm

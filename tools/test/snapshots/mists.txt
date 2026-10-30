@@ -687,6 +687,39 @@ MONK 3: supported=true spec=windwalker link=https://www.wowsims.com/mop/monk/win
   ]
 }
 
+## Window
+{
+  "bagsShowsBagExport": true,
+  "closedByEscape": true,
+  "copyDialog": {
+    "shown": true,
+    "text": "https://www.wowsims.com/mop/monk/mistweaver"
+  },
+  "generateShowsExport": true,
+  "links": [
+    {
+      "text": "Click to copy: https://www.wowsims.com/mop/monk/mistweaver",
+      "url": "https://www.wowsims.com/mop/monk/mistweaver"
+    }
+  ],
+  "opened": true,
+  "rowExport": {
+    "mainTabShown": true,
+    "output": "{}"
+  },
+  "savedRows": [
+    "Tester-TestRealm",
+    "Old-TestRealm"
+  ],
+  "savedRowsAfterDelete": [
+    "Tester-TestRealm"
+  ],
+  "savedTabShown": true,
+  "status": "Click 'Generate Data' to generate exportable data",
+  "statusAfterGenerate": "Data Generated!",
+  "title": "WowSimsExporter test-version"
+}
+
 ## Prints
 chat: |cff33ff99WowSimsExporter|r: WowSimsExporter test-version Initialized. Commands:
 /wse - Open window
@@ -697,3 +730,6 @@ chat: |cff33ff99WowSimsExporter|r: Character data saved for Tester-TestRealm
 chat: [|cffFFFF00WowSimsExporter|r] Exported 4 items from bags.
 comm: WSEProfession request WHISPER Inspected
 comm: WSEProfession Blacksmithing=300, Mining=275,  WHISPER Inspected
+chat: |cff33ff99WowSimsExporter|r: Updated saved character data for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 4 items from bags.
+chat: |cff33ff99WowSimsExporter|r: Deleted saved character: Old-TestRealm

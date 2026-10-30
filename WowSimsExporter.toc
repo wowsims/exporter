@@ -4,7 +4,6 @@
 ## Interface: 50504, 50503, 40402, 38002, 38001, 20506, 20505, 11509, 11508, 16001
 ## Notes: This is an exporter written to quickly export your character to https://www.wowsims.com/ for simulations.
 ## SavedVariables: WSEDB
-## OptionalDeps: Ace3
 ## X-Curse-Project-ID: 590920
 ## X-Wago-ID: aN0Y936j
 ## X-WoWI-ID: 26823
@@ -19,10 +18,6 @@
 ## Category-ruRU: Инструменты разработки
 ## Category-zhCN: 开发工具
 ## Category-zhTW: 開發工具
-
-#@non-debug@
-embeds.xml
-#@end-non-debug@
 
 Locales/Locale.lua
 Locales/enUS.lua

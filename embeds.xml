@@ -1,7 +1,0 @@
-<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
-	<!--@non-debug@
-	<Script file="Libs\LibStub\LibStub.lua"/>
-	<Include file="Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml"/>
-	<Include file="Libs\AceGUI-3.0\AceGUI-3.0.xml"/>
-	@end-non-debug@-->
-</Ui>
