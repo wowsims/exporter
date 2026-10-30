@@ -193,6 +193,39 @@ DRUID 3: supported=true spec=feral link=https://www.wowsims.com/sod/feral_druid
   ]
 }
 
+## Window
+{
+  "bagsShowsBagExport": true,
+  "closedByEscape": true,
+  "copyDialog": {
+    "shown": true,
+    "text": "https://www.wowsims.com/sod/warlock"
+  },
+  "generateShowsExport": true,
+  "links": [
+    {
+      "text": "Click to copy: https://www.wowsims.com/sod/warlock",
+      "url": "https://www.wowsims.com/sod/warlock"
+    }
+  ],
+  "opened": true,
+  "rowExport": {
+    "mainTabShown": true,
+    "output": "{}"
+  },
+  "savedRows": [
+    "Tester-TestRealm",
+    "Old-TestRealm"
+  ],
+  "savedRowsAfterDelete": [
+    "Tester-TestRealm"
+  ],
+  "savedTabShown": true,
+  "status": "Click 'Generate Data' to generate exportable data",
+  "statusAfterGenerate": "Data Generated!",
+  "title": "WowSimsExporter test-version"
+}
+
 ## Prints
 chat: |cff33ff99WowSimsExporter|r: WowSimsExporter test-version Initialized. Commands:
 /wse - Open window
@@ -201,3 +234,6 @@ Auto-save: ENABLED
 |cff008000Credits go to test-authors|r
 chat: |cff33ff99WowSimsExporter|r: Character data saved for Tester-TestRealm
 chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.
+chat: |cff33ff99WowSimsExporter|r: Updated saved character data for Tester-TestRealm
+chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.
+chat: |cff33ff99WowSimsExporter|r: Deleted saved character: Old-TestRealm
