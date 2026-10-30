@@ -168,6 +168,7 @@ local function NewFrame(frameType, name, parent)
     function frame:Show() self.shown = true end
     function frame:Hide() self.shown = false end
     function frame:SetText(text) self.text = text end
+    function frame:CreateFontString() return NewFrame("FontString") end
     setmetatable(frame, { __index = function() return function() end end })
     if name then _G[name] = frame end
     table.insert(MOCK.frames, frame)
@@ -213,10 +214,10 @@ function CreateFrame(frameType, name, parent)
     return NewFrame(frameType, name, parent)
 end
 
-function MOCK.FireFrameEvent(event)
+function MOCK.FireFrameEvent(event, ...)
     for _, frame in ipairs(MOCK.frames) do
         if frame.events[event] and frame.scripts.OnEvent then
-            frame.scripts.OnEvent(frame, event)
+            frame.scripts.OnEvent(frame, event, ...)
         end
     end
 end
@@ -579,42 +580,45 @@ local function Serialize(value, indent)
 end
 MOCK.Serialize = Serialize
 
-local function DeepCopy(value)
-    if type(value) ~= "table" then return value end
-    local copy = {}
-    for k, v in pairs(value) do copy[k] = DeepCopy(v) end
-    return copy
-end
-
 MOCK.prints = {}
-MOCK.addons = {}
+MOCK.hooks = {}
+MOCK.comms = {}
 
-local function NewAddon(_, name)
-    local addon = { name = name, events = {}, hooks = {}, commands = {}, comms = {} }
-    function addon:RegisterChatCommand(command) table.insert(self.commands, command) end
-    function addon:RegisterEvent(event, handler) self.events[event] = handler end
-    function addon:UnregisterEvent(event) self.events[event] = nil end
-    function addon:Print(message) table.insert(MOCK.prints, message) end
-    function addon:SecureHook(target, handler) self.hooks[target] = handler end
-    function addon:Unhook(target) self.hooks[target] = nil end
-    function addon:RegisterComm(prefix) table.insert(self.comms, prefix) end
-    function addon:SendCommMessage(prefix, text, channel, target)
+SlashCmdList = {}
+
+function hooksecurefunc(target, handler) MOCK.hooks[target] = handler end
+
+function Ambiguate(name) return name end
+
+C_ChatInfo = {
+    RegisterAddonMessagePrefix = function(prefix) table.insert(MOCK.comms, prefix) end,
+    SendAddonMessage = function(prefix, text, channel, target)
         table.insert(MOCK.prints, ("comm: %s %s %s %s"):format(prefix, text, channel, tostring(target)))
-    end
-    MOCK.addons[name] = addon
-    return addon
-end
+    end,
+}
 
-local LIBRARIES = {
-    ["LibParse"] = { JSONEncode = function(_, value) return Serialize(value) end },
-    ["AceAddon-3.0"] = { NewAddon = NewAddon },
-    ["AceGUI-3.0"] = {},
-    ["AceDB-3.0"] = { New = function(_, _, defaults) return { profile = DeepCopy(defaults.profile) } end },
-    ["AceDBOptions-3.0"] = { GetOptionsTable = function() return {} end },
-    ["AceConfig-3.0"] = { RegisterOptionsTable = function() end },
-    ["AceConfigDialog-3.0"] = {
-        AddToBlizOptions = function() return { name = "WowSimsExporter" }, "WowSimsExporter" end,
+Settings = {
+    RegisterCanvasLayoutCategory = function(_, name)
+        return { GetID = function() return name end }
+    end,
+    RegisterAddOnCategory = function() end,
+}
+
+-- An older version's saved variables, which the addon has to keep reading.
+WSEDB = {
+    profileKeys = { ["Tester - TestRealm"] = "Main", ["Alt - TestRealm"] = "Default" },
+    profiles = {
+        Default = {},
+        Main = {
+            showAutoSaveMessages = true,
+            savedCharacters = { { name = "Old-TestRealm", data = "{}", dateString = "2023-01-01 00:00:00" } },
+        },
     },
+}
+
+-- UI.lua still builds its windows with AceGUI, which the scenario replaces.
+local LIBRARIES = {
+    ["AceGUI-3.0"] = {},
 }
 
 function LibStub(name) return assert(LIBRARIES[name], "no mock for library " .. name) end
@@ -638,12 +642,21 @@ end
 function MOCK.RunScenario(root, files)
     local Env = {}
     local window = {}
+    local addon, addonFrame
 
     for _, file in ipairs(files) do
         local chunk = assert(loadfile(root .. "/" .. file))
         chunk("WowSimsExporter", Env)
 
-        if file == "UI.lua" then
+        if file == "Core/Addon.lua" then
+            -- Keep hold of the addon object and the frame its events arrive on.
+            local NewAddon = Env.NewAddon
+            Env.NewAddon = function(...)
+                addon = NewAddon(...)
+                addonFrame = MOCK.frames[#MOCK.frames]
+                return addon
+            end
+        elseif file == "UI.lua" then
             -- Capture what the addon would show instead of building AceGUI windows.
             local UI = Env.UI
             UI.CreateMainWindow = function(_, classIsSupported, link)
@@ -659,24 +672,31 @@ function MOCK.RunScenario(root, files)
 
     MOCK.FireFrameEvent("SPELLS_CHANGED")
 
-    local addon = MOCK.addons.WowSimsExporter
-    addon:OnInitialize()
-    local enteringWorld = addon.events.PLAYER_ENTERING_WORLD
-    enteringWorld("PLAYER_ENTERING_WORLD", true, false)
+    MOCK.FireFrameEvent("ADDON_LOADED", "SomeOtherAddon")
+    MOCK.FireFrameEvent("ADDON_LOADED", "WowSimsExporter")
+    MOCK.FireFrameEvent("PLAYER_ENTERING_WORLD", true, false)
 
     local sections = {}
     local function Section(title, body)
         table.insert(sections, "## " .. title .. "\n" .. body)
     end
 
+    -- Marks addon output that snapshots.js checks is JSON and pretty-prints.
+    local function JSON(output)
+        return "<json>" .. output .. "</json>"
+    end
+
     local events = {}
-    for _, event in ipairs(SortedKeys(addon.events)) do
-        if event ~= "PLAYER_ENTERING_WORLD" then table.insert(events, event) end
+    for _, event in ipairs(SortedKeys(addonFrame.events)) do
+        if event ~= "PLAYER_ENTERING_WORLD" and event ~= "CHAT_MSG_ADDON" then table.insert(events, event) end
     end
     Section("Events", Serialize(events))
-    Section("Hooks", Serialize(SortedKeys(addon.hooks)))
-    Section("Comms", Serialize(addon.comms))
-    Section("Chat commands", Serialize(addon.commands))
+    Section("Hooks", Serialize(SortedKeys(MOCK.hooks)))
+    Section("Comms", Serialize(MOCK.comms))
+    local commands = {}
+    for key in pairs(SlashCmdList) do table.insert(commands, _G["SLASH_" .. key .. "1"]) end
+    table.sort(commands)
+    Section("Chat commands", Serialize(commands))
     Section("Character pane button", Serialize(WSECharacterFrameButton.points))
 
     MOCK.class, MOCK.tree = REPRESENTATIVE_CLASS[flavor], 2
@@ -684,23 +704,27 @@ function MOCK.RunScenario(root, files)
     Section("Export: " .. MOCK.class .. " tree 2", Serialize({
         classIsSupported = window.classIsSupported,
         link = window.link,
-    }) .. "\n" .. window.output)
+    }) .. "\n" .. JSON(window.output))
 
-    Section("Bag export", MOCK.bagGenerator())
+    Section("Bag export", JSON(MOCK.bagGenerator()))
 
-    if addon.hooks.InspectUnit then
+    if MOCK.hooks.InspectUnit then
         window.output = nil
-        addon.hooks.InspectUnit("target")
+        MOCK.hooks.InspectUnit("target")
         addon:CreateWindow(true, true)
-        Section("Inspect export: " .. MOCK.class .. " tree 2", window.output)
+        Section("Inspect export: " .. MOCK.class .. " tree 2", JSON(window.output))
 
         for _, variant in ipairs({ "gaps", "conflict" }) do
             MOCK.inspectVariant = variant
             window.output = nil
             addon:CreateWindow(true, true)
-            Section("Inspect export (" .. variant .. "): " .. MOCK.class .. " tree 2", window.output)
+            Section("Inspect export (" .. variant .. "): " .. MOCK.class .. " tree 2", JSON(window.output))
         end
         MOCK.inspectVariant = nil
+
+        -- Another player asks for our professions; messages for other addons are ignored.
+        MOCK.FireFrameEvent("CHAT_MSG_ADDON", "OtherAddon", "request", "WHISPER", "Inspected")
+        MOCK.FireFrameEvent("CHAT_MSG_ADDON", "WSEProfession", "request", "WHISPER", "Inspected")
     end
 
     if flavor == "forever" then
@@ -714,7 +738,7 @@ function MOCK.RunScenario(root, files)
             addon:CreateWindow(true, false)
             Section("Export (" .. variant .. "): " .. MOCK.class .. " tree 2", Serialize({
                 link = window.link,
-            }) .. "\n" .. window.output)
+            }) .. "\n" .. JSON(window.output))
             C_ClassTalents = nil
         end
         C_SpecializationInfo.GetCombatConfigIDForSpecGroup = GetCombatConfigIDForSpecGroup
@@ -732,6 +756,20 @@ function MOCK.RunScenario(root, files)
         end
     end
     Section("Spec matrix", table.concat(matrix, "\n"))
+
+    local db = WSEDB
+    local savedNames = {}
+    for _, entry in ipairs(db.profiles.Main.savedCharacters) do table.insert(savedNames, entry.name) end
+    Section("Saved variables", Serialize({
+        profileKeys = db.profileKeys,
+        profiles = SortedKeys(db.profiles),
+        Main = {
+            showAutoSaveMessages = db.profiles.Main.showAutoSaveMessages,
+            autoSaveEnabled = db.profiles.Main.autoSaveEnabled,
+            maxSavedCharacters = db.profiles.Main.maxSavedCharacters,
+            savedCharacters = savedNames,
+        },
+    }))
 
     Section("Prints", table.concat(MOCK.prints, "\n"))
 

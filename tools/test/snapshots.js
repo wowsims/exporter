@@ -84,7 +84,8 @@ return MOCK.RunScenario(root, list)
 	lua.lua_pushstring(L, to_luastring(ROOT));
 	lua.lua_pushstring(L, to_luastring(tocFiles(gameType).join('\n')));
 	check(lua.lua_pcall(L, 2, 1, 0));
-	return lua.lua_tojsstring(L, -1);
+	// The export must be JSON; show it pretty-printed so a change is readable in the snapshot diff.
+	return lua.lua_tojsstring(L, -1).replace(/<json>([^]*?)<\/json>/g, (_, json) => JSON.stringify(JSON.parse(json), null, 2));
 };
 
 const firstDifference = (expected, actual) => {

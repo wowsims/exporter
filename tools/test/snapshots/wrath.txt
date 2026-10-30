@@ -17,9 +17,9 @@
 
 ## Chat commands
 [
-  "wse",
-  "wowsimsexporter",
-  "wsexporter"
+  "/wowsimsexporter",
+  "/wse",
+  "/wsexporter"
 ]
 
 ## Character pane button
@@ -44,81 +44,84 @@
   "gear": {
     "items": [
       {
-        "gems": {},
+        "gems": [],
         "id": 1001
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1002
       },
       {
         "enchant": 2003,
-        "gems": {},
+        "gems": [],
         "id": 1003
       },
       {
         "enchant": 2015,
-        "gems": {},
+        "gems": [],
         "id": 1015
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1005
       },
       {
         "enchant": 2009,
-        "gems": {},
+        "gems": [],
         "id": 1009
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1010
       },
       {
         "enchant": 2006,
-        "gems": {},
+        "gems": [],
         "id": 1006
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1007
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 1008
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1011
       },
       {
         "enchant": 2012,
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 1012
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1013
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1014
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 1016
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1017
       }
     ]
@@ -146,7 +149,7 @@
         "spellID": 50006
       }
     ],
-    "prime": {}
+    "prime": []
   },
   "id": "Player-1-00000001",
   "level": 80,
@@ -174,7 +177,7 @@
   "items": [
     {
       "enchant": 2500,
-      "gems": {},
+      "gems": [],
       "id": 7001
     }
   ]
@@ -212,11 +215,32 @@ DEATHKNIGHT 1: supported=true spec=blood link=https://www.wowsims.com/wotlk/deat
 DEATHKNIGHT 2: supported=true spec=frost link=https://www.wowsims.com/wotlk/deathknight
 DEATHKNIGHT 3: supported=true spec=unholy link=https://www.wowsims.com/wotlk/deathknight
 
+## Saved variables
+{
+  "Main": {
+    "autoSaveEnabled": true,
+    "maxSavedCharacters": 20,
+    "savedCharacters": [
+      "Tester-TestRealm",
+      "Old-TestRealm"
+    ],
+    "showAutoSaveMessages": true
+  },
+  "profileKeys": {
+    "Alt - TestRealm": "Default",
+    "Tester - TestRealm": "Main"
+  },
+  "profiles": [
+    "Default",
+    "Main"
+  ]
+}
+
 ## Prints
-WowSimsExporter test-version Initialized. Commands:
+chat: |cff33ff99WowSimsExporter|r: WowSimsExporter test-version Initialized. Commands:
 /wse - Open window
 /wse export - Export character (auto-saves)
 Auto-save: ENABLED
 |cff008000Credits go to test-authors|r
-Character data saved for Tester-TestRealm
+chat: |cff33ff99WowSimsExporter|r: Character data saved for Tester-TestRealm
 chat: [|cffFFFF00WowSimsExporter|r] Exported 1 items from bags.

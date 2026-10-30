@@ -52,8 +52,9 @@ client for it in `tools/test/wow_mock.lua`.
 **Tests**
 
 `npm ci --prefix tools/test && node tools/test/snapshots.js` runs every game version's export against
-a fake client and compares it with `tools/test/snapshots/`. After an intended change, rerun it with
-`--update` and commit the new snapshots. CI runs it on every pull request.
+a fake client and compares it with `tools/test/snapshots/`, with the exported JSON pretty-printed.
+After an intended change, rerun it with `--update` and commit the new snapshots.
+`node tools/test/json.js` checks the JSON encoder's edge cases. CI runs both on every pull request.
 
 It was created using World of Warcraft Addon Creator 2015, its a very good IDE based on visual studio, its not required to be used, but if new files are added, please adjust the project file to match if not using WoWAC2015.
 

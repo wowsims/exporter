@@ -22,9 +22,9 @@
 
 ## Chat commands
 [
-  "wse",
-  "wowsimsexporter",
-  "wsexporter"
+  "/wowsimsexporter",
+  "/wse",
+  "/wsexporter"
 ]
 
 ## Character pane button
@@ -49,38 +49,38 @@
   "gear": {
     "items": [
       {
-        "gems": {},
+        "gems": [],
         "id": 1001,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1002,
         "reforging": 115
       },
       {
         "enchant": 2003,
-        "gems": {},
+        "gems": [],
         "id": 1003
       },
       {
         "enchant": 2015,
-        "gems": {},
+        "gems": [],
         "id": 1015,
         "random_suffix": -15
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1005,
         "random_suffix": -5
       },
       {
         "enchant": 2009,
-        "gems": {},
+        "gems": [],
         "id": 1009
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1010,
         "random_suffix": -10,
         "reforging": 123,
@@ -89,57 +89,60 @@
       },
       {
         "enchant": 2006,
-        "gems": {},
+        "gems": [],
         "id": 1006,
         "reforging": 119
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1007,
         "upgrade_step": 1
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 1008,
         "reforging": 121
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1011
       },
       {
         "enchant": 2012,
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 1012,
         "reforging": 125
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1013,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1014,
         "reforging": 127
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 1016,
         "reforging": 129,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 1017
       }
     ]
@@ -188,19 +191,19 @@
   "items": [
     {
       "enchant": 2500,
-      "gems": {},
+      "gems": [],
       "id": 7001
     },
     {
-      "gems": {},
+      "gems": [],
       "id": 7002
     },
     {
-      "gems": {},
+      "gems": [],
       "id": 7005
     },
     {
-      "gems": {},
+      "gems": [],
       "id": 7006
     }
   ]
@@ -213,38 +216,38 @@
   "gear": {
     "items": [
       {
-        "gems": {},
+        "gems": [],
         "id": 5001,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5002,
         "reforging": 115
       },
       {
         "enchant": 2003,
-        "gems": {},
+        "gems": [],
         "id": 5003
       },
       {
         "enchant": 2015,
-        "gems": {},
+        "gems": [],
         "id": 5015,
         "random_suffix": -15
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5005,
         "random_suffix": -5
       },
       {
         "enchant": 2009,
-        "gems": {},
+        "gems": [],
         "id": 5009
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5010,
         "random_suffix": -10,
         "reforging": 123,
@@ -252,59 +255,62 @@
       },
       {
         "enchant": 2006,
-        "gems": {},
+        "gems": [],
         "id": 5006,
         "reforging": 119
       },
       {
         "enchant": 4880,
-        "gems": {},
+        "gems": [],
         "id": 5007,
         "upgrade_step": 1
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5008,
         "reforging": 121
       },
       {
         "enchant": 4359,
-        "gems": {},
+        "gems": [],
         "id": 5011
       },
       {
         "enchant": 2012,
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5012,
         "reforging": 125
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5013,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5014,
         "reforging": 127
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5016,
         "reforging": 129,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5017
       }
     ]
@@ -353,94 +359,99 @@
   "class": "monk",
   "flavor": "mists",
   "gear": {
-    "items": {
-      [2]: {
+    "items": [
+      null,
+      {
         "gems": [
           83141
         ],
         "id": 5002,
         "reforging": 115
       },
-      [3]: {
+      {
         "enchant": 2003,
-        "gems": {},
+        "gems": [],
         "id": 5003
       },
-      [4]: {
+      {
         "enchant": 2015,
-        "gems": {},
+        "gems": [],
         "id": 5015,
         "random_suffix": -15
       },
-      [5]: {
-        "gems": {},
+      {
+        "gems": [],
         "id": 5005,
         "random_suffix": -5
       },
-      [6]: {
+      {
         "enchant": 2009,
-        "gems": {},
+        "gems": [],
         "id": 5009
       },
-      [7]: {
-        "gems": {},
+      {
+        "gems": [],
         "id": 5010,
         "random_suffix": -10,
         "reforging": 123,
         "upgrade_step": 1
       },
-      [8]: {
+      {
         "enchant": 2006,
-        "gems": {},
+        "gems": [],
         "id": 5006,
         "reforging": 119
       },
-      [9]: {
-        "gems": {},
+      {
+        "gems": [],
         "id": 5007,
         "upgrade_step": 1
       },
-      [10]: {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+      {
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5008,
         "reforging": 121
       },
-      [12]: {
+      null,
+      {
         "enchant": 2012,
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5012,
         "reforging": 125
       },
-      [13]: {
-        "gems": {},
+      {
+        "gems": [],
         "id": 5013,
         "upgrade_step": 1
       },
-      [14]: {
-        "gems": {},
+      {
+        "gems": [],
         "id": 5014,
         "reforging": 127
       },
-      [15]: {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+      {
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5016,
         "reforging": 129,
         "upgrade_step": 1
       },
-      [16]: {
-        "gems": {},
+      {
+        "gems": [],
         "id": 5017
       }
-    }
+    ]
   },
   "glyphs": {
     "major": [
@@ -488,7 +499,7 @@
   "gear": {
     "items": [
       {
-        "gems": {},
+        "gems": [],
         "id": 5001,
         "upgrade_step": 1
       },
@@ -501,27 +512,27 @@
       },
       {
         "enchant": 2003,
-        "gems": {},
+        "gems": [],
         "id": 5003
       },
       {
         "enchant": 2015,
-        "gems": {},
+        "gems": [],
         "id": 5015,
         "random_suffix": -15
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5005,
         "random_suffix": -5
       },
       {
         "enchant": 2009,
-        "gems": {},
+        "gems": [],
         "id": 5009
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5010,
         "random_suffix": -10,
         "reforging": 123,
@@ -529,59 +540,62 @@
       },
       {
         "enchant": 2006,
-        "gems": {},
+        "gems": [],
         "id": 5006,
         "reforging": 119
       },
       {
         "enchant": 4880,
-        "gems": {},
+        "gems": [],
         "id": 5007,
         "upgrade_step": 1
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5008,
         "reforging": 121
       },
       {
         "enchant": 4359,
-        "gems": {},
+        "gems": [],
         "id": 5011
       },
       {
         "enchant": 2012,
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5012,
         "reforging": 125
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5013,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5014,
         "reforging": 127
       },
       {
-        "gems": {
-          [1]: 3001,
-          [3]: 3003
-        },
+        "gems": [
+          3001,
+          null,
+          3003
+        ],
         "id": 5016,
         "reforging": 129,
         "upgrade_step": 1
       },
       {
-        "gems": {},
+        "gems": [],
         "id": 5017
       }
     ]
@@ -607,7 +621,7 @@
   "id": "Player-1-00000002",
   "level": 90,
   "name": "Inspected",
-  "professions": {},
+  "professions": [],
   "race": "Pandaren (A)",
   "realm": "TestRealm",
   "spec": "mistweaver",
@@ -652,12 +666,34 @@ MONK 1: supported=true spec=brewmaster link=https://www.wowsims.com/mop/monk/bre
 MONK 2: supported=true spec=mistweaver link=https://www.wowsims.com/mop/monk/mistweaver
 MONK 3: supported=true spec=windwalker link=https://www.wowsims.com/mop/monk/windwalker
 
+## Saved variables
+{
+  "Main": {
+    "autoSaveEnabled": true,
+    "maxSavedCharacters": 20,
+    "savedCharacters": [
+      "Tester-TestRealm",
+      "Old-TestRealm"
+    ],
+    "showAutoSaveMessages": true
+  },
+  "profileKeys": {
+    "Alt - TestRealm": "Default",
+    "Tester - TestRealm": "Main"
+  },
+  "profiles": [
+    "Default",
+    "Main"
+  ]
+}
+
 ## Prints
-WowSimsExporter test-version Initialized. Commands:
+chat: |cff33ff99WowSimsExporter|r: WowSimsExporter test-version Initialized. Commands:
 /wse - Open window
 /wse export - Export character (auto-saves)
 Auto-save: ENABLED
 |cff008000Credits go to test-authors|r
-Character data saved for Tester-TestRealm
+chat: |cff33ff99WowSimsExporter|r: Character data saved for Tester-TestRealm
 chat: [|cffFFFF00WowSimsExporter|r] Exported 4 items from bags.
 comm: WSEProfession request WHISPER Inspected
+comm: WSEProfession Blacksmithing=300, Mining=275,  WHISPER Inspected
