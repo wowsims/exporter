@@ -10,14 +10,9 @@
 
 local addonName, Env = ...
 
-local LibParse = LibStub("LibParse")
 local L = Env.L
 
-local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "AceComm-3.0")
-
-local defaults = {
-    profile = Env.SavedDataManager.defaults,
-}
+local WowSimsExporter = Env.NewAddon("WowSimsExporter")
 
 -- Events on every client that mean the character changed; flavors add their own.
 local characterChangedEvents = {
@@ -27,47 +22,25 @@ local characterChangedEvents = {
     "ENCHANT_SPELL_COMPLETED",
 }
 
-local options = {
-    name = addonName,
-    handler = WowSimsExporter,
-    type = "group",
-    args = {
-        openExporterButton = {
-            type = "execute",
-            name = L["Open Exporter Window"],
-            desc = L["Opens the exporter window"],
-            func = function() WowSimsExporter:OpenWindow() end,
-            order = 1,
-            width = "full",
-        },
-        showCharacterButton = {
-            type = "toggle",
-            name = L["Show Character Pane Button"],
-            desc = L["Show or hide the WowSims icon button on the character sheet."],
-            get = function(info)
-                -- Default to true
-                if WowSimsExporter.db.profile.showCharacterButton == nil then
-                    return true
-                end
-                return WowSimsExporter.db.profile.showCharacterButton
-            end,
-            set = function(info, value) 
-                WowSimsExporter.db.profile.showCharacterButton = value
-                -- show or hide
-                if WSECharacterFrameButton then
-                    if value then
-                        WSECharacterFrameButton:Show()
-                    else
-                        WSECharacterFrameButton:Hide()
-                    end
-                end
-            end,
-            order = 2,
-            width = "double",
-        },
-    },
-    
-}
+---Whether the character pane button is shown (the default).
+local function GetShowCharacterButton()
+    return WowSimsExporter.db.profile.showCharacterButton ~= false
+end
+
+local function SetShowCharacterButton(value)
+    WowSimsExporter.db.profile.showCharacterButton = value
+    if WSECharacterFrameButton then
+        if value then
+            WSECharacterFrameButton:Show()
+        else
+            WSECharacterFrameButton:Hide()
+        end
+    end
+end
+
+local function OpenExporterWindow()
+    WowSimsExporter:OpenWindow()
+end
 
 ---Register an event, skipping events the client doesn't have (registering one of those throws).
 ---@param event string
@@ -80,14 +53,10 @@ function WowSimsExporter:RegisterEventIfValid(event, handler)
 end
 
 function WowSimsExporter:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("WSEDB", defaults, true)
+    self.db = Env.NewDatabase("WSEDB", Env.SavedDataManager.defaults)
 
-    LibStub("AceConfig-3.0"):RegisterOptionsTable("WowSimsExporter", options)
-    self.optionsFrame, self.optionsCategoryID = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("WowSimsExporter", "WowSimsExporter")
-
-    local profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
-    LibStub("AceConfig-3.0"):RegisterOptionsTable("WowSimsExporter_Profiles", profiles)
-    LibStub("AceConfigDialog-3.0"):AddToBlizOptions("WowSimsExporter_Profiles", L["Profiles"], "WowSimsExporter")
+    self.optionsFrame, self.optionsCategoryID = Env.CreateOptionsPanel(OpenExporterWindow,
+        GetShowCharacterButton, SetShowCharacterButton)
 
     -- Initialize the SavedDataManager
     Env.SavedDataManager:Initialize(self.db, self)
@@ -130,10 +99,7 @@ function WowSimsExporter:OnInitialize()
         self:RegisterComm("WSEProfession")
     end
 
-    local showButton = self.db.profile.showCharacterButton
-    if showButton == nil then showButton = true end
-
-    Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func, showButton)
+    Env.UI:CreateCharacterPanelButton(OpenExporterWindow, GetShowCharacterButton())
 
     self:Print(L["%s %s Initialized. Commands:"]:format(addonName, Env.VERSION) .. "\n" ..
         L["/wse - Open window"] .. "\n" ..
@@ -184,7 +150,7 @@ end
 
 local function GenerateOutput(character, isInspect, exportBags)
     character:FillForExport(isInspect)
-    local jsonExport = LibParse:JSONEncode(character)
+    local jsonExport = Env.JSONEncode(character)
     
     if not isInspect and character.level == GetMaxPlayerLevel() then
         -- Automatically save to database using SavedDataManager
@@ -199,7 +165,7 @@ local function GenerateOutputBags()
     equipmentSpecBags:FillFromBagItems()
     DEFAULT_CHAT_FRAME:AddMessage("[|cffFFFF00WowSimsExporter|r] " .. L["Exported %d items from bags."]:format(#
         equipmentSpecBags.items))
-    return LibParse:JSONEncode(equipmentSpecBags)
+    return Env.JSONEncode(equipmentSpecBags)
 end
 
 function WowSimsExporter:CreateWindow(generate, isInspect)

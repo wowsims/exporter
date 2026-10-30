@@ -51,6 +51,7 @@ jobs:
         run: |
           npm ci --prefix tools/test
           node tools/test/snapshots.js
+          node tools/test/json.js
 
       # once cloned, we just run the GitHub Action for the packager project
       - name: Package and release

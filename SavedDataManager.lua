@@ -195,8 +195,7 @@ function SavedDataManager:AutoSave(event)
         return
     end
 
-    local LibParse = LibStub("LibParse")
-    local jsonExport = LibParse:JSONEncode(character)
+    local jsonExport = Env.JSONEncode(character)
     self:SaveCharacterData(jsonExport, nil, true) -- Pass true for isAutoSave
     
     -- Optional: Print a subtle message for auto-saves

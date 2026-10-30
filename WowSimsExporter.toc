@@ -29,6 +29,10 @@ Locales/enUS.lua
 Locales/zhCN.lua
 Core/Flavor.lua
 Core/Util.lua
+Core/Json.lua
+Core/Addon.lua
+Core/Database.lua
+Core/Options.lua
 Core/Tooltip.lua
 Core/Professions.lua
 Core/Items.lua

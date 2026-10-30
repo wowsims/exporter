@@ -23,6 +23,18 @@
     <Content Include="Core/Util.lua">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Core/Json.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Addon.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Database.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core/Options.lua">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Core/Tooltip.lua">
       <SubType>Code</SubType>
     </Content>
@@ -103,60 +115,6 @@
     <Content Include="Libs/CallbackHandler-1.0/CallbackHandler-1.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceAddon-3.0/AceAddon-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceAddon-3.0/AceAddon-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfig-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfig-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConsole-3.0/AceConsole-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceConsole-3.0/AceConsole-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceDB-3.0/AceDB-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceDB-3.0/AceDB-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceDBOptions-3.0/AceDBOptions-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceDBOptions-3.0/AceDBOptions-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceEvent-3.0/AceEvent-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceEvent-3.0/AceEvent-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Libs/AceGUI-3.0/AceGUI-3.0.lua">
       <SubType>Code</SubType>
     </Content>
@@ -229,24 +187,6 @@
     <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Slider.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/LibParse/LibParse.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceComm-3.0/AceComm-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceComm-3.0/AceComm-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceComm-3.0/ChatThrottleLib.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceHook-3.0/AceHook-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceHook-3.0/AceHook-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />
@@ -260,18 +200,6 @@
     <Folder Include="Flavors\Wrath\" />
     <Folder Include="Talents\" />
     <Folder Include="Libs\" />
-    <Folder Include="Libs\AceAddon-3.0\" />
-    <Folder Include="Libs\AceComm-3.0\" />
-    <Folder Include="Libs\AceHook-3.0\" />
-    <Folder Include="Libs\LibParse\" />
-    <Folder Include="Libs\AceConfig-3.0\" />
-    <Folder Include="Libs\AceConfig-3.0\AceConfigCmd-3.0\" />
-    <Folder Include="Libs\AceConfig-3.0\AceConfigDialog-3.0\" />
-    <Folder Include="Libs\AceConfig-3.0\AceConfigRegistry-3.0\" />
-    <Folder Include="Libs\AceConsole-3.0\" />
-    <Folder Include="Libs\AceDB-3.0\" />
-    <Folder Include="Libs\AceDBOptions-3.0\" />
-    <Folder Include="Libs\AceEvent-3.0\" />
     <Folder Include="Libs\AceGUI-3.0\" />
     <Folder Include="Libs\AceGUI-3.0\widgets\" />
     <Folder Include="Libs\CallbackHandler-1.0\" />
