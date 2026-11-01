@@ -65,6 +65,22 @@ local options = {
             order = 2,
             width = "double",
         },
+        showStartupMessage = {
+            type = "toggle",
+            name = L["Show Startup Message"],
+            desc = L["Show or hide the initialization message in chat when the addon loads."],
+            get = function(info)
+                if WowSimsExporter.db.profile.showStartupMessage == nil then
+                    return true
+                end
+                return WowSimsExporter.db.profile.showStartupMessage
+            end,
+            set = function(info, value)
+                WowSimsExporter.db.profile.showStartupMessage = value
+            end,
+            order = 3,
+            width = "double",
+        },
     },
     
 }
@@ -135,11 +151,13 @@ function WowSimsExporter:OnInitialize()
 
     Env.UI:CreateCharacterPanelButton(options.args.openExporterButton.func, showButton)
 
-    self:Print(L["%s %s Initialized. Commands:"]:format(addonName, Env.VERSION) .. "\n" ..
-        L["/wse - Open window"] .. "\n" ..
-        L["/wse export - Export character (auto-saves)"] .. "\n" ..
-        L["Auto-save: %s"]:format(self.db.profile.autoSaveEnabled and L["ENABLED"] or L["DISABLED"]) .. "\n" ..
-        "\124cff008000" .. L["Credits go to %s"]:format(Env.AUTHORS) .. "\124r")
+    if self.db.profile.showStartupMessage ~= false then
+        self:Print(L["%s %s Initialized. Commands:"]:format(addonName, Env.VERSION) .. "\n" ..
+            L["/wse - Open window"] .. "\n" ..
+            L["/wse export - Export character (auto-saves)"] .. "\n" ..
+            L["Auto-save: %s"]:format(self.db.profile.autoSaveEnabled and L["ENABLED"] or L["DISABLED"]) .. "\n" ..
+            "\124cff008000" .. L["Credits go to %s"]:format(Env.AUTHORS) .. "\124r")
+    end
 
     if not Env.IS_CLIENT_SUPPORTED then
         self:Print(L["WARNING: Sim does not support your game version! Supported versions are:"] .. "\n" ..
