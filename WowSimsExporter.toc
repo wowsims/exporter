@@ -27,6 +27,7 @@ embeds.xml
 Locales/Locale.lua
 Locales/enUS.lua
 Locales/zhCN.lua
+Locales/zhTW.lua
 Core/Flavor.lua
 Core/Util.lua
 Core/Tooltip.lua
