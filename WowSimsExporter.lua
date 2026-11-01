@@ -207,7 +207,10 @@ function WowSimsExporter:CreateWindow(generate, isInspect)
     local unit = isInspect and Env.inspectUnit or "player"
     character:SetUnit(unit)
     local classIsSupported = table.contains(Env.Flavor.classes, character.class)
-    local linkToSim = Env.Flavor.prelink .. select(2, Env.GetSpec("player"))
+    local linkToSim = Env.Flavor.prelink
+    if Env.Flavor.name ~= "forever" then
+        linkToSim = linkToSim .. select(2, Env.GetSpec("player"))
+    end
 
     Env.UI:CreateMainWindow(classIsSupported, linkToSim)
     if not classIsSupported then return end
