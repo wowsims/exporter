@@ -205,9 +205,8 @@ end
 function WowSimsExporter:CreateWindow(generate, isInspect)
     local character = Env.CreateCharacter()
     local unit = isInspect and Env.inspectUnit or "player"
-    character:SetUnit(unit)
+    local simPath = character:SetUnit(unit)
     local classIsSupported = table.contains(Env.Flavor.classes, character.class)
-    local simPath = select(2, Env.GetSpec(unit))
     local linkToSim = Env.Flavor.prelink .. simPath
     local cnLinkToSim = Env.Flavor.cnPrelink and Env.Flavor.cnPrelink .. simPath
 
