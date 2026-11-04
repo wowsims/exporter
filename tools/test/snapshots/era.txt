@@ -33,7 +33,7 @@
 ## Export: DRUID tree 2
 {
   "classIsSupported": true,
-  "link": "https://www.wowsims.com/sod/feral_druid"
+  "link": "https://www.wowsims.com/classic/feral_druid"
 }
 {
   "class": "druid",
@@ -136,33 +136,63 @@
 }
 
 ## Spec matrix
-WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/sod/warrior
-WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/sod/warrior
-WARRIOR 3: supported=true spec= link=https://www.wowsims.com/sod/
-PALADIN 1: supported=true spec=retribution link=https://www.wowsims.com/sod/retribution_paladin
-PALADIN 2: supported=true spec=retribution link=https://www.wowsims.com/sod/retribution_paladin
-PALADIN 3: supported=true spec=retribution link=https://www.wowsims.com/sod/retribution_paladin
-HUNTER 1: supported=true spec=beast_mastery link=https://www.wowsims.com/sod/hunter
-HUNTER 2: supported=true spec=marksman link=https://www.wowsims.com/sod/hunter
-HUNTER 3: supported=true spec=survival link=https://www.wowsims.com/sod/hunter
-ROGUE 1: supported=true spec=assassination link=https://www.wowsims.com/sod/rogue
-ROGUE 2: supported=true spec=combat link=https://www.wowsims.com/sod/rogue
-ROGUE 3: supported=true spec=subtlety link=https://www.wowsims.com/sod/rogue
-PRIEST 1: supported=true spec=shadow link=https://www.wowsims.com/sod/shadow_priest
-PRIEST 2: supported=true spec=shadow link=https://www.wowsims.com/sod/shadow_priest
-PRIEST 3: supported=true spec=shadow link=https://www.wowsims.com/sod/shadow_priest
-SHAMAN 1: supported=true spec=elemental link=https://www.wowsims.com/sod/elemental_shaman
-SHAMAN 2: supported=true spec=enhancement link=https://www.wowsims.com/sod/enhancement_shaman
-SHAMAN 3: supported=true spec= link=https://www.wowsims.com/sod/
-MAGE 1: supported=true spec=arcane link=https://www.wowsims.com/sod/mage
-MAGE 2: supported=true spec=fire link=https://www.wowsims.com/sod/mage
-MAGE 3: supported=true spec=frost link=https://www.wowsims.com/sod/mage
-WARLOCK 1: supported=true spec=affliction link=https://www.wowsims.com/sod/warlock
-WARLOCK 2: supported=true spec=demonology link=https://www.wowsims.com/sod/warlock
-WARLOCK 3: supported=true spec=warlocktank link=https://www.wowsims.com/sod/tank_warlock
-DRUID 1: supported=true spec=balance link=https://www.wowsims.com/sod/balance_druid
-DRUID 2: supported=true spec=feral link=https://www.wowsims.com/sod/feral_druid
-DRUID 3: supported=true spec=feral link=https://www.wowsims.com/sod/feral_druid
+WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/classic/warrior
+WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/classic/warrior
+WARRIOR 3: supported=true spec=protection link=https://www.wowsims.com/classic/tank_warrior
+PALADIN 1: supported=true spec=holy link=https://www.wowsims.com/classic/holy_paladin
+PALADIN 2: supported=true spec=protection link=https://www.wowsims.com/classic/protection_paladin
+PALADIN 3: supported=true spec=retribution link=https://www.wowsims.com/classic/retribution_paladin
+HUNTER 1: supported=true spec=beast_mastery link=https://www.wowsims.com/classic/hunter
+HUNTER 2: supported=true spec=marksman link=https://www.wowsims.com/classic/hunter
+HUNTER 3: supported=true spec=survival link=https://www.wowsims.com/classic/hunter
+ROGUE 1: supported=true spec=assassination link=https://www.wowsims.com/classic/rogue
+ROGUE 2: supported=true spec=combat link=https://www.wowsims.com/classic/rogue
+ROGUE 3: supported=true spec=subtlety link=https://www.wowsims.com/classic/rogue
+PRIEST 1: supported=true spec=holy_disc link=https://www.wowsims.com/classic/healing_priest
+PRIEST 2: supported=true spec=holy_disc link=https://www.wowsims.com/classic/healing_priest
+PRIEST 3: supported=true spec=shadow link=https://www.wowsims.com/classic/shadow_priest
+SHAMAN 1: supported=true spec=elemental link=https://www.wowsims.com/classic/elemental_shaman
+SHAMAN 2: supported=true spec=enhancement link=https://www.wowsims.com/classic/enhancement_shaman
+SHAMAN 3: supported=true spec=restoration link=https://www.wowsims.com/classic/restoration_shaman
+MAGE 1: supported=true spec=arcane link=https://www.wowsims.com/classic/mage
+MAGE 2: supported=true spec=fire link=https://www.wowsims.com/classic/mage
+MAGE 3: supported=true spec=frost link=https://www.wowsims.com/classic/mage
+WARLOCK 1: supported=true spec=affliction link=https://www.wowsims.com/classic/warlock
+WARLOCK 2: supported=true spec=demonology link=https://www.wowsims.com/classic/warlock
+WARLOCK 3: supported=true spec=destruction link=https://www.wowsims.com/classic/warlock
+DRUID 1: supported=true spec=balance link=https://www.wowsims.com/classic/balance_druid
+DRUID 2: supported=true spec=feral link=https://www.wowsims.com/classic/feral_druid
+DRUID 3: supported=true spec=feral link=https://www.wowsims.com/classic/feral_druid
+
+## Spec links
+DRUID balance (dps): balance_druid
+DRUID restoration (healer): restoration_druid
+DRUID feral_bear (tank): feral_tank_druid
+DRUID feral (dps): feral_druid
+HUNTER beast_mastery (dps): hunter
+HUNTER marksman (dps): hunter
+HUNTER survival (dps): hunter
+MAGE arcane (dps): mage
+MAGE fire (dps): mage
+MAGE frost (dps): mage
+PALADIN holy (healer): holy_paladin
+PALADIN protection (tank): protection_paladin
+PALADIN retribution (dps): retribution_paladin
+PRIEST holy_disc (healer): healing_priest
+PRIEST shadow (dps): shadow_priest
+ROGUE assassination (dps): rogue
+ROGUE combat (dps): rogue
+ROGUE subtlety (dps): rogue
+SHAMAN elemental (dps): elemental_shaman
+SHAMAN enhancement (dps): enhancement_shaman
+SHAMAN restoration (healer): restoration_shaman
+WARLOCK affliction (dps): warlock
+WARLOCK demonology (dps): warlock
+WARLOCK destruction (dps): warlock
+WARRIOR arms (dps): warrior
+WARRIOR fury (dps): warrior
+WARRIOR protection (tank): tank_warrior
+Unlinked pages: warden_shaman
 
 ## Prints
 WowSimsExporter test-version Initialized. Commands:

@@ -35,6 +35,9 @@
     <Content Include="Core/Spec.lua">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Core/SimLink.lua">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Talents/ClassicTrees.lua">
       <SubType>Code</SubType>
     </Content>

@@ -40,6 +40,7 @@ end
 
 ---Fill all data for unit.
 ---@param unit "player"|"target" Target unit. "target" would need to be inspect target.
+---@return string simPath The path of the unit's spec page on the sim, from the same Env.GetSpec call.
 function CharacterMeta:SetUnit(unit)
     local name, realm = UnitFullName(unit)
     self.id = UnitGUID(unit)
@@ -53,7 +54,9 @@ function CharacterMeta:SetUnit(unit)
     self.race = getRace(unit, englishRace)
     self.class = englishClass:lower()
     self.level = UnitLevel(unit)
-    self.spec = Env.GetSpec(unit)
+    local simPath
+    self.spec, simPath = Env.GetSpec(unit)
+    return simPath
 end
 
 ---Fill remaining data needed for export.
