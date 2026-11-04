@@ -39,7 +39,8 @@ end
 ---Create/show the main window.
 ---@param classIsSupported boolean If false then show class not supported info instead of export stuff.
 ---@param simLink string The URL to the (class/spec) sim to display.
-function UI:CreateMainWindow(classIsSupported, simLink)
+---@param cnSimLink string|nil The same page on the China mirror, shown next to simLink on zhCN clients.
+function UI:CreateMainWindow(classIsSupported, simLink, cnSimLink)
     if _frame then return end
 
     local frame = AceGUI:Create("Frame")
@@ -98,9 +99,9 @@ function UI:CreateMainWindow(classIsSupported, simLink)
             container:AddChild(ilabel)
         end
 
-        if simLink and Env.Flavor.cnPrelink and Env.LOCALE == "zhCN" then
+        if simLink and cnSimLink and Env.LOCALE == "zhCN" then
             AddLinkLabel(L["International site - click to copy: %s"]:format(simLink), simLink)
-            AddLinkLabel(L["China site - click to copy: %s"]:format(Env.Flavor.cnPrelink), Env.Flavor.cnPrelink)
+            AddLinkLabel(L["China site - click to copy: %s"]:format(cnSimLink), cnSimLink)
         elseif simLink then
             AddLinkLabel(L["Click to copy: %s"]:format(simLink), simLink)
         end

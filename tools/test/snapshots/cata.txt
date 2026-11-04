@@ -226,6 +226,39 @@ DEATHKNIGHT 1: supported=true spec=blood link=https://www.wowsims.com/cata/death
 DEATHKNIGHT 2: supported=true spec=frost link=https://www.wowsims.com/cata/death_knight/frost
 DEATHKNIGHT 3: supported=true spec=unholy link=https://www.wowsims.com/cata/death_knight/unholy
 
+## Spec links
+DEATHKNIGHT blood (dps): death_knight/blood
+DEATHKNIGHT frost (dps): death_knight/frost
+DEATHKNIGHT unholy (dps): death_knight/unholy
+DRUID balance (dps): druid/balance
+DRUID feral (dps): druid/feral
+DRUID restoration (healer): druid/restoration
+HUNTER beast_mastery (dps): hunter/beast_mastery
+HUNTER marksman (dps): hunter/marksmanship
+HUNTER survival (dps): hunter/survival
+MAGE arcane (dps): mage/arcane
+MAGE fire (dps): mage/fire
+MAGE frost (dps): mage/frost
+PALADIN holy (healer): paladin/holy
+PALADIN protection (tank): paladin/protection
+PALADIN retribution (dps): paladin/retribution
+PRIEST disc (healer): priest/discipline
+PRIEST holy (healer): priest/holy
+PRIEST shadow (dps): priest/shadow
+ROGUE assassination (dps): rogue/assassination
+ROGUE combat (dps): rogue/combat
+ROGUE subtlety (dps): rogue/subtlety
+SHAMAN elemental (dps): shaman/elemental
+SHAMAN enhancement (dps): shaman/enhancement
+SHAMAN restoration (healer): shaman/restoration
+WARLOCK affliction (dps): warlock/affliction
+WARLOCK demonology (dps): warlock/demonology
+WARLOCK destruction (dps): warlock/destruction
+WARRIOR arms (dps): warrior/arms
+WARRIOR fury (dps): warrior/fury
+WARRIOR protection (tank): warrior/protection
+Unlinked pages: druid/guardian
+
 ## Prints
 WowSimsExporter test-version Initialized. Commands:
 /wse - Open window

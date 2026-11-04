@@ -34,6 +34,7 @@
 ## Export: MAGE tree 2
 {
   "classIsSupported": true,
+  "cnLink": "https://wowsimscn.com/mage/dps",
   "link": "https://www.wowsims.com/forever/mage/dps"
 }
 {
@@ -340,6 +341,36 @@ WARLOCK 3: supported=true spec=destruction link=https://www.wowsims.com/forever/
 DRUID 1: supported=true spec=balance link=https://www.wowsims.com/forever/druid/balance
 DRUID 2: supported=true spec=feral link=https://www.wowsims.com/forever/druid/feralcat
 DRUID 3: supported=true spec=restoration link=https://www.wowsims.com/forever/druid/restoration
+
+## Spec links
+DRUID balance (dps): druid/balance
+DRUID feral_bear (tank): druid/feralbear
+DRUID feral (dps): druid/feralcat
+DRUID restoration (healer): druid/restoration
+HUNTER beast_mastery (dps): hunter/dps
+HUNTER marksman (dps): hunter/dps
+HUNTER survival (dps): hunter/dps
+MAGE arcane (dps): mage/dps
+MAGE fire (dps): mage/dps
+MAGE frost (dps): mage/dps
+PALADIN holy (healer): paladin/holy
+PALADIN protection (tank): paladin/protection
+PALADIN retribution (dps): paladin/retribution
+PRIEST shadow (dps): priest/dps
+PRIEST holy_disc (healer): priest/healer
+ROGUE assassination (dps): rogue/dps
+ROGUE combat (dps): rogue/dps
+ROGUE subtlety (dps): rogue/dps
+SHAMAN elemental (dps): shaman/elemental
+SHAMAN enhancement (dps): shaman/enhancement
+SHAMAN restoration (healer): shaman/restoration
+WARLOCK affliction (dps): warlock/dps
+WARLOCK demonology (dps): warlock/dps
+WARLOCK destruction (dps): warlock/dps
+WARRIOR arms (dps): warrior/dps
+WARRIOR fury (dps): warrior/dps
+WARRIOR protection (tank): warrior/protection
+Unlinked pages: 
 
 ## Prints
 WowSimsExporter test-version Initialized. Commands:

@@ -529,8 +529,9 @@ if flavor == "era" or flavor == "sod" then
         RefreshRunesList = function() end,
         GetRuneForEquipmentSlot = function(slot)
             local runes = {
-                [INVSLOT_CHEST] = { learnedAbilitySpellIDs = { 401000 } },
-                [INVSLOT_LEGS] = { learnedAbilitySpellIDs = { 407993 } },
+                -- Tree 3 of a rogue or shaman wears its tank rune, like a warlock's Metamorphosis.
+                [INVSLOT_CHEST] = { learnedAbilitySpellIDs = { (MOCK.class == "ROGUE" and MOCK.tree == 3) and 400014 or 401000 } },
+                [INVSLOT_LEGS] = { learnedAbilitySpellIDs = { (MOCK.class == "SHAMAN" and MOCK.tree == 3) and 408531 or 407993 } },
                 [INVSLOT_HAND] = { learnedAbilitySpellIDs = { MOCK.tree == 3 and 403789 or 403000 } },
                 [INVSLOT_FINGER1] = { learnedAbilitySpellIDs = {}, itemEnchantmentID = 7514 },
             }
@@ -646,9 +647,10 @@ function MOCK.RunScenario(root, files)
         if file == "UI.lua" then
             -- Capture what the addon would show instead of building AceGUI windows.
             local UI = Env.UI
-            UI.CreateMainWindow = function(_, classIsSupported, link)
+            UI.CreateMainWindow = function(_, classIsSupported, link, cnLink)
                 window.classIsSupported = classIsSupported
                 window.link = link
+                window.cnLink = cnLink
             end
             UI.SetOutput = function(_, output) window.output = output end
             UI.SetOutputGenerator = function(_, generator) MOCK.generator = generator end
@@ -684,6 +686,7 @@ function MOCK.RunScenario(root, files)
     Section("Export: " .. MOCK.class .. " tree 2", Serialize({
         classIsSupported = window.classIsSupported,
         link = window.link,
+        cnLink = window.cnLink,
     }) .. "\n" .. window.output)
 
     Section("Bag export", MOCK.bagGenerator())
@@ -732,6 +735,20 @@ function MOCK.RunScenario(root, files)
         end
     end
     Section("Spec matrix", table.concat(matrix, "\n"))
+
+    -- Every registered spec, including variants the matrix can't reach, must link a page the sim
+    -- serves. Pages no spec links are listed so a new sim page shows up here.
+    local links, linked, unlinked = {}, {}, {}
+    Env.ForEachSpec(function(playerClass, spec, role)
+        local path = Env.GetSimPath(playerClass, spec, role)
+        assert(Env.Flavor.simPages[path], ("%s %s links no page of the %s sim"):format(playerClass, spec, flavor))
+        linked[path] = true
+        table.insert(links, ("%s %s (%s): %s"):format(playerClass, spec, Env.GetSpecRole(spec, role), path))
+    end)
+    for _, page in ipairs(SortedKeys(Env.Flavor.simPages)) do
+        if not linked[page] then table.insert(unlinked, page) end
+    end
+    Section("Spec links", table.concat(links, "\n") .. "\nUnlinked pages: " .. table.concat(unlinked, " "))
 
     Section("Prints", table.concat(MOCK.prints, "\n"))
 

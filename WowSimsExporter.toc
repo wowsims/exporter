@@ -33,6 +33,7 @@ Core/Tooltip.lua
 Core/Professions.lua
 Core/Items.lua
 Core/Spec.lua
+Core/SimLink.lua
 Talents/ClassicTrees.lua [AllowLoadGameType vanilla, tbc, wrath, cata]
 Talents/Glyphs.lua [AllowLoadGameType wrath, cata, mists]
 Flavors/Vanilla/Runes.lua [AllowLoadGameType vanilla]

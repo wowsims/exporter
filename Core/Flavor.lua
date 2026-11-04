@@ -2,6 +2,9 @@ local Env = select(2, ...)
 
 Env.IS_CLASSIC_ERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 Env.IS_CLASSIC_ERA_SOD = Env.IS_CLASSIC_ERA and C_Engraving.IsEngravingEnabled()
+-- IS_CLASSIC_ERA is true on every Classic Era client, Season of Discovery included; this is true
+-- only on the Era realms without SoD.
+Env.IS_CLASSIC_ERA_VANILLA = Env.IS_CLASSIC_ERA and not Env.IS_CLASSIC_ERA_SOD
 Env.IS_CLASSIC_WRATH = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 Env.IS_CLASSIC_CATA = WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC
 Env.IS_CLASSIC_MISTS = WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC
@@ -33,7 +36,9 @@ Env.supportedClientNames = {
 ---@class Flavor
 ---@field name string Short name of the game version, exported as the character's flavor so a sim can tell where an export came from: era, sod, tbc, wrath, cata, mists or forever.
 ---@field prelink string Base URL of the sim, e.g. "https://www.wowsims.com/tbc/".
----@field cnPrelink string|nil China mirror of the sim, offered next to prelink on zhCN clients. Only its root is linked.
+---@field cnPrelink string|nil China mirror of the sim, offered next to prelink on zhCN clients. Serves the same spec paths.
+---@field simLayout "flat"|"class_spec"|"class_role"|nil How the sim's codebase names its spec pages. See Core/SimLink.lua.
+---@field simPages table<string, boolean> Spec pages the sim serves, as paths under prelink.
 ---@field classes string[] Lowercase class names the sim supports.
 ---@field itemFields table<string, string> ItemSpec fields the sim reads, besides id and enchant, with their Lua type.
 ---@field events string[] Events besides the common ones that mean the character changed.
@@ -52,6 +57,7 @@ Env.supportedClientNames = {
 local defaults = {
     name = "",
     prelink = "https://www.wowsims.com/",
+    simPages = {},
     classes = {},
     itemFields = {},
     events = {},
