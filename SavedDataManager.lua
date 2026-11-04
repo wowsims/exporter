@@ -24,6 +24,7 @@ SavedDataManager.defaults = {
     maxSavedCharacters = 20, -- Maximum number of characters to keep
     autoSaveEnabled = true, -- Enable automatic saving on character changes
     showAutoSaveMessages = false, -- Show messages when auto-saving
+    showStartupMessage = true, -- Show the initialization message when the addon loads
 }
 
 -- Initialize the SavedDataManager with a database reference

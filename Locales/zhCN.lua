@@ -45,6 +45,8 @@ Env.RegisterLocale("zhCN", {
     ["Opens the exporter window"] = "打开导出器窗口",
     ["Show Character Pane Button"] = "显示角色面板按钮",
     ["Show or hide the WowSims icon button on the character sheet."] = "在角色面板上显示或隐藏 WowSims 图标按钮。",
+    ["Show Startup Message"] = "显示启动提示",
+    ["Show or hide the initialization message in chat when the addon loads."] = "控制插件加载时是否在聊天框显示启动说明。",
     ["Profiles"] = "配置文件",
 
     -- Chat messages

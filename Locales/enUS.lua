@@ -47,6 +47,8 @@ into the provided box and click "Import"
     ["Opens the exporter window"] = true,
     ["Show Character Pane Button"] = true,
     ["Show or hide the WowSims icon button on the character sheet."] = true,
+    ["Show Startup Message"] = true,
+    ["Show or hide the initialization message in chat when the addon loads."] = true,
     ["Profiles"] = true,
 
     -- Chat messages
