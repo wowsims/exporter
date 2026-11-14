@@ -4,6 +4,9 @@ local Env = select(2, ...)
 local GetItemInfo = GetItemInfo or C_Item.GetItemInfo
 local IsEquippableItem = IsEquippableItem or C_Item.IsEquippableItem
 
+-- Green quality is "Good" on classic clients and "Uncommon" on the retail client (WoW Forever).
+local QUALITY_GOOD = Enum.ItemQuality.Good or Enum.ItemQuality.Uncommon or 2
+
 ---Determine if an item should be exported on bag item export.
 -- TODO(Riotdog-GehennasEU): Is this sufficient? This seems to be what simc uses:
 -- https://github.com/simulationcraft/simc-addon/blob/master/core.lua
@@ -40,7 +43,7 @@ end
 ---@return boolean
 function Env.IsBagUpgradeNearPlayerLevel(itemLevel, itemRarity)
     local minIlvl = UnitLevel("player") - 15
-    return itemLevel > minIlvl and itemRarity >= Enum.ItemQuality.Good
+    return itemLevel > minIlvl and itemRarity >= QUALITY_GOOD
 end
 
 ---Bag export filter for Wrath and Cataclysm: skip TBC items like Rocket Boots Xtreme (Lite) and
