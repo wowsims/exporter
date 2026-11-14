@@ -97,7 +97,9 @@ NUM_BAG_SLOTS = 4
 MAX_NUM_TALENT_TIERS = 6
 
 Enum = {
-    ItemQuality = { Poor = 0, Common = 1, Good = 2, Rare = 3, Epic = 4 },
+    -- Classic clients call green quality "Good"; the retail client (Forever) calls it "Uncommon".
+    ItemQuality = IS_CLASSIC and { Poor = 0, Common = 1, Good = 2, Rare = 3, Epic = 4 }
+        or { Poor = 0, Common = 1, Uncommon = 2, Rare = 3, Epic = 4 },
     ItemClass = { Weapon = 2, Armor = 4, Projectile = 6 },
     InventoryType = { IndexShoulderType = 3 },
 }
