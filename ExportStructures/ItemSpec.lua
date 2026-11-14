@@ -40,7 +40,10 @@ end
 ---Fill values from an item link.
 ---@param itemLink string See https://wowpedia.fandom.com/wiki/ItemLink
 function ItemSpecMeta:FillFromItemLink(itemLink)
-    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId = strsplit(":", itemLink)
+    -- Split only the "item:..." part. Newer clients color links as "|cnIQ4:|Hitem:...", and the colon
+    -- in that color code would shift every field by one if the whole link were split.
+    local itemString = Env.IS_FOREVER and itemLink:match("item:[%-%d:]*") or itemLink
+    local _, itemId, enchantId, gemId1, gemId2, gemId3, gemId4, suffixId = strsplit(":", itemString)
 
     self.id = tonumber(itemId)
     self.enchant = tonumber(enchantId)

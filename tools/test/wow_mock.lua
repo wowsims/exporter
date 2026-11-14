@@ -610,7 +610,11 @@ local LIBRARIES = {
     ["LibParse"] = { JSONEncode = function(_, value) return Serialize(value) end },
     ["AceAddon-3.0"] = { NewAddon = NewAddon },
     ["AceGUI-3.0"] = {},
-    ["AceDB-3.0"] = { New = function(_, _, defaults) return { profile = DeepCopy(defaults.profile) } end },
+    ["AceDB-3.0"] = {
+        New = function(_, _, defaults)
+            return { profile = DeepCopy(defaults.profile), global = DeepCopy(defaults.global or {}) }
+        end,
+    },
     ["AceDBOptions-3.0"] = { GetOptionsTable = function() return {} end },
     ["AceConfig-3.0"] = { RegisterOptionsTable = function() end },
     ["AceConfigDialog-3.0"] = {
@@ -618,7 +622,14 @@ local LIBRARIES = {
     },
 }
 
-function LibStub(name) return assert(LIBRARIES[name], "no mock for library " .. name) end
+-- Errors the addon reports through the game's error handler fail the test.
+function geterrorhandler() return function(err) error(err, 0) end end
+
+-- LibStub(name, true) is "silent": it returns nil for a library that isn't there, as in the game.
+function LibStub(name, silent)
+    if silent then return LIBRARIES[name] end
+    return assert(LIBRARIES[name], "no mock for library " .. name)
+end
 
 --------------------------------------------------------------------------------
 -- Scenario

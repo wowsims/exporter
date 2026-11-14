@@ -192,7 +192,7 @@ function SavedDataManager:AutoSave(event)
     
     -- Generate and auto-save character data
     character:FillForExport(false)
-    if character.level < GetMaxPlayerLevel() then
+    if character.level < GetMaxPlayerLevel() and not Env.Flavor.saveBelowMaxLevel then
         return
     end
 
