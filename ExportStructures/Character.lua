@@ -21,7 +21,26 @@ local CharacterMeta = {
 }
 CharacterMeta.__index = CharacterMeta
 
+-- WoW Forever's Skyborne: the sim has one race per faction, "High Order Skyborne" (Alliance) and
+-- "Windshaper Skyborne" (Horde). The game may report just "Skyborne", so pick by faction.
+local function getForeverSkyborneRace(unit, englishRace)
+    local localizedRace = UnitRace and UnitRace(unit)
+    local names = ((englishRace or "") .. " " .. (localizedRace or "")):lower()
+    if not names:find("skyborne") then return nil end
+    local compact = (englishRace or ""):lower():gsub("[%s_%-]", "")
+    if compact:find("highorder") then return "HighOrderSkyborne" end
+    if compact:find("windshaper") then return "WindshaperSkyborne" end
+    local faction = UnitFactionGroup(unit)
+    if faction == "Horde" then return "WindshaperSkyborne" end
+    if faction == "Alliance" then return "HighOrderSkyborne" end
+    return nil
+end
+
 local function getRace(unit, englishRace)
+    if Env.IS_FOREVER then
+        local skyborne = getForeverSkyborneRace(unit, englishRace)
+        if skyborne then return skyborne end
+    end
     if englishRace == "Pandaren" then
         local englishFaction, _ = UnitFactionGroup(unit)
         return englishRace.." ("..englishFaction:sub(1,1)..")"
