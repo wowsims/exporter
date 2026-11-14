@@ -59,6 +59,12 @@ Env.RegisterFlavor({
         random_suffix = "number",
     },
     events = { "TRAIT_CONFIG_UPDATED", "ACTIVE_COMBAT_CONFIG_CHANGED" },
+    -- Inspected talents come from the client's inspect talent config. See Flavors/Forever/Talents.lua.
+    supportsInspect = true,
+    -- Character names are "Firstname Surname". See CharacterMeta:SetUnit.
+    namesHaveSurnames = true,
+    -- Most Forever players are leveling, so save characters at every level, not only at max level.
+    saveBelowMaxLevel = true,
     CreateTalentString = Env.CreateForeverTalentString,
     CountPointsPerTree = Env.CountForeverPointsPerTree,
     GetProfessions = GetProfessionsFromProfessionAPI,
@@ -80,7 +86,7 @@ Env.AddSpec("druid", "balance", function(t) return TblMaxValIdx(t) == 1 end)
 -- take Shredding Attacks, so hybrids link the cat sim.
 local THICK_HIDE, SHREDDING_ATTACKS = 134403, 134406 -- TraitDefinition IDs
 Env.AddSpec("druid", "feral_bear", function(t)
-    local ranks = Env.GetForeverTalentRanks()
+    local ranks = Env.GetForeverTalentRanks(Env.IsForeverCountingInspect())
     return TblMaxValIdx(t) == 2
         and ranks ~= nil
         and (ranks[THICK_HIDE] or 0) > 0
