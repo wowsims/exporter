@@ -15,6 +15,8 @@ Env.RegisterLocale("zhCN", {
 
 ]],
     ["Click to copy: %s"] = "点击复制：%s",
+    ["New: WowSims 4.0 beta for WoW Forever"] = "新：WoW Forever 版 WowSims 4.0 测试版",
+    ["gear sets, stat weights, upgrades, inspect, group exports and more. To get it, set this addon to Beta in the CurseForge app. Click to copy the link."] = "装备套装、属性权重、升级、观察、队伍导出等。在 CurseForge 应用中将此插件设为 Beta 即可获取。点击复制链接。",
     ["International site - click to copy: %s"] = "国际版（点击复制）：%s",
     ["China site - click to copy: %s"] = "中国版（点击复制）：%s",
     ["Generate Data (Equipped Only)"] = "生成数据（仅已装备）",

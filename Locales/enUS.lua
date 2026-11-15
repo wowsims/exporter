@@ -17,6 +17,8 @@ into the provided box and click "Import"
 
 ]],
     ["Click to copy: %s"] = true,
+    ["New: WowSims 4.0 beta for WoW Forever"] = true,
+    ["gear sets, stat weights, upgrades, inspect, group exports and more. To get it, set this addon to Beta in the CurseForge app. Click to copy the link."] = true,
     ["International site - click to copy: %s"] = true,
     ["China site - click to copy: %s"] = true,
     ["Generate Data (Equipped Only)"] = true,
