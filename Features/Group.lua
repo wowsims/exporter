@@ -234,4 +234,10 @@ function Group:Initialize(db, addon)
 end
 
 Env.GroupFeature = Group
+Env.AddOptions("group", 50, L["Group"], {
+    share = Env.Toggle(1, L["Share my export when my group or guild asks"], nil,
+        function() return Group:GetOptions().share end,
+        function(value) Group:GetOptions().share = value end),
+})
+
 Env.RegisterFeature(Group)

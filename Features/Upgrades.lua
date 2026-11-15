@@ -34,27 +34,31 @@ local function CanWear(bag, slot)
     return true
 end
 
----Bag items that score higher than what they'd replace, best first.
----@return table[] upgrades { link, percent }
+---Bag (and, while it's open, bank) items that score higher than what they'd replace, best first.
+---@return table[] upgrades { link, percent, inBank }
 ---@return boolean hasWeights
+---@return boolean bankScanned
 function Upgrades.FindBagUpgrades()
     local statWeights = Env.StatWeights
-    if not statWeights or not statWeights:GetActiveScale() then return {}, false end
+    if not statWeights or not statWeights:GetActiveScale() then return {}, false, false end
     local found, seen = {}, {}
-    for bag = 0, MAX_BAG do
+    local function Scan(bag, inBank)
         for slot = 1, GetNumSlots(bag) or 0 do
             local link = GetLink(bag, slot)
             if link and not seen[link] then
                 seen[link] = true
                 local percent = statWeights:GetUpgradePercent(link)
                 if percent and percent > 0.5 and CanWear(bag, slot) then
-                    table.insert(found, { link = link, percent = percent })
+                    table.insert(found, { link = link, percent = percent, inBank = inBank })
                 end
             end
         end
     end
+    for bag = 0, MAX_BAG do Scan(bag, false) end
+    local bank = Env.GetOpenBankContainers()
+    for _, bag in ipairs(bank or {}) do Scan(bag, true) end
     table.sort(found, function(a, b) return a.percent > b.percent end)
-    return found, true
+    return found, true, bank ~= nil
 end
 
 local function Equip(link)
@@ -88,12 +92,16 @@ local function CreateTab(container)
         scroll:ReleaseChildren()
 
         -- Bag upgrades
-        local bagSection = Env.AddSection(scroll, L["Upgrades in your bags"])
-        local upgrades, hasWeights = Upgrades.FindBagUpgrades()
+        local upgrades, hasWeights, bankScanned = Upgrades.FindBagUpgrades()
+        local bagSection = Env.AddSection(scroll, bankScanned and L["Upgrades in your bags and bank"] or L["Upgrades in your bags"])
+        if hasWeights and not bankScanned then
+            Env.AddHint(bagSection, L["Open your bank to include bank items."])
+        end
         if not hasWeights then
             Env.AddHint(bagSection, L["Add stat weights for your class on the Stat Weights tab first; upgrades are found with them."])
         elseif #upgrades == 0 then
-            Env.AddHint(bagSection, L["Nothing in your bags beats what you're wearing."])
+            Env.AddHint(bagSection, bankScanned and L["Nothing in your bags or bank beats what you're wearing."]
+                or L["Nothing in your bags beats what you're wearing."])
         else
             for _, upgrade in ipairs(upgrades) do
                 local row = AceGUI:Create("SimpleGroup")
@@ -113,14 +121,21 @@ local function CreateTab(container)
                 label:SetCallback("OnLeave", function() GameTooltip:Hide() end)
                 row:AddChild(label)
 
-                local button = AceGUI:Create("Button")
-                button:SetText(L["Equip"])
-                button:SetWidth(90)
-                button:SetCallback("OnClick", function()
-                    Equip(upgrade.link)
-                    C_Timer.After(0.5, Refresh)
-                end)
-                row:AddChild(button)
+                if upgrade.inBank then
+                    local inBank = AceGUI:Create("Label")
+                    inBank:SetText("|cffffd100" .. L["In your bank"] .. "|r")
+                    inBank:SetWidth(90)
+                    row:AddChild(inBank)
+                else
+                    local button = AceGUI:Create("Button")
+                    button:SetText(L["Equip"])
+                    button:SetWidth(90)
+                    button:SetCallback("OnClick", function()
+                        Equip(upgrade.link)
+                        C_Timer.After(0.5, Refresh)
+                    end)
+                    row:AddChild(button)
+                end
             end
         end
 

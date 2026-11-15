@@ -79,8 +79,9 @@ function EquipmentSpecMeta:GetItemInSlot(slotId)
     return self.items[itemIndexBySlot[slotId]]
 end
 
----Fill items with items from bag. Valid items are filtered by
----the Env.TreatItemAsPossibleUpgrade(itemLink) function.
+---Fill items with items from bag (and, on WoW Forever, the bank while it's open). Valid items are
+---filtered by the Env.TreatItemAsPossibleUpgrade(itemLink) function.
+---@return boolean includedBank
 function EquipmentSpecMeta:FillFromBagItems()
     local GetContainerNumSlots = C_Container.GetContainerNumSlots
     local GetContainerItemLink = C_Container.GetContainerItemLink
@@ -98,6 +99,21 @@ function EquipmentSpecMeta:FillFromBagItems()
             end
         end
     end
+
+    -- WoW Forever: the bank too, while it's open (Env.GetOpenBankContainers is Forever-only).
+    local bank = Env.GetOpenBankContainers and Env.GetOpenBankContainers()
+    if not bank then return false end
+    for _, bagId in ipairs(bank) do
+        for slotId = 1, Env.GetContainerSlots(bagId) do
+            local itemLink = GetContainerItemLink(bagId, slotId)
+            if itemLink and Env.TreatItemAsPossibleUpgrade(itemLink) then
+                local itemSpec = Env.CreateItemSpec()
+                itemSpec:FillFromItemLink(itemLink)
+                table.insert(self.items, itemSpec)
+            end
+        end
+    end
+    return true
 end
 
 -- Metatable for the EquipmentSpec.items table.

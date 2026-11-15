@@ -147,6 +147,49 @@
   ]
 }
 
+## Bag export (bank open)
+{
+  "items": [
+    {
+      "enchant": 2500,
+      "id": 7001
+    },
+    {
+      "id": 7005
+    },
+    {
+      "id": 7006
+    },
+    {
+      "id": 7008
+    }
+  ]
+}
+
+## Options
+openExporterButton (execute): Open WowSims
+wowsims_general (group): General
+  minimap (toggle): Show minimap button = true
+  showCharacterButton (toggle): Show Character Pane Button = true
+  showStartupMessage (toggle): Show Startup Message = true
+  tour (execute): Replay the tour
+wowsims_tooltips (group): Tooltips
+  show (toggle): Show WowSims scores and upgrades on item tooltips = true
+wowsims_lootRolls (group): Loot rolls
+  onFrame (toggle): Show upgrade hints on loot roll windows = true
+  inChat (toggle): Also print upgrade hints in chat = true
+wowsims_exports (group): Exports include:
+  gear (toggle): Gear = true
+  talents (toggle): Talents = true
+  professions (toggle): Professions = true
+  warnMissing (toggle): Warn about missing enchants and empty sockets = true
+wowsims_group (group): Group
+  share (toggle): Share my export when my group or guild asks = true
+wowsims_chatLinks (group): Chat links
+  enabled (toggle): Make [WowSims: ...] gear set links in chat clickable = true
+wowsims_version (group): Updates
+  notify (toggle): Tell me when a newer WowSims is out = true
+
 ## Inspect export: MAGE tree 2
 {
   "class": "mage",
@@ -619,7 +662,8 @@ Auto-save: ENABLED
 |cff008000Credits go to test-authors|r
 chat: |cffFFFF00WowSims|r: Missing enchants: Chest, Feet, Hands, Main Hand
 Character data saved for Tester-TestRealm
-chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.
+chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags. Open your bank first to include bank items.
+chat: [|cffFFFF00WowSimsExporter|r] Exported 4 items from bags and bank.
 comm: WSEProfession request WHISPER Inspected
 chat: |cffFFFF00WowSims|r: Missing enchants: Chest, Feet, Hands, Main Hand
 Updated saved character data for Tester-TestRealm
