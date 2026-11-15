@@ -216,7 +216,7 @@
   "id": "Player-1-00000002",
   "level": 60,
   "name": "Inspected TestRealm",
-  "professions": {},
+  "professions": [],
   "race": "NightElf",
   "realm": "TestRealm",
   "spec": "fire",
@@ -230,63 +230,65 @@
   "class": "mage",
   "flavor": "forever",
   "gear": {
-    "items": {
-      [2]: {
+    "items": [
+      null,
+      {
         "id": 5002
       },
-      [3]: {
+      {
         "enchant": 2003,
         "id": 5003
       },
-      [4]: {
+      {
         "enchant": 2015,
         "id": 5015,
         "random_suffix": -15
       },
-      [5]: {
+      {
         "id": 5005,
         "random_suffix": -5
       },
-      [6]: {
+      {
         "enchant": 2009,
         "id": 5009
       },
-      [7]: {
+      {
         "id": 5010,
         "random_suffix": -10
       },
-      [8]: {
+      {
         "enchant": 2006,
         "id": 5006
       },
-      [9]: {
+      {
         "id": 5007
       },
-      [10]: {
+      {
         "id": 5008
       },
-      [12]: {
+      null,
+      {
         "enchant": 2012,
         "id": 5012
       },
-      [13]: {
+      {
         "id": 5013
       },
-      [14]: {
+      {
         "id": 5014
       },
-      [15]: {
+      {
         "id": 5016
       },
-      [16]: {
+      {
         "id": 5017
       }
-    }
+    ]
   },
   "id": "Player-1-00000002",
   "level": 60,
   "name": "Inspected TestRealm",
-  "professions": {},
+  "professions": [],
   "race": "NightElf",
   "realm": "TestRealm",
   "spec": "fire",
@@ -364,7 +366,7 @@
   "id": "Player-1-00000002",
   "level": 60,
   "name": "Inspected TestRealm",
-  "professions": {},
+  "professions": [],
   "race": "NightElf",
   "realm": "TestRealm",
   "spec": "fire",

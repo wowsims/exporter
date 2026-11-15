@@ -179,7 +179,7 @@ function GearSets:Export(name)
     end
     character.gear = equipment
 
-    return LibParse:JSONEncode(character)
+    return Env.JSONEncode(character)
 end
 
 ---Find an item in the bags, preferring the exact link (same enchant and gems) over the same item ID.

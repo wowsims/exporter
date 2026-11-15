@@ -609,7 +609,6 @@ local function NewAddon(_, name)
 end
 
 local LIBRARIES = {
-    ["LibParse"] = { JSONEncode = function(_, value) return Serialize(value) end },
     ["AceAddon-3.0"] = { NewAddon = NewAddon },
     ["AceGUI-3.0"] = {},
     ["AceDB-3.0"] = {
@@ -680,6 +679,11 @@ function MOCK.RunScenario(root, files)
     enteringWorld("PLAYER_ENTERING_WORLD", true, false)
 
     local sections = {}
+    -- Marks addon output that snapshots.js checks is JSON and pretty-prints.
+    local function JSON(output)
+        return "<json>" .. output .. "</json>"
+    end
+
     local function Section(title, body)
         table.insert(sections, "## " .. title .. "\n" .. body)
     end
@@ -700,21 +704,21 @@ function MOCK.RunScenario(root, files)
         classIsSupported = window.classIsSupported,
         link = window.link,
         cnLink = window.cnLink,
-    }) .. "\n" .. window.output)
+    }) .. "\n" .. JSON(window.output))
 
-    Section("Bag export", MOCK.bagGenerator())
+    Section("Bag export", JSON(MOCK.bagGenerator()))
 
     if addon.hooks.InspectUnit then
         window.output = nil
         addon.hooks.InspectUnit("target")
         addon:CreateWindow(true, true)
-        Section("Inspect export: " .. MOCK.class .. " tree 2", window.output)
+        Section("Inspect export: " .. MOCK.class .. " tree 2", JSON(window.output))
 
         for _, variant in ipairs({ "gaps", "conflict" }) do
             MOCK.inspectVariant = variant
             window.output = nil
             addon:CreateWindow(true, true)
-            Section("Inspect export (" .. variant .. "): " .. MOCK.class .. " tree 2", window.output)
+            Section("Inspect export (" .. variant .. "): " .. MOCK.class .. " tree 2", JSON(window.output))
         end
         MOCK.inspectVariant = nil
     end
@@ -730,7 +734,7 @@ function MOCK.RunScenario(root, files)
             addon:CreateWindow(true, false)
             Section("Export (" .. variant .. "): " .. MOCK.class .. " tree 2", Serialize({
                 link = window.link,
-            }) .. "\n" .. window.output)
+            }) .. "\n" .. JSON(window.output))
             C_ClassTalents = nil
         end
         C_SpecializationInfo.GetCombatConfigIDForSpecGroup = GetCombatConfigIDForSpecGroup
