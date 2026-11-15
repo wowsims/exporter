@@ -212,7 +212,23 @@ end
 ---Add every feature's option group to the addon's AceConfig options table.
 ---@param options table The options table passed to AceConfig's RegisterOptionsTable.
 function Env.AddFeatureOptions(options)
-    options.args.wowsimsHeader = { type = "header", name = "WowSims", order = 99 }
+    -- The exporter's own toggles (character pane button, startup message) belong in General.
+    local general = optionGroups.general
+    if general then
+        for key, order in pairs({ showCharacterButton = 2, showStartupMessage = 3 }) do
+            local option = options.args[key]
+            if option then
+                option.order, option.width = order, "full"
+                general.args[key] = option
+                options.args[key] = nil
+            end
+        end
+    end
+    if options.args.openExporterButton then
+        options.args.openExporterButton.name = L["Open WowSims"]
+        options.args.openExporterButton.desc = nil
+        options.args.openExporterButton.width = nil
+    end
     for key, group in pairs(optionGroups) do
         options.args["wowsims_" .. key] = group
     end

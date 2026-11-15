@@ -155,7 +155,7 @@ Env.AddOptions("general", 10, L["General"], {
         function() return not Settings:GetMinimapData().hide end,
         function(value) Settings:SetMinimapButtonShown(value) end),
     tour = {
-        type = "execute", order = 2, name = L["Replay the tour"],
+        type = "execute", order = 10, name = L["Replay the tour"],
         func = function() if Env.Tutorial then Env.Tutorial:Start() end end,
     },
 })

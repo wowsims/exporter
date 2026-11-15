@@ -167,12 +167,11 @@
 }
 
 ## Options
-openExporterButton (execute): Open Exporter Window
-showCharacterButton (toggle): Show Character Pane Button = true
-showStartupMessage (toggle): Show Startup Message = true
-wowsimsHeader (header): WowSims
+openExporterButton (execute): Open WowSims
 wowsims_general (group): General
   minimap (toggle): Show minimap button = true
+  showCharacterButton (toggle): Show Character Pane Button = true
+  showStartupMessage (toggle): Show Startup Message = true
   tour (execute): Replay the tour
 wowsims_tooltips (group): Tooltips
   show (toggle): Show WowSims scores and upgrades on item tooltips = true

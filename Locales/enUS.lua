@@ -340,4 +340,5 @@ into the provided box and click "Import"
     ["That's the tour! Replay it from the About tab or with /wowsims tour."] = true,
     ["Exported %d items from bags and bank."] = true,
     ["Open your bank first to include bank items."] = true,
+    ["Open WowSims"] = true,
 })

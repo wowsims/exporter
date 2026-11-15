@@ -325,4 +325,5 @@ Env.RegisterLocale("zhTW", {
     ["That's the tour! Replay it from the About tab or with /wowsims tour."] = "導覽結束！可在「關於」分頁或使用 /wowsims tour 重新播放。",
     ["Exported %d items from bags and bank."] = "已從背包和銀行匯出 %d 件物品。",
     ["Open your bank first to include bank items."] = "先開啟銀行即可包含銀行物品。",
+    ["Open WowSims"] = "開啟 WowSims",
 })
