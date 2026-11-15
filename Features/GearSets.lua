@@ -380,6 +380,21 @@ local function CreateTab(container)
         end)
         group:AddChild(exportButton)
 
+        if Env.ChatLinks then
+            local linkButton = AceGUI:Create("Button")
+            linkButton:SetText(L["Link"])
+            linkButton:SetWidth(90)
+            linkButton:SetCallback("OnClick", function() Env.ChatLinks:LinkSet(name) end)
+            linkButton:SetCallback("OnEnter", function(widget)
+                GameTooltip:SetOwner(widget.frame, "ANCHOR_TOP")
+                GameTooltip:SetText(L["Link in chat"])
+                GameTooltip:AddLine(L["Other WowSims users can click the link to open this set."], 1, 1, 1, true)
+                GameTooltip:Show()
+            end)
+            linkButton:SetCallback("OnLeave", function() GameTooltip:Hide() end)
+            group:AddChild(linkButton)
+        end
+
         if set.talents and set.talents ~= "" and Env.ShowTalentWindow then
             local talentsButton = AceGUI:Create("Button")
             talentsButton:SetText(L["Talents"])

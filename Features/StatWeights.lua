@@ -420,5 +420,11 @@ function StatWeights:Initialize(db)
     HookTooltips()
 end
 
+Env.AddOptions("tooltips", 20, L["Tooltips"], {
+    show = Env.Toggle(1, L["Show WowSims scores and upgrades on item tooltips"], nil,
+        function() return StatWeights:GetData().showOnTooltips end,
+        function(value) StatWeights:GetData().showOnTooltips = value end),
+})
+
 Env.StatWeights = StatWeights
 Env.RegisterFeature(StatWeights)

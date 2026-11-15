@@ -30,8 +30,8 @@ local STEPS = {
       text = L["Ask your whole group or guild for their exports at once, from anywhere. Everyone with WowSims sends theirs back."] },
     { tab = "simimport", title = L["Import"],
       text = L["Paste a build from the sim to see the gear on your character, how it scores against what you wear, and its talents. Save it as a gear set when you like it."] },
-    { tab = "settings", title = L["Settings"],
-      text = L["Turn the minimap button, tooltips and export options on or off. You can replay this tour here any time."] },
+    { tab = "about", title = L["About"],
+      text = L["Help, links and the addon settings, where you can turn any WowSims feature off. Right-click the minimap button for quick actions. You can replay this tour here any time."] },
 }
 
 local card, glow
@@ -170,7 +170,7 @@ function Tutorial:Show(i)
     if i < 1 then i = 1 end
     if i > #steps then
         self:Stop(true)
-        Env.FeaturePrint(L["That's the tour! Replay it from Settings or with /wowsims tour."])
+        Env.FeaturePrint(L["That's the tour! Replay it from the About tab or with /wowsims tour."])
         return
     end
     index = i
