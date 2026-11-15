@@ -23,6 +23,9 @@
     <Content Include="Core/Util.lua">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Core/Json.lua">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Core/Tooltip.lua">
       <SubType>Code</SubType>
     </Content>
@@ -232,9 +235,6 @@
     <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Slider.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/LibParse/LibParse.lua">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Libs/AceComm-3.0/AceComm-3.0.lua">
       <SubType>Code</SubType>
     </Content>
@@ -266,7 +266,6 @@
     <Folder Include="Libs\AceAddon-3.0\" />
     <Folder Include="Libs\AceComm-3.0\" />
     <Folder Include="Libs\AceHook-3.0\" />
-    <Folder Include="Libs\LibParse\" />
     <Folder Include="Libs\AceConfig-3.0\" />
     <Folder Include="Libs\AceConfig-3.0\AceConfigCmd-3.0\" />
     <Folder Include="Libs\AceConfig-3.0\AceConfigDialog-3.0\" />

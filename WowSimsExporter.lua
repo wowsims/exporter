@@ -10,7 +10,6 @@
 
 local addonName, Env = ...
 
-local LibParse = LibStub("LibParse")
 local L = Env.L
 
 local WowSimsExporter = LibStub("AceAddon-3.0"):NewAddon("WowSimsExporter", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "AceComm-3.0")
@@ -202,7 +201,7 @@ end
 
 local function GenerateOutput(character, isInspect, exportBags)
     character:FillForExport(isInspect)
-    local jsonExport = LibParse:JSONEncode(character)
+    local jsonExport = Env.JSONEncode(character)
     
     if not isInspect and character.level == GetMaxPlayerLevel() then
         -- Automatically save to database using SavedDataManager
@@ -217,7 +216,7 @@ local function GenerateOutputBags()
     equipmentSpecBags:FillFromBagItems()
     DEFAULT_CHAT_FRAME:AddMessage("[|cffFFFF00WowSimsExporter|r] " .. L["Exported %d items from bags."]:format(#
         equipmentSpecBags.items))
-    return LibParse:JSONEncode(equipmentSpecBags)
+    return Env.JSONEncode(equipmentSpecBags)
 end
 
 function WowSimsExporter:CreateWindow(generate, isInspect)
