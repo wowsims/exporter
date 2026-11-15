@@ -44,6 +44,8 @@ Env.supportedClientNames = {
 ---@field events string[] Events besides the common ones that mean the character changed.
 ---@field characterButtonPoint table SetPoint arguments for the character pane button; the relative frame by global name.
 ---@field supportsInspect boolean Whether inspected players can be exported.
+---@field namesHaveSurnames boolean UnitFullName returns a surname instead of the realm (Forever).
+---@field saveBelowMaxLevel boolean Save and auto-save characters below max level too.
 ---@field CreateTalentString fun(isInspect:boolean):string
 ---@field CountPointsPerTree (fun(unit:string):number[])|nil Points spent per talent tree, for AddSpec checks.
 ---@field GetSpecializationID (fun(unit:string):integer)|nil Used instead of CountPointsPerTree to match AddSpec spec IDs.
@@ -63,6 +65,8 @@ local defaults = {
     events = {},
     characterButtonPoint = { "TOPRIGHT", "CharacterFrame", "BOTTOMRIGHT", 0, 0 },
     supportsInspect = false,
+    namesHaveSurnames = false,
+    saveBelowMaxLevel = false,
     CreateTalentString = function() return "" end,
     CountPointsPerTree = function() return {} end,
 }

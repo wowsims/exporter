@@ -11,9 +11,11 @@ local _outputGenerator
 local _outputGeneratorBags
 
 local function OnClose(frame)
+    if Env.Tutorial then Env.Tutorial:Stop() end
     AceGUI:Release(frame)
     _frame = nil
     _jsonbox = nil
+    UI.tabGroup = nil
 end
 
 local BETA_LINK = "https://www.curseforge.com/wow/addons/wowsims-exporter"
@@ -47,9 +49,30 @@ function UI:CreateMainWindow(classIsSupported, simLink, cnSimLink)
 
     local frame = AceGUI:Create("Frame")
     frame:SetCallback("OnClose", OnClose)
-    frame:SetTitle("WowSimsExporter " .. Env.VERSION .. "")
+    frame:SetTitle((Env.IS_FOREVER and "WowSims " or "WowSimsExporter ") .. Env.VERSION .. "")
     frame:SetStatusText(L["Click 'Generate Data' to generate exportable data"])
     frame:SetLayout("Fill")
+
+    if Env.Flavor.name == "forever" and Env.MakeOpaque then
+        Env.MakeOpaque(frame)
+    end
+
+    if Env.Flavor.name == "forever" then
+        -- Remember the window's size and position, and open bigger the first time so the
+        -- extra tabs fit. AceGUI keeps width, height, top and left in the status table.
+        local db = Env.SavedDataManager and Env.SavedDataManager.db
+        if db and db.global then
+            if type(db.global.mainWindow) ~= "table" then
+                db.global.mainWindow = { width = 820, height = 700 }
+            end
+            frame:SetStatusTable(db.global.mainWindow)
+        end
+    end
+
+    -- Keep the tab row and buttons from being squashed when the window is resized.
+    if Env.IS_FOREVER and Env.SetMinSize then
+        Env.SetMinSize(frame, 720, 480)
+    end
 
     -- Add the frame as a global variable under the name `WowSimsExporter`
     _G["WowSimsExporter"] = frame.frame
@@ -63,10 +86,20 @@ function UI:CreateMainWindow(classIsSupported, simLink, cnSimLink)
     tabGroup:SetFullWidth(true)
     tabGroup:SetFullHeight(true)
     tabGroup:SetLayout("Flow")
-    tabGroup:SetTabs({
-        { text = L["Main"], value = "main" },
+    local tabs = {
+        -- Forever has an Import tab, so the main tab is named for what it does.
+        { text = Env.Flavor.name == "forever" and L["Export"] or L["Main"], value = "main" },
         { text = L["Saved Data"], value = "saveddata" },
-    })
+    }
+    -- Tabs of the features under Features/, after the original two.
+    local featureTabs = {}
+    for _, feature in ipairs(Env.Features or {}) do
+        if feature.tab then
+            table.insert(tabs, { text = feature.tab.text, value = feature.tab.value })
+            featureTabs[feature.tab.value] = feature.tab
+        end
+    end
+    tabGroup:SetTabs(tabs)
 
     local function CreateMainTab(container)
         local icon = AceGUI:Create("Icon")
@@ -250,15 +283,37 @@ function UI:CreateMainWindow(classIsSupported, simLink, cnSimLink)
 
     tabGroup:SetCallback("OnGroupSelected", function(self, event, group)
         self:ReleaseChildren()
+        -- Feature tabs fill the tab with one ScrollFrame, which needs "Fill" to get a height
+        -- (and so a scrollbar). The original tabs keep "Flow".
+        if Env.IS_FOREVER then
+            self:SetLayout(featureTabs[group] and "Fill" or "Flow")
+            frame:SetStatusText(group == "main" and L["Click 'Generate Data' to generate exportable data"] or "")
+        end
         if group == "main" then
             CreateMainTab(self)
         elseif group == "saveddata" then
             CreateSavedDataTab(self)
+        elseif featureTabs[group] then
+            featureTabs[group].Create(self)
+            self:DoLayout()
+            -- Lay out again next frame, once text and item data have settled, so the
+            -- scroll frame's height (and scrollbar) match the content.
+            self.wowsimsGroup = group
+            C_Timer.After(0, function()
+                if self.wowsimsGroup == group and self.children and self.children[1] then
+                    self.children[1]:DoLayout()
+                    self:DoLayout()
+                end
+            end)
         end
     end)
 
     frame:AddChild(tabGroup)
     tabGroup:SelectTab("main")
+    UI.tabGroup = tabGroup
+
+    -- First time the window opens: offer the tour (Forever).
+    if Env.Tutorial then Env.Tutorial:OfferOnFirstOpen() end
 end
 
 ---Create a button on the character panel that will call the provided function
@@ -299,7 +354,7 @@ function UI:CreateCharacterPanelButton(onClick, showInitially)
 end
 
 function UI:CreateInspectButton(onClick)
-    if not InspectFrame then return end
+    if not InspectFrame or (Env.IS_FOREVER and WSEInspectButton) then return end
 
     local inspectButton = CreateFrame("Button", "WSEInspectButton", InspectFrame, "UIPanelButtonTemplate")
     inspectButton:SetSize(50, 24)

@@ -8,16 +8,26 @@
 ]
 
 ## Hooks
-{}
+[
+  "InspectFrame_LoadUI",
+  "InspectUnit"
+]
 
 ## Comms
-{}
+[
+  "WSEProfession"
+]
 
 ## Chat commands
 [
+  "wsversion",
   "wse",
   "wowsimsexporter",
-  "wsexporter"
+  "wsexporter",
+  "wowsims",
+  "wselist",
+  "wsedelete",
+  "wseautosave"
 ]
 
 ## Character pane button
@@ -102,7 +112,7 @@
   },
   "id": "Player-1-00000001",
   "level": 60,
-  "name": "Tester",
+  "name": "Tester TestRealm",
   "professions": [
     {
       "level": 300,
@@ -135,6 +145,234 @@
       "id": 7006
     }
   ]
+}
+
+## Inspect export: MAGE tree 2
+{
+  "class": "mage",
+  "flavor": "forever",
+  "gear": {
+    "items": [
+      {
+        "id": 5001
+      },
+      {
+        "id": 5002
+      },
+      {
+        "enchant": 2003,
+        "id": 5003
+      },
+      {
+        "enchant": 2015,
+        "id": 5015,
+        "random_suffix": -15
+      },
+      {
+        "id": 5005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "id": 5009
+      },
+      {
+        "id": 5010,
+        "random_suffix": -10
+      },
+      {
+        "enchant": 2006,
+        "id": 5006
+      },
+      {
+        "enchant": 4880,
+        "id": 5007
+      },
+      {
+        "id": 5008
+      },
+      {
+        "enchant": 4359,
+        "id": 5011
+      },
+      {
+        "enchant": 2012,
+        "id": 5012
+      },
+      {
+        "id": 5013
+      },
+      {
+        "id": 5014
+      },
+      {
+        "id": 5016
+      },
+      {
+        "id": 5017
+      }
+    ]
+  },
+  "id": "Player-1-00000002",
+  "level": 60,
+  "name": "Inspected TestRealm",
+  "professions": [],
+  "race": "NightElf",
+  "realm": "TestRealm",
+  "spec": "fire",
+  "talents": "2-5-2",
+  "unit": "target",
+  "version": "test-version"
+}
+
+## Inspect export (gaps): MAGE tree 2
+{
+  "class": "mage",
+  "flavor": "forever",
+  "gear": {
+    "items": [
+      null,
+      {
+        "id": 5002
+      },
+      {
+        "enchant": 2003,
+        "id": 5003
+      },
+      {
+        "enchant": 2015,
+        "id": 5015,
+        "random_suffix": -15
+      },
+      {
+        "id": 5005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "id": 5009
+      },
+      {
+        "id": 5010,
+        "random_suffix": -10
+      },
+      {
+        "enchant": 2006,
+        "id": 5006
+      },
+      {
+        "id": 5007
+      },
+      {
+        "id": 5008
+      },
+      null,
+      {
+        "enchant": 2012,
+        "id": 5012
+      },
+      {
+        "id": 5013
+      },
+      {
+        "id": 5014
+      },
+      {
+        "id": 5016
+      },
+      {
+        "id": 5017
+      }
+    ]
+  },
+  "id": "Player-1-00000002",
+  "level": 60,
+  "name": "Inspected TestRealm",
+  "professions": [],
+  "race": "NightElf",
+  "realm": "TestRealm",
+  "spec": "fire",
+  "talents": "2-5-2",
+  "unit": "target",
+  "version": "test-version"
+}
+
+## Inspect export (conflict): MAGE tree 2
+{
+  "class": "mage",
+  "flavor": "forever",
+  "gear": {
+    "items": [
+      {
+        "id": 5001
+      },
+      {
+        "id": 5002
+      },
+      {
+        "enchant": 2003,
+        "id": 5003
+      },
+      {
+        "enchant": 2015,
+        "id": 5015,
+        "random_suffix": -15
+      },
+      {
+        "id": 5005,
+        "random_suffix": -5
+      },
+      {
+        "enchant": 2009,
+        "id": 5009
+      },
+      {
+        "id": 5010,
+        "random_suffix": -10
+      },
+      {
+        "enchant": 2006,
+        "id": 5006
+      },
+      {
+        "enchant": 4880,
+        "id": 5007
+      },
+      {
+        "id": 5008
+      },
+      {
+        "enchant": 4359,
+        "id": 5011
+      },
+      {
+        "enchant": 2012,
+        "id": 5012
+      },
+      {
+        "id": 5013
+      },
+      {
+        "id": 5014
+      },
+      {
+        "id": 5016
+      },
+      {
+        "id": 5017
+      }
+    ]
+  },
+  "id": "Player-1-00000002",
+  "level": 60,
+  "name": "Inspected TestRealm",
+  "professions": [],
+  "race": "NightElf",
+  "realm": "TestRealm",
+  "spec": "fire",
+  "talents": "2-5-2",
+  "unit": "target",
+  "version": "test-version"
 }
 
 ## Export (C_ClassTalents): MAGE tree 2
@@ -206,7 +444,7 @@
   },
   "id": "Player-1-00000001",
   "level": 60,
-  "name": "Tester",
+  "name": "Tester TestRealm",
   "professions": [
     {
       "level": 300,
@@ -294,7 +532,7 @@
   },
   "id": "Player-1-00000001",
   "level": 60,
-  "name": "Tester",
+  "name": "Tester TestRealm",
   "professions": [
     {
       "level": 300,
@@ -376,9 +614,14 @@ Unlinked pages:
 WowSimsExporter test-version Initialized. Commands:
 /wse - Open window
 /wse export - Export character (auto-saves)
+/wse inspect - Export your target
 Auto-save: ENABLED
 |cff008000Credits go to test-authors|r
+chat: |cffFFFF00WowSims|r: Missing enchants: Chest, Feet, Hands, Main Hand
 Character data saved for Tester-TestRealm
 chat: [|cffFFFF00WowSimsExporter|r] Exported 3 items from bags.
+comm: WSEProfession request WHISPER Inspected
+chat: |cffFFFF00WowSims|r: Missing enchants: Chest, Feet, Hands, Main Hand
 Updated saved character data for Tester-TestRealm
+chat: |cffFFFF00WowSims|r: Missing enchants: Chest, Feet, Hands, Main Hand
 Updated saved character data for Tester-TestRealm
