@@ -331,8 +331,15 @@ function UI:CreateCharacterPanelButton(onClick, showInitially)
         openButton:Hide()
     end
     
-    local point, relativeTo, relativePoint, x, y = unpack(Env.Flavor.characterButtonPoint)
-    openButton:SetPoint(point, _G[relativeTo], relativePoint, x, y)
+    --从此开始
+    if Env.IS_CLASSIC_CATA then
+        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", -30, 76)
+    elseif Env.IS_CLASSIC_TBC then
+        openButton:SetPoint("TOPLEFT", CharacterFrameTab5, "TOPRIGHT", 0, 0)
+    else
+        openButton:SetPoint("TOPRIGHT", CharacterFrame, "BOTTOMRIGHT", -30, 76)
+    end
+    --到此结束    
     
     openButton:SetFrameLevel(CharacterFrame:GetFrameLevel() + 10)
     openButton:SetText("WowSims")
