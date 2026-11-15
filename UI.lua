@@ -16,6 +16,8 @@ local function OnClose(frame)
     _jsonbox = nil
 end
 
+local BETA_LINK = "https://www.curseforge.com/wow/addons/wowsims-exporter"
+
 local function CreateCopyDialog(text)
     local frame = AceGUI:Create("Frame")
     frame:SetTitle(L["WSE Copy Dialog"])
@@ -104,6 +106,14 @@ function UI:CreateMainWindow(classIsSupported, simLink, cnSimLink)
             AddLinkLabel(L["China site - click to copy: %s"]:format(cnSimLink), cnSimLink)
         elseif simLink then
             AddLinkLabel(L["Click to copy: %s"]:format(simLink), simLink)
+        end
+
+        -- WoW Forever: point players at the WowSims 4.0 beta on CurseForge. Hidden in the 4.0 build
+        -- itself (it has Env.Features), so merging this into beta doesn't advertise the beta to testers.
+        if Env.IS_FOREVER and not Env.Features then
+            AddLinkLabel("|cff00ccff" .. L["New: WowSims 4.0 beta for WoW Forever"] .. "|r - "
+                .. L["gear sets, stat weights, upgrades, inspect, group exports and more. To get it, set this addon to Beta in the CurseForge app. Click to copy the link."],
+                BETA_LINK)
         end
 
         local button = AceGUI:Create("Button")
