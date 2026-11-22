@@ -166,6 +166,23 @@
   ]
 }
 
+## Stat weights
+{
+  "class": "Mage",
+  "name": "Test",
+  "weights": {
+    "ArcaneResist": 0.05,
+    "FireResist": 0.1,
+    "FireSpellDamage": 1,
+    "FrostResist": 0.01,
+    "FrostSpellDamage": 0.5,
+    "Intellect": 0.3,
+    "ShadowSpellDamage": 0.7,
+    "SpellPenetration": 0.2
+  }
+}
+Score of item 944: 160.50
+
 ## Options
 openExporterButton (execute): Open WowSims
 wowsims_general (group): General
