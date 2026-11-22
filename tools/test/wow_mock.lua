@@ -56,6 +56,10 @@ function wipe(t)
     return t
 end
 
+function strtrim(text)
+    return (text:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
 -- WoW runs Lua 5.1, where "%x" in a gsub replacement string is just "x" unless x is a digit or "%".
 -- fengari implements Lua 5.3, which rejects it, so translate replacement strings to 5.1 behaviour.
 local gsub = string.gsub
@@ -731,6 +735,33 @@ function MOCK.RunScenario(root, files)
         Section("Bag export (bank open)", JSON(MOCK.bagGenerator()))
         MOCK.bankOpen = false
         MOCK.FireFrameEvent("BANKFRAME_CLOSED")
+    end
+
+    if flavor == "forever" then
+        -- Stat weights from a Pawn string, scored on Elemental Mage Staff (944) with the stats the
+        -- Forever client returned for it in game, less its weapon DPS. Fire and Frost resistance each
+        -- come under two keys and must count once.
+        local name, className, weights = Env.StatWeights.ParsePawnString('( Pawn: v1: "Test": Class=Mage,'
+            .. 'Intellect=0.3,SpellPenetration=0.2,FireSpellDamage=1,FrostSpellDamage=0.5,'
+            .. 'FireResist=0.1,FrostResist=0.01,ShadowSpellDamage=0.7,ArcaneResist=0.05 )')
+        C_Item.GetItemStats = function(link)
+            if link:find("item:944") then
+                return {
+                    ITEM_MOD_INTELLECT_SHORT = 26,
+                    ITEM_MOD_SPELL_PENETRATION_SHORT = 8,
+                    RESISTANCE4_NAME = 10,
+                    ITEM_MOD_FROST_RESISTANCE_SHORT = 10,
+                    ITEM_MOD_FIRE_RESISTANCE_SHORT = 10,
+                    ITEM_MOD_FROST_DAMAGE_DONE_SHORT = 100,
+                    ITEM_MOD_FIRE_DAMAGE_DONE_SHORT = 100,
+                    RESISTANCE2_NAME = 10,
+                }
+            end
+        end
+        local score = Env.StatWeights.ScoreItem("item:944", { class = className, weights = weights })
+        C_Item.GetItemStats = nil
+        Section("Stat weights", Serialize({ name = name, class = className, weights = weights })
+            .. ("\nScore of item 944: %.2f"):format(score))
     end
 
     -- The settings page: every option in order, with the value its getter reads now.

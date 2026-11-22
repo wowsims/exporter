@@ -49,6 +49,21 @@ local statKeysByPawnName = {
     DefenseRating = { "ITEM_MOD_DEFENSE_SKILL_RATING_SHORT" },
     ResilienceRating = { "ITEM_MOD_RESILIENCE_RATING_SHORT" },
     PvpPower = { "ITEM_MOD_PVP_POWER_SHORT" },
+    -- The key Wrath uses for attack power in cat and bear form. Not yet seen on a Forever item.
+    FeralAp = { "ITEM_MOD_FERAL_ATTACK_POWER_SHORT" },
+    -- Forever states school damage and resistances as item stats. It lists a resistance twice, as
+    -- ITEM_MOD_<SCHOOL>_RESISTANCE_SHORT and as RESISTANCE<n>_NAME, so only the first key found counts.
+    ArcaneSpellDamage = { "ITEM_MOD_ARCANE_DAMAGE_DONE_SHORT" },
+    FireSpellDamage = { "ITEM_MOD_FIRE_DAMAGE_DONE_SHORT" },
+    FrostSpellDamage = { "ITEM_MOD_FROST_DAMAGE_DONE_SHORT" },
+    HolySpellDamage = { "ITEM_MOD_HOLY_DAMAGE_DONE_SHORT" },
+    NatureSpellDamage = { "ITEM_MOD_NATURE_DAMAGE_DONE_SHORT" },
+    ShadowSpellDamage = { "ITEM_MOD_SHADOW_DAMAGE_DONE_SHORT" },
+    FireResist = { "ITEM_MOD_FIRE_RESISTANCE_SHORT", "RESISTANCE2_NAME" },
+    NatureResist = { "ITEM_MOD_NATURE_RESISTANCE_SHORT", "RESISTANCE3_NAME" },
+    FrostResist = { "ITEM_MOD_FROST_RESISTANCE_SHORT", "RESISTANCE4_NAME" },
+    ShadowResist = { "ITEM_MOD_SHADOW_RESISTANCE_SHORT", "RESISTANCE5_NAME" },
+    ArcaneResist = { "ITEM_MOD_ARCANE_RESISTANCE_SHORT", "RESISTANCE6_NAME" },
 }
 local WEAPON_DPS_KEY = "ITEM_MOD_DAMAGE_PER_SECOND_SHORT"
 
@@ -60,7 +75,11 @@ local statDisplayNames = {
     MasteryRating = "Mastery", ArmorPenetration = "Armor Penetration", SpellPenetration = "Spell Penetration",
     Mp5 = "MP5", DodgeRating = "Dodge", ParryRating = "Parry", BlockRating = "Block", BlockValue = "Block Value",
     DefenseRating = "Defense", ResilienceRating = "Resilience", PvpPower = "PvP Power",
-    MeleeDps = "Melee Weapon DPS", RangedDps = "Ranged Weapon DPS",
+    MeleeDps = "Melee Weapon DPS", RangedDps = "Ranged Weapon DPS", FeralAp = "Feral Attack Power",
+    ArcaneSpellDamage = "Arcane Damage", FireSpellDamage = "Fire Damage", FrostSpellDamage = "Frost Damage",
+    HolySpellDamage = "Holy Damage", NatureSpellDamage = "Nature Damage", ShadowSpellDamage = "Shadow Damage",
+    ArcaneResist = "Arcane Resistance", FireResist = "Fire Resistance", FrostResist = "Frost Resistance",
+    NatureResist = "Nature Resistance", ShadowResist = "Shadow Resistance",
 }
 
 ---Weights as text, highest first, e.g. "Agility 2.10, Attack Power 1.00".
