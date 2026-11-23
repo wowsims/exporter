@@ -1,4 +1,4 @@
-## Title: WowSims
+## Title: WowSimsExporter
 ## Version: @project-version@
 ## Author: generalwrex(Natop), namreeb, coolmodi(FelixPflaum), riotdog, polynomix
 ## Interface: 50504, 50503, 40402, 38002, 38001, 20506, 20505, 11509, 11508, 16001
@@ -47,7 +47,6 @@ Flavors/Cata/Flavor.lua [AllowLoadGameType cata]
 Flavors/Mists/Items.lua [AllowLoadGameType mists]
 Flavors/Mists/Talents.lua [AllowLoadGameType mists]
 Flavors/Mists/Flavor.lua [AllowLoadGameType mists]
-Flavors/Forever/TalentTrees.lua [AllowLoadGameType camelot]
 Flavors/Forever/Talents.lua [AllowLoadGameType camelot]
 Flavors/Forever/Flavor.lua [AllowLoadGameType camelot]
 SavedDataManager.lua
@@ -55,18 +54,4 @@ ExportStructures/ItemSpec.lua
 ExportStructures/EquipmentSpec.lua
 ExportStructures/Character.lua
 UI.lua
-Features/Core.lua [AllowLoadGameType camelot]
-Features/GearSets.lua [AllowLoadGameType camelot]
-Features/StatWeights.lua [AllowLoadGameType camelot]
-Features/Encoding.lua [AllowLoadGameType camelot]
-Features/ExportOptions.lua [AllowLoadGameType camelot]
-Features/Upgrades.lua [AllowLoadGameType camelot]
-Features/Inspect.lua [AllowLoadGameType camelot]
-Features/Group.lua [AllowLoadGameType camelot]
-Features/PaperDoll.lua [AllowLoadGameType camelot]
-Features/SimImport.lua [AllowLoadGameType camelot]
-Features/TalentView.lua [AllowLoadGameType camelot]
-Features/VersionCheck.lua [AllowLoadGameType camelot]
-Features/Tutorial.lua [AllowLoadGameType camelot]
-Features/Settings.lua [AllowLoadGameType camelot]
 WowSimsExporter.lua
