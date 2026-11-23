@@ -97,7 +97,7 @@ local function OnAddonMessage(_, prefix, message, _, sender)
     end
 
     local result = Compare(version, Env.VERSION)
-    if result > 0 and not notified and VersionCheck:GetOptions().notify then
+    if result > 0 and not notified then
         notified = true
         Env.FeaturePrint(L["A newer WowSims is out: %s (you have %s). Update it from CurseForge."]:format(version, Env.VERSION))
     elseif result < 0 then
@@ -144,15 +144,7 @@ function VersionCheck:PrintSeen()
     end
 end
 
----@return table options { notify = true }
-function VersionCheck:GetOptions()
-    local options = Env.GetOrCreateTable(self.db.global, "versionCheck")
-    if options.notify == nil then options.notify = true end
-    return options
-end
-
 function VersionCheck:Initialize(db, addon)
-    self.db = db
     if C_ChatInfo and C_ChatInfo.RegisterAddonMessagePrefix then
         C_ChatInfo.RegisterAddonMessagePrefix(PREFIX)
     elseif RegisterAddonMessagePrefix then
@@ -174,10 +166,4 @@ function VersionCheck:Initialize(db, addon)
 end
 
 Env.VersionCheck = VersionCheck
-Env.AddOptions("version", 60, L["Updates"], {
-    notify = Env.Toggle(1, L["Tell me when a newer WowSims is out"], nil,
-        function() return VersionCheck:GetOptions().notify end,
-        function(value) VersionCheck:GetOptions().notify = value end),
-})
-
 Env.RegisterFeature(VersionCheck)

@@ -113,23 +113,35 @@ local function Before(character, isInspect)
     end
 end
 
-local function Option(order, key, name)
-    return Env.Toggle(order, name, nil,
-        function() return GetOptions()[key] end,
-        function(value) GetOptions()[key] = value end)
-end
+local function CreateSettingsSection(container)
+    local options = GetOptions()
 
-Env.AddOptions("exports", 40, L["Exports include:"], {
-    gear = Option(1, "gear", L["Gear"]),
-    talents = Option(2, "talents", L["Talents"]),
-    professions = Option(3, "professions", L["Professions"]),
-    warnMissing = Option(4, "warnMissing", L["Warn about missing enchants and empty sockets"]),
-})
+    local label = AceGUI:Create("Label")
+    label:SetText(L["Exports include:"])
+    label:SetFullWidth(true)
+    container:AddChild(label)
+
+    local rows = {
+        { key = "gear", label = L["Gear"] },
+        { key = "talents", label = L["Talents"] },
+        { key = "professions", label = L["Professions"] },
+        { key = "warnMissing", label = L["Warn about missing enchants and empty sockets"] },
+    }
+    for _, row in ipairs(rows) do
+        local checkBox = AceGUI:Create("CheckBox")
+        checkBox:SetLabel(row.label)
+        checkBox:SetWidth(row.key == "warnMissing" and 400 or 150)
+        checkBox:SetValue(options[row.key])
+        checkBox:SetCallback("OnValueChanged", function(_, _, value) options[row.key] = value end)
+        container:AddChild(checkBox)
+    end
+end
 
 function ExportOptions:Initialize(db)
     self.db = db
 end
 
 Env.AddExportHook({ Before = Before })
+Env.AddSettingsSection(CreateSettingsSection)
 Env.ExportOptions = ExportOptions
 Env.RegisterFeature(ExportOptions)

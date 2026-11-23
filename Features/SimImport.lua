@@ -54,11 +54,7 @@ local function ReadItems(equipment)
     local items = {}
     for index, item in pairs(equipment and equipment.items or {}) do
         if type(item) == "table" and tonumber(item.id) and tonumber(item.id) > 0 then
-            local gems = {}
-            for _, gem in pairs(type(item.gems) == "table" and item.gems or {}) do
-                if tonumber(gem) and tonumber(gem) > 0 then table.insert(gems, tonumber(gem)) end
-            end
-            items[index] = { id = tonumber(item.id), enchant = tonumber(item.enchant), gems = gems }
+            items[index] = { id = tonumber(item.id), enchant = tonumber(item.enchant) }
         end
     end
     return items
@@ -205,7 +201,7 @@ local itemLayout = {
 
 ---Where each wanted item is: equipped, in the bags, or missing.
 ---@param items table
----@return table[] rows { slotId, id, where = "equipped"|"bags"|"bank"|"missing", link }
+---@return table[] rows { slotId, id, where = "equipped"|"bags"|"missing", link }
 local function MatchItems(items)
     local rows, usedBag = {}, {}
     local bagLinks = {}
@@ -213,13 +209,6 @@ local function MatchItems(items)
         for slotId = 1, C_Container.GetContainerNumSlots(bagId) do
             local link = C_Container.GetContainerItemLink(bagId, slotId)
             if link then table.insert(bagLinks, { key = bagId .. ":" .. slotId, link = link }) end
-        end
-    end
-    -- The bank too, while it's open.
-    for _, bagId in ipairs(Env.GetOpenBankContainers() or {}) do
-        for slotId = 1, Env.GetContainerSlots(bagId) do
-            local link = C_Container.GetContainerItemLink(bagId, slotId)
-            if link then table.insert(bagLinks, { key = bagId .. ":" .. slotId, link = link, inBank = true }) end
         end
     end
     local equippedIds = {}
@@ -231,7 +220,7 @@ local function MatchItems(items)
     for index, slotId in ipairs(itemLayout) do
         local item = items[index]
         if item then
-            local row = { slotId = slotId, id = item.id, where = "missing", item = item }
+            local row = { slotId = slotId, id = item.id, where = "missing" }
             local equipped = GetInventoryItemLink("player", slotId)
             if equipped and Env.GetItemIdFromLink(equipped) == item.id then
                 row.where, row.link = "equipped", equipped
@@ -242,7 +231,7 @@ local function MatchItems(items)
                 for _, bagItem in ipairs(bagLinks) do
                     if not usedBag[bagItem.key] and Env.GetItemIdFromLink(bagItem.link) == item.id then
                         usedBag[bagItem.key] = true
-                        row.where, row.link = bagItem.inBank and "bank" or "bags", bagItem.link
+                        row.where, row.link = "bags", bagItem.link
                         break
                     end
                 end
@@ -384,147 +373,6 @@ local function SetFromItems(items, rows, talents)
     return set
 end
 
---------------------------------------------------------------------------------
--- Shopping list
---------------------------------------------------------------------------------
-
-local pendingLoads = {}
-local refreshQueued = false
-
----A link for an item ID; a placeholder while the item's data loads (onLoad runs once it has).
-local function ItemLinkFor(id, onLoad)
-    local getInfo = (C_Item and C_Item.GetItemInfo) or GetItemInfo
-    local _, link = getInfo(id)
-    if link then return link end
-    if onLoad and not pendingLoads[id] and Item and Item.CreateFromItemID then
-        pendingLoads[id] = true
-        Item:CreateFromItemID(id):ContinueOnItemLoad(function()
-            if refreshQueued then return end
-            refreshQueued = true
-            C_Timer.After(0.3, function()
-                refreshQueued = false
-                onLoad()
-            end)
-        end)
-    end
-    return "|cff9d9d9d[" .. L["item %d"]:format(id) .. "]|r"
-end
-
----Enchant ID and gem item IDs from an item link.
-local function LinkParts(link)
-    local itemString = link and link:match("item:([%-%d:]*)")
-    if not itemString then return 0, {} end
-    local parts = { strsplit(":", itemString) }
-    local gems = {}
-    for i = 3, 6 do
-        local gem = tonumber(parts[i] or "")
-        if gem and gem > 0 then table.insert(gems, gem) end
-    end
-    return tonumber(parts[2] or "") or 0, gems
-end
-
----Gems the sim wants that the owned item doesn't have.
-local function MissingGems(wanted, have)
-    local left = {}
-    for _, gem in ipairs(have) do left[gem] = (left[gem] or 0) + 1 end
-    local missing = {}
-    for _, gem in ipairs(wanted or {}) do
-        if (left[gem] or 0) > 0 then
-            left[gem] = left[gem] - 1
-        else
-            table.insert(missing, gem)
-        end
-    end
-    return missing
-end
-
----What to get to match the sim's set: missing items, other enchants, missing gems.
----@return table[] entries { slotId, link, text }
-local function ShoppingList(rows, onLoad)
-    local entries = {}
-    for _, row in ipairs(rows) do
-        local item = row.item or {}
-        if row.where == "missing" then
-            local extra = ""
-            if (item.enchant or 0) > 0 or #(item.gems or {}) > 0 then
-                extra = "  |cff9d9d9d" .. L["(plus the sim's enchant and gems)"] .. "|r"
-            end
-            table.insert(entries, { slotId = row.slotId, link = ItemLinkFor(row.id, onLoad),
-                text = "|cffff8040" .. L["Get it"] .. "|r" .. extra })
-        else
-            local enchant, gems = LinkParts(row.link)
-            local wantedEnchant = item.enchant or 0
-            if wantedEnchant > 0 and enchant ~= wantedEnchant then
-                table.insert(entries, { slotId = row.slotId, link = row.link,
-                    text = "|cffffd100" .. (enchant == 0 and L["Needs an enchant"] or L["Has a different enchant than the sim's"]) .. "|r" })
-            end
-            local missingGems = MissingGems(item.gems, gems)
-            if #missingGems > 0 then
-                local gemLinks = {}
-                for _, gem in ipairs(missingGems) do table.insert(gemLinks, ItemLinkFor(gem, onLoad)) end
-                table.insert(entries, { slotId = row.slotId, link = row.link,
-                    text = "|cffffd100" .. L["Needs gems:"] .. "|r " .. table.concat(gemLinks, " ") })
-            end
-        end
-    end
-    return entries
-end
-
----Plain text for the copy window: "Head: Item Name - Get it".
-local function PlainText(text)
-    return (text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", ""):gsub("|H.-|h(.-)|h", "%1"))
-end
-
-local function AddShoppingList(group, rows, name, Refresh)
-    local heading = AceGUI:Create("Heading")
-    heading:SetFullWidth(true)
-    group:AddChild(heading)
-
-    local entries = ShoppingList(rows, Refresh)
-    heading:SetText(L["Shopping list (%d)"]:format(#entries))
-    if #entries == 0 then
-        local done = AceGUI:Create("Label")
-        done:SetText("|cff1eff00" .. L["Nothing to get: you have every item, enchanted and gemmed like the sim."] .. "|r")
-        done:SetFullWidth(true)
-        group:AddChild(done)
-        return
-    end
-
-    local lines = {}
-    for _, entry in ipairs(entries) do
-        local text = ("|cffffd100%s:|r %s  %s"):format(Env.SlotName(entry.slotId), entry.link, entry.text)
-        table.insert(lines, PlainText(text))
-        local label = AceGUI:Create("InteractiveLabel")
-        label:SetText(text)
-        label:SetFullWidth(true)
-        label:SetCallback("OnEnter", function(widget)
-            local hyperlink = entry.link:match("|H(item:[^|]+)|h")
-            if not hyperlink then return end
-            GameTooltip:SetOwner(widget.frame, "ANCHOR_CURSOR")
-            GameTooltip:SetHyperlink(hyperlink)
-            GameTooltip:Show()
-        end)
-        label:SetCallback("OnLeave", function() GameTooltip:Hide() end)
-        label:SetCallback("OnClick", function()
-            if IsShiftKeyDown() and ChatEdit_InsertLink then ChatEdit_InsertLink(entry.link) end
-        end)
-        group:AddChild(label)
-    end
-
-    local hint = AceGUI:Create("Label")
-    hint:SetText("|cff9d9d9d" .. L["Shift-click a line to link the item in chat."] .. "|r")
-    hint:SetWidth(330)
-    group:AddChild(hint)
-
-    local copy = AceGUI:Create("Button")
-    copy:SetText(L["Copy the list"])
-    copy:SetWidth(150)
-    copy:SetCallback("OnClick", function()
-        Env.ShowTextWindow(L["Shopping list: %s"]:format(name), table.concat(lines, "\n"))
-    end)
-    group:AddChild(copy)
-end
-
 local function AddGearSection(scroll, name, items, talents, Refresh)
     local rows = MatchItems(items)
     local found = 0
@@ -540,9 +388,6 @@ local function AddGearSection(scroll, name, items, talents, Refresh)
 
     local countColor = (found == #rows and "|cff1eff00") or (found > 0 and "|cffffd100") or "|cffff4040"
     local summaryLines = { L["%s%d of %d|r items found (worn or in bags)"]:format(countColor, found, #rows) }
-    if not Env.GetOpenBankContainers() then
-        table.insert(summaryLines, "|cff9d9d9d" .. L["Open your bank to include bank items."] .. "|r")
-    end
     local scoreLine = ScoreComparison(rows)
     if scoreLine then table.insert(summaryLines, scoreLine) end
     local classFile = loaded and loaded.classFile
@@ -573,8 +418,7 @@ local function AddGearSection(scroll, name, items, talents, Refresh)
     equipButton:SetCallback("OnClick", function()
         local links = {}
         for _, row in ipairs(rows) do
-            -- Items in the bank can't be equipped from there.
-            if row.where == "equipped" or row.where == "bags" then links[row.slotId] = row.link end
+            if row.where ~= "missing" then links[row.slotId] = row.link end
         end
         Env.GearSets:EquipLinks(links, name)
     end)
@@ -608,8 +452,6 @@ local function AddGearSection(scroll, name, items, talents, Refresh)
         end)
         group:AddChild(saveButton)
     end
-
-    AddShoppingList(group, rows, name, Refresh)
 
     if talents and talents ~= "" then
         local talentHeading = AceGUI:Create("Heading")

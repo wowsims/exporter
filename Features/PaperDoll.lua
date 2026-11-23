@@ -25,7 +25,6 @@ local bottomSlots = { "MainHandSlot", "SecondaryHandSlot", "RangedSlot" }
 local statusLines = {
     equipped = { L["You're wearing this"], 0.12, 1, 0 },
     bags = { L["In your bags"], 1, 0.82, 0 },
-    bank = { L["In your bank"], 1, 0.82, 0 },
     missing = { L["Not in your bags"], 1, 0.3, 0.3 },
 }
 

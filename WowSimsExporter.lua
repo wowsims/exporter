@@ -97,8 +97,6 @@ end
 function WowSimsExporter:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("WSEDB", defaults, true)
 
-    -- WoW Forever: every WowSims feature's settings, under the exporter's own.
-    if Env.AddFeatureOptions then Env.AddFeatureOptions(options) end
     LibStub("AceConfig-3.0"):RegisterOptionsTable("WowSimsExporter", options)
     self.optionsFrame, self.optionsCategoryID = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("WowSimsExporter", "WowSimsExporter")
 
@@ -485,17 +483,9 @@ end
 
 local function GenerateOutputBags()
     local equipmentSpecBags = Env.CreateEquipmentSpec()
-    local includedBank = equipmentSpecBags:FillFromBagItems()
-    local message
-    if includedBank then
-        message = L["Exported %d items from bags and bank."]:format(#equipmentSpecBags.items)
-    elseif Env.GetOpenBankContainers then
-        message = L["Exported %d items from bags."]:format(#equipmentSpecBags.items) .. " "
-            .. L["Open your bank first to include bank items."]
-    else
-        message = L["Exported %d items from bags."]:format(#equipmentSpecBags.items)
-    end
-    DEFAULT_CHAT_FRAME:AddMessage("[|cffFFFF00WowSimsExporter|r] " .. message)
+    equipmentSpecBags:FillFromBagItems()
+    DEFAULT_CHAT_FRAME:AddMessage("[|cffFFFF00WowSimsExporter|r] " .. L["Exported %d items from bags."]:format(#
+        equipmentSpecBags.items))
     return Env.JSONEncode(equipmentSpecBags)
 end
 

@@ -1,9 +1,7 @@
--- About tab, the minimap button, and the general WowSims settings.
---
--- Settings live in the game's options (Options > AddOns > WowSimsExporter); each feature adds its own
--- group with Env.AddOptions. The About tab links there.
+-- Settings tab and the minimap button.
 --
 -- The minimap button's state is kept in WSEDB.global.minimap = { hide = false, angle = 225 }.
+-- The other settings shown here are the existing ones in WSEDB.profile, read and written as before.
 
 local addonName, Env = ...
 -- WowSims features are Forever-only; other game versions keep the original exporter.
@@ -17,12 +15,6 @@ local Settings = {}
 local ICON = "Interface\\AddOns\\" .. addonName .. "\\Skins\\wowsims"
 local DEFAULT_ANGLE = 225 -- degrees around the minimap, bottom left
 
-local LINKS = {
-    { label = L["Report a bug or suggest something (GitHub)"], url = "https://github.com/wowsims/exporter/issues" },
-    { label = L["Chat with us (WowSims Discord)"], url = "https://discord.gg/N9ZgAMXQ3p" },
-    { label = L["The simulator"], url = "https://www.wowsims.com" },
-}
-
 local button
 
 ---@return table
@@ -32,28 +24,6 @@ function Settings:GetMinimapData()
     return data
 end
 
----@param show boolean
-function Settings:SetMinimapButtonShown(show)
-    self:GetMinimapData().hide = not show
-    if button then button:SetShown(show) end
-end
-
----Open the addon's page in the game's options.
-function Settings:OpenOptions()
-    if self.addon and self.addon.OpenOptions then self.addon:OpenOptions() end
-end
-
----Open the WowSims window on a tab.
----@param value string Tab value, e.g. "upgrades".
-function Settings:OpenTab(value)
-    if not (Env.UI and Env.UI.tabGroup) and self.addon then
-        self.addon:OpenWindow("")
-    end
-    if Env.UI and Env.UI.tabGroup then Env.UI.tabGroup:SelectTab(value) end
-end
-
--- Minimap button --------------------------------------------------------------------------------
-
 local function UpdateButtonPosition()
     local angle = math.rad(Settings:GetMinimapData().angle)
     local radius = (Minimap:GetWidth() / 2) + 5
@@ -61,41 +31,7 @@ local function UpdateButtonPosition()
     button:SetPoint("CENTER", Minimap, "CENTER", math.cos(angle) * radius, math.sin(angle) * radius)
 end
 
----Right-click menu: quick actions. Uses the retail client's menu API (WoW Forever runs on it);
----without it, right-click opens the settings instead.
-local function ShowMenu(owner)
-    if not (MenuUtil and MenuUtil.CreateContextMenu) then
-        Settings:OpenOptions()
-        return
-    end
-    MenuUtil.CreateContextMenu(owner, function(_, root)
-        root:CreateTitle("WowSims")
-        root:CreateButton(L["Export my character"], function() Settings.addon:OpenWindow("export") end)
-        if UnitExists("target") and UnitIsPlayer("target") and not UnitIsUnit("target", "player") then
-            root:CreateButton(L["Export my target"], function() Settings.addon:OpenWindow("inspect") end)
-        end
-        root:CreateDivider()
-        local tabs = {
-            { "upgrades", L["Upgrades"] },
-            { "gearsets", L["Gear Sets"] },
-            { "statweights", L["Stat Weights"] },
-            { "inspect", L["Inspect"] },
-            { "group", L["Group"] },
-            { "simimport", L["Import"] },
-        }
-        for _, tab in ipairs(tabs) do
-            root:CreateButton(tab[2], function() Settings:OpenTab(tab[1]) end)
-        end
-        root:CreateDivider()
-        root:CreateButton(L["Settings"], function() Settings:OpenOptions() end)
-        root:CreateButton(L["Hide this button"], function()
-            Settings:SetMinimapButtonShown(false)
-            Env.FeaturePrint(L["Minimap button hidden. Turn it back on in the addon settings."])
-        end)
-    end)
-end
-
-local function CreateMinimapButton()
+local function CreateMinimapButton(addon)
     if button or not Minimap then return end
 
     button = CreateFrame("Button", "WowSimsMinimapButton", Minimap)
@@ -116,12 +52,8 @@ local function CreateMinimapButton()
     border:SetPoint("TOPLEFT")
     border:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
 
-    button:SetScript("OnClick", function(self, mouseButton)
-        if mouseButton == "RightButton" then
-            ShowMenu(self)
-        else
-            Settings.addon:OpenWindow()
-        end
+    button:SetScript("OnClick", function()
+        addon:OpenWindow()
     end)
     button:SetScript("OnDragStart", function(self)
         self:SetScript("OnUpdate", function()
@@ -138,7 +70,7 @@ local function CreateMinimapButton()
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
         GameTooltip:SetText("WowSims")
-        GameTooltip:AddLine(L["Click to open. Right-click for quick actions. Drag to move."], 1, 1, 1)
+        GameTooltip:AddLine(L["Click to open. Drag to move."], 1, 1, 1)
         GameTooltip:Show()
     end)
     button:SetScript("OnLeave", function()
@@ -148,35 +80,23 @@ local function CreateMinimapButton()
     UpdateButtonPosition()
 end
 
--- Settings page: general options ----------------------------------------------------------------
-
-Env.AddOptions("general", 10, L["General"], {
-    minimap = Env.Toggle(1, L["Show minimap button"], nil,
-        function() return not Settings:GetMinimapData().hide end,
-        function(value) Settings:SetMinimapButtonShown(value) end),
-    tour = {
-        type = "execute", order = 10, name = L["Replay the tour"],
-        func = function() if Env.Tutorial then Env.Tutorial:Start() end end,
-    },
-})
-
--- About tab -------------------------------------------------------------------------------------
-
-local function AddLink(container, link)
-    local label = AceGUI:Create("InteractiveLabel")
-    label:SetText("|cff00ccff" .. link.label .. "|r  |cff9d9d9d" .. link.url .. "|r")
-    label:SetFullWidth(true)
-    label:SetHighlight("Interface\\QuestFrame\\UI-QuestTitleHighlight")
-    label:SetCallback("OnClick", function() Env.ShowTextWindow(link.label, link.url) end)
-    container:AddChild(label)
+---@param show boolean
+function Settings:SetMinimapButtonShown(show)
+    self:GetMinimapData().hide = not show
+    if button then button:SetShown(show) end
 end
 
-local function AddButton(container, text, width, onClick)
-    local widget = AceGUI:Create("Button")
-    widget:SetText(text)
-    widget:SetWidth(width)
-    widget:SetCallback("OnClick", onClick)
-    container:AddChild(widget)
+---@param container table
+---@param label string
+---@param value boolean
+---@param onChange fun(value: boolean)
+local function AddCheckBox(container, label, value, onChange)
+    local checkBox = AceGUI:Create("CheckBox")
+    checkBox:SetLabel(label)
+    checkBox:SetFullWidth(true)
+    checkBox:SetValue(value)
+    checkBox:SetCallback("OnValueChanged", function(_, _, newValue) onChange(newValue) end)
+    container:AddChild(checkBox)
 end
 
 ---@param container table The tab group to fill.
@@ -187,58 +107,52 @@ local function CreateTab(container)
     scroll:SetLayout("Flow")
     container:AddChild(scroll)
 
-    local header = AceGUI:Create("SimpleGroup")
-    header:SetFullWidth(true)
-    header:SetLayout("Flow")
-    scroll:AddChild(header)
-    local icon = AceGUI:Create("Icon")
-    icon:SetImage(ICON)
-    icon:SetImageSize(48, 48)
-    icon:SetWidth(60)
-    header:AddChild(icon)
-    local title = AceGUI:Create("Label")
-    title:SetFontObject(GameFontNormalLarge)
-    title:SetText("WowSims " .. tostring(Env.VERSION) .. "\n|cffffffff" .. L["for WoW Forever"] .. "|r")
-    title:SetWidth(400)
-    header:AddChild(title)
+    local profile = Settings.db.profile
 
-    Env.AddHint(scroll, L["WowSims connects the game to the simulator at wowsims.com: export your character, compare gear with your stat weights, find upgrades, inspect other players and share builds with your group."])
+    local general = Env.AddSection(scroll, L["General"])
+    AddCheckBox(general, L["Show minimap button"], not Settings:GetMinimapData().hide, function(value)
+        Settings:SetMinimapButtonShown(value)
+    end)
+    AddCheckBox(general, L["Show Character Pane Button"], profile.showCharacterButton ~= false, function(value)
+        profile.showCharacterButton = value
+        if WSECharacterFrameButton then WSECharacterFrameButton:SetShown(value) end
+    end)
+    AddCheckBox(general, L["Show Startup Message"], profile.showStartupMessage ~= false, function(value)
+        profile.showStartupMessage = value
+    end)
 
-    local settings = Env.AddSection(scroll, L["Settings"])
-    Env.AddHint(settings, L["Turn WowSims features on or off, and choose what exports include, in the game's options (Options > AddOns > WowSimsExporter)."])
-    AddButton(settings, L["Open addon settings"], 180, function() Settings:OpenOptions() end)
+    if Env.StatWeights then
+        local tooltips = Env.AddSection(scroll, L["Tooltips"])
+        local data = Env.StatWeights:GetData()
+        AddCheckBox(tooltips, L["Show WowSims scores and upgrades on item tooltips"], data.showOnTooltips, function(value)
+            data.showOnTooltips = value
+        end)
+    end
+
+    if #(Env.settingsSections or {}) > 0 then
+        local exports = Env.AddSection(scroll, L["Exports"])
+        for _, createSection in ipairs(Env.settingsSections) do
+            createSection(exports)
+        end
+    end
+
     if Env.Tutorial then
-        AddButton(settings, L["Replay the tour"], 160, function() Env.Tutorial:Start() end)
+        local help = Env.AddSection(scroll, L["Help"])
+        local tour = AceGUI:Create("Button")
+        tour:SetText(L["Replay the tour"])
+        tour:SetWidth(160)
+        tour:SetCallback("OnClick", function() Env.Tutorial:Start() end)
+        help:AddChild(tour)
     end
 
-    local help = Env.AddSection(scroll, L["Help and feedback"])
-    Env.AddHint(help, L["Click a link to copy it."])
-    for _, link in ipairs(LINKS) do AddLink(help, link) end
-
-    local commands = Env.AddSection(scroll, L["Commands"])
-    Env.AddHint(commands, table.concat({
-        "|cffffd100/wowsims|r, |cffffd100/wse|r  " .. L["open this window"],
-        "|cffffd100/wse export|r  " .. L["export your character"],
-        "|cffffd100/wse inspect|r  " .. L["export your target"],
-        "|cffffd100/wse options|r  " .. L["open the addon settings"],
-        "|cffffd100/wowsims tour|r  " .. L["replay the tour"],
-        "|cffffd100/wowsims version|r  " .. L["who in your guild or group has WowSims"],
-    }, "\n"))
-
-    local getMetadata = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
-    local authors = getMetadata and getMetadata(addonName, "Author")
-    if authors and authors ~= "" then
-        local credits = Env.AddSection(scroll, L["Made by"])
-        Env.AddHint(credits, authors)
-    end
+    Env.AddHint(scroll, " \n" .. L["Auto-save settings are on the Saved Data tab. Open this window with /wowsims or /wse. Commands: /wowsims tour, /wowsims version."])
 end
 
-Settings.tab = { value = "about", text = L["About"], Create = CreateTab }
+Settings.tab = { value = "settings", text = L["Settings"], Create = CreateTab }
 
 function Settings:Initialize(db, addon)
     self.db = db
-    self.addon = addon
-    CreateMinimapButton()
+    CreateMinimapButton(addon)
     if button then button:SetShown(not self:GetMinimapData().hide) end
 end
 
