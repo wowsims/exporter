@@ -102,8 +102,6 @@ Enum = {
         or { Poor = 0, Common = 1, Uncommon = 2, Rare = 3, Epic = 4 },
     ItemClass = { Weapon = 2, Armor = 4, Projectile = 6 },
     InventoryType = { IndexShoulderType = 3 },
-    -- The retail client (Forever) numbers the bank with Enum.BagIndex; classic clients use BANK_CONTAINER.
-    BagIndex = not IS_CLASSIC and { Bank = -1 } or nil,
 }
 
 ITEM_UPGRADE_TOOLTIP_FORMAT = "Upgrade Level: %d/%d"
@@ -476,30 +474,16 @@ local BAG_ITEMS = {
     { id = 7007, uncached = true },
 }
 
--- The bank (container -1) holds one more upgrade, visible only while MOCK.bankOpen.
-local BANK_ITEMS = {
-    { id = 7008, rarity = 4, ilvl = 200, class = 4 },
-}
-
 local function BagItemByLink(link)
     local id = tonumber(link:match("item:(%d+)"))
-    for _, list in ipairs({ BAG_ITEMS, BANK_ITEMS }) do
-        for _, item in ipairs(list) do
-            if item.id == id then return item end
-        end
+    for _, item in ipairs(BAG_ITEMS) do
+        if item.id == id then return item end
     end
 end
 
 C_Container = {
-    GetContainerNumSlots = function(bag)
-        if bag == -1 then return MOCK.bankOpen and #BANK_ITEMS or 0 end
-        return bag == 0 and #BAG_ITEMS or 0
-    end,
+    GetContainerNumSlots = function(bag) return bag == 0 and #BAG_ITEMS or 0 end,
     GetContainerItemLink = function(bag, slot)
-        if bag == -1 then
-            local item = MOCK.bankOpen and BANK_ITEMS[slot]
-            return item and ItemLink(item.id, nil, {}, nil, nil)
-        end
         local item = BAG_ITEMS[slot]
         return item and ItemLink(item.id, slot == 1 and "2500" or nil, {}, nil, nil)
     end,
@@ -606,7 +590,6 @@ local function DeepCopy(value)
 end
 
 MOCK.prints = {}
-MOCK.options = {}
 MOCK.addons = {}
 
 local function NewAddon(_, name)
@@ -634,7 +617,7 @@ local LIBRARIES = {
         end,
     },
     ["AceDBOptions-3.0"] = { GetOptionsTable = function() return {} end },
-    ["AceConfig-3.0"] = { RegisterOptionsTable = function(_, name, options) MOCK.options[name] = options end },
+    ["AceConfig-3.0"] = { RegisterOptionsTable = function() end },
     ["AceConfigDialog-3.0"] = {
         AddToBlizOptions = function() return { name = "WowSimsExporter" }, "WowSimsExporter" end,
     },
@@ -724,39 +707,6 @@ function MOCK.RunScenario(root, files)
     }) .. "\n" .. JSON(window.output))
 
     Section("Bag export", JSON(MOCK.bagGenerator()))
-
-    if flavor == "forever" then
-        MOCK.bankOpen = true
-        MOCK.FireFrameEvent("BANKFRAME_OPENED")
-        Section("Bag export (bank open)", JSON(MOCK.bagGenerator()))
-        MOCK.bankOpen = false
-        MOCK.FireFrameEvent("BANKFRAME_CLOSED")
-    end
-
-    -- The settings page: every option in order, with the value its getter reads now.
-    local optionLines = {}
-    local function ListOptions(args, indent)
-        local keys = {}
-        for key in pairs(args) do table.insert(keys, key) end
-        table.sort(keys, function(a, b)
-            local oa, ob = args[a].order or 100, args[b].order or 100
-            if oa ~= ob then return oa < ob end
-            return a < b
-        end)
-        for _, key in ipairs(keys) do
-            local option = args[key]
-            local line = indent .. key .. " (" .. option.type .. "): " .. tostring(option.name)
-            if option.type == "toggle" and option.get then
-                local ok, value = pcall(option.get, { key })
-                line = line .. " = " .. (ok and tostring(value) or ("error: " .. tostring(value)))
-            end
-            table.insert(optionLines, line)
-            if option.args then ListOptions(option.args, indent .. "  ") end
-        end
-    end
-    local mainOptions = MOCK.options.WowSimsExporter
-    if mainOptions then ListOptions(mainOptions.args, "") end
-    Section("Options", table.concat(optionLines, "\n"))
 
     if addon.hooks.InspectUnit then
         window.output = nil

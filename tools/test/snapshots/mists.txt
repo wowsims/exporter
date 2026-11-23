@@ -209,11 +209,6 @@
   ]
 }
 
-## Options
-openExporterButton (execute): Open Exporter Window
-showCharacterButton (toggle): Show Character Pane Button = true
-showStartupMessage (toggle): Show Startup Message = true
-
 ## Inspect export: MONK tree 2
 {
   "class": "monk",

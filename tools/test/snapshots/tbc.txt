@@ -170,11 +170,6 @@
   ]
 }
 
-## Options
-openExporterButton (execute): Open Exporter Window
-showCharacterButton (toggle): Show Character Pane Button = true
-showStartupMessage (toggle): Show Startup Message = true
-
 ## Spec matrix
 WARRIOR 1: supported=true spec=arms link=https://www.wowsims.com/tbc/warrior/dps
 WARRIOR 2: supported=true spec=fury link=https://www.wowsims.com/tbc/warrior/dps

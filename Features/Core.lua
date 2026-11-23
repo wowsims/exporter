@@ -195,58 +195,12 @@ function Env.RunExportHooks(stage, ...)
     end
 end
 
--- Settings in the game's options (Options > AddOns > WowSimsExporter). Each feature adds a group of
--- AceConfig options when its file loads; WowSimsExporter.lua adds them all to its options table
--- before registering it, so they appear under the exporter's own settings.
-local optionGroups = {}
+-- Extra sections for the Settings tab: features add fn(container) that adds their widgets.
+Env.settingsSections = {}
 
----Add a group of options to the addon's settings page.
----@param key string Unique key, e.g. "tooltips".
----@param order number Position among the WowSims groups (lower first).
----@param name string Heading shown above the group.
----@param args table AceConfig args (toggles, buttons...). Getters run when the page is shown.
-function Env.AddOptions(key, order, name, args)
-    optionGroups[key] = { type = "group", inline = true, name = name, order = 100 + order, args = args }
-end
-
----Add every feature's option group to the addon's AceConfig options table.
----@param options table The options table passed to AceConfig's RegisterOptionsTable.
-function Env.AddFeatureOptions(options)
-    -- The exporter's own toggles (character pane button, startup message) belong in General.
-    local general = optionGroups.general
-    if general then
-        for key, order in pairs({ showCharacterButton = 2, showStartupMessage = 3 }) do
-            local option = options.args[key]
-            if option then
-                option.order, option.width = order, "full"
-                general.args[key] = option
-                options.args[key] = nil
-            end
-        end
-    end
-    if options.args.openExporterButton then
-        options.args.openExporterButton.name = L["Open WowSims"]
-        options.args.openExporterButton.desc = nil
-        options.args.openExporterButton.width = nil
-    end
-    for key, group in pairs(optionGroups) do
-        options.args["wowsims_" .. key] = group
-    end
-end
-
----A simple on/off option for Env.AddOptions.
----@param order number
----@param name string
----@param desc string|nil
----@param get fun(): boolean
----@param set fun(value: boolean)
----@return table
-function Env.Toggle(order, name, desc, get, set)
-    return {
-        type = "toggle", order = order, width = "full", name = name, desc = desc,
-        get = function() return get() and true or false end,
-        set = function(_, value) set(value) end,
-    }
+---@param createSection fun(container: table)
+function Env.AddSettingsSection(createSection)
+    table.insert(Env.settingsSections, createSection)
 end
 
 -- Events for features, on their own frame. AceEvent keeps one handler per event per object,
@@ -387,61 +341,4 @@ function Env.TalentPointsText(talentString)
     end
     while #counts < 3 do table.insert(counts, 0) end
     return table.concat(counts, "/", 1, 3)
-end
-
----Name of an equipment slot, e.g. "Head".
----@param slotId integer
----@return string
-function Env.SlotName(slotId)
-    local names = {
-        [INVSLOT_HEAD or 1] = L["Head"], [INVSLOT_NECK or 2] = L["Neck"], [INVSLOT_SHOULDER or 3] = L["Shoulder"],
-        [INVSLOT_CHEST or 5] = L["Chest"], [INVSLOT_WAIST or 6] = L["Waist"], [INVSLOT_LEGS or 7] = L["Legs"],
-        [INVSLOT_FEET or 8] = L["Feet"], [INVSLOT_WRIST or 9] = L["Wrist"], [INVSLOT_HAND or 10] = L["Hands"],
-        [INVSLOT_FINGER1 or 11] = L["Ring"], [INVSLOT_FINGER2 or 12] = L["Ring"],
-        [INVSLOT_TRINKET1 or 13] = L["Trinket"], [INVSLOT_TRINKET2 or 14] = L["Trinket"],
-        [INVSLOT_BACK or 15] = L["Back"], [INVSLOT_MAINHAND or 16] = L["Main Hand"],
-        [INVSLOT_OFFHAND or 17] = L["Off Hand"], [INVSLOT_RANGED or 18] = L["Ranged"],
-    }
-    return names[slotId] or ""
-end
-
--- Bank ------------------------------------------------------------------------------------------
-
-local bankOpen = false
-Env.RegisterFeatureEvent("BANKFRAME_OPENED", function() bankOpen = true end)
-Env.RegisterFeatureEvent("BANKFRAME_CLOSED", function() bankOpen = false end)
-
----Container IDs of the bank while it's open, or nil when it's closed. Built from whatever the
----client defines: the classic bank and its bags, and the retail client's bank tabs (Forever runs
----on the retail client, where the bank was reworked). IDs the client doesn't have are skipped.
----@return integer[]|nil
-function Env.GetOpenBankContainers()
-    if not bankOpen then return nil end
-    local ids, seen = {}, {}
-    local function Add(id)
-        if type(id) == "number" and not seen[id] then
-            seen[id] = true
-            table.insert(ids, id)
-        end
-    end
-    Add(BANK_CONTAINER)
-    if NUM_BANKBAGSLOTS and NUM_BAG_SLOTS then
-        local first = (NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS) + 1
-        for i = 0, NUM_BANKBAGSLOTS - 1 do Add(first + i) end
-    end
-    local bagIndex = Enum and Enum.BagIndex
-    if bagIndex then
-        Add(bagIndex.Bank)
-        for i = 1, 7 do Add(bagIndex["BankBag_" .. i]) end
-        for i = 1, 6 do Add(bagIndex["CharacterBankTab_" .. i]) end
-    end
-    return ids
-end
-
----Number of slots in a container, 0 if the client doesn't know it.
----@param bagId integer
----@return integer
-function Env.GetContainerSlots(bagId)
-    local ok, slots = pcall(C_Container.GetContainerNumSlots, bagId)
-    return ok and tonumber(slots) or 0
 end
