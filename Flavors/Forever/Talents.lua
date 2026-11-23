@@ -69,37 +69,12 @@ local function GetActiveTalentConfigID()
     return nil
 end
 
--- The retail client keeps an inspected player's talents in a special config, the one Blizzard's own
--- inspect talent window reads. It holds data after NotifyInspect(unit) and INSPECT_READY, until the
--- inspect is cleared. -1 is the value of the constant on retail clients, used if it isn't defined.
-local INSPECT_CONFIG_ID = Constants and Constants.TraitConsts
-    and Constants.TraitConsts.INSPECT_TRAIT_CONFIG_ID or -1
-
--- Set while counting points for spec detection, so AddSpec checks that read ranks
--- (Env.GetForeverTalentRanks) read the same player as the count.
-local countingInspect = false
-
----Whether spec detection is currently counting an inspected player's talents.
----@return boolean
-function Env.IsForeverCountingInspect()
-    return countingInspect
-end
-
----Get the config ID to read talents from.
----@param isInspect boolean|nil
----@return integer|nil configID
-local function GetTalentConfigID(isInspect)
-    if isInspect then return INSPECT_CONFIG_ID end
-    return GetActiveTalentConfigID()
-end
-
----Get the ranks of all purchased talents in the active spec group, or of the inspected player.
+---Get the ranks of all purchased talents in the active spec group.
 ---Returns nil instead of failing when talents can't be read, so the rest of the export still works.
----@param isInspect boolean|nil Read the inspected player instead of the player.
 ---@return table<integer, integer>|nil ranks TraitDefinition ID to rank, nil if the client has no talent data yet.
-function Env.GetForeverTalentRanks(isInspect)
+function Env.GetForeverTalentRanks()
     if not C_Traits then return nil end
-    local configID = GetTalentConfigID(isInspect)
+    local configID = GetActiveTalentConfigID()
     if not configID then return nil end
 
     local configInfo = C_Traits.GetConfigInfo(configID)
@@ -107,7 +82,7 @@ function Env.GetForeverTalentRanks(isInspect)
 
     local ranks = {}
     for _, treeID in ipairs(configInfo.treeIDs) do
-        for _, nodeID in ipairs(C_Traits.GetTreeNodes(treeID) or {}) do
+        for _, nodeID in ipairs(C_Traits.GetTreeNodes(treeID)) do
             local node = C_Traits.GetNodeInfo(configID, nodeID)
             -- currentRank also counts ranks granted without spending points.
             local rank = node and (node.currentRank or node.ranksPurchased) or 0
@@ -122,13 +97,11 @@ function Env.GetForeverTalentRanks(isInspect)
     return ranks
 end
 
----Get a player's talent ranks laid out like the sim's trees.
----@param isInspect boolean|nil Read the inspected player (Env.inspectUnit) instead of the player.
+---Get the player's talent ranks laid out like the sim's trees.
 ---@return integer[][] points Rank per talent, [treeIdx][talentIdx]. Empty if no talent data is available.
-local function GetTalentPoints(isInspect)
-    local unit = isInspect and Env.inspectUnit or "player"
-    local trees = talentDefinitionIds[select(2, UnitClass(unit))]
-    local ranks = Env.GetForeverTalentRanks(isInspect)
+local function GetTalentPoints()
+    local trees = talentDefinitionIds[select(2, UnitClass("player"))]
+    local ranks = Env.GetForeverTalentRanks()
     if not trees or not ranks then return {} end
 
     local points = {}
@@ -143,257 +116,23 @@ end
 
 ---Create a talent string in the sim's format, e.g. "0500032-05-3". Trailing zeroes of each tree
 ---and trailing dashes are trimmed, the same as the sim serializes it.
----@param isInspect boolean|nil Read the inspected player instead of the player.
 ---@return string
-function Env.CreateForeverTalentString(isInspect)
+function Env.CreateForeverTalentString()
     local treeStrings = {}
-    for treeIdx, tree in ipairs(GetTalentPoints(isInspect)) do
+    for treeIdx, tree in ipairs(GetTalentPoints()) do
         treeStrings[treeIdx] = (table.concat(tree):gsub("0+$", ""))
     end
     return (table.concat(treeStrings, "-"):gsub("%-+$", ""))
 end
 
 ---Counts spent talent points per tree.
----@param unit string|nil "player" or the inspected unit.
 ---@return table pointsPerTreeTable { tree1Count, tree2Count, tree3Count }
-function Env.CountForeverPointsPerTree(unit)
-    local isInspect = unit ~= nil and unit ~= "player"
-    countingInspect = isInspect
+function Env.CountForeverPointsPerTree()
     local counts = { 0, 0, 0 }
-    for treeIdx, tree in ipairs(GetTalentPoints(isInspect)) do
+    for treeIdx, tree in ipairs(GetTalentPoints()) do
         for _, rank in ipairs(tree) do
             counts[treeIdx] = counts[treeIdx] + rank
         end
     end
     return counts
-end
-
----Describe what the client gives for an inspected player's talents, for /wse inspectdebug.
----@return string[] lines
-function Env.DescribeForeverInspectTalents()
-    local lines = {}
-    local function add(text) table.insert(lines, text) end
-    if not C_Traits then
-        add("C_Traits: missing")
-        return lines
-    end
-    add(("Inspect config ID: %s"):format(tostring(INSPECT_CONFIG_ID)))
-    local configInfo = C_Traits.GetConfigInfo(INSPECT_CONFIG_ID)
-    if not configInfo then
-        add("GetConfigInfo: nil (no inspect talent data from the client)")
-        return lines
-    end
-    local treeIDs = configInfo.treeIDs or {}
-    add(("Trees: %d (%s)"):format(#treeIDs, table.concat(treeIDs, ", ")))
-    local nodeCount = 0
-    for _, treeID in ipairs(treeIDs) do
-        nodeCount = nodeCount + #(C_Traits.GetTreeNodes(treeID) or {})
-    end
-    add(("Nodes: %d"):format(nodeCount))
-    local ranks = Env.GetForeverTalentRanks(true) or {}
-    local known, unknown, total = 0, 0, 0
-    local class = select(2, UnitClass(Env.inspectUnit or "target"))
-    local inSim = {}
-    for _, tree in ipairs(talentDefinitionIds[class] or {}) do
-        for _, definitionId in ipairs(tree) do inSim[definitionId] = true end
-    end
-    for definitionId, rank in pairs(ranks) do
-        total = total + rank
-        if inSim[definitionId] then known = known + 1 else unknown = unknown + 1 end
-    end
-    add(("Talents with points: %d in the sim's trees, %d not (%d points)"):format(known, unknown, total))
-    add(("Talent string: %s"):format(Env.CreateForeverTalentString(true)))
-    return lines
-end
-
----Split a sim talent string ("0500032-05-3") into one rank string per tree.
----@param talentString string
----@return string[]
-local function SplitTalentString(talentString)
-    local trees = {}
-    for tree in (talentString .. "-"):gmatch("([^-]*)-") do
-        table.insert(trees, tree)
-    end
-    return trees
-end
-
----Map each talent definition of the active config to the node and entry that buy it.
----@param configID integer
----@param configInfo table
----@return table<integer, table> nodeByDefinition { nodeID, entryID, isChoice }
-local function MapDefinitionsToNodes(configID, configInfo)
-    local nodeByDefinition = {}
-    for _, treeID in ipairs(configInfo.treeIDs or {}) do
-        for _, nodeID in ipairs(C_Traits.GetTreeNodes(treeID) or {}) do
-            local node = C_Traits.GetNodeInfo(configID, nodeID)
-            local entryIDs = node and node.entryIDs or {}
-            for _, entryID in ipairs(entryIDs) do
-                local entry = C_Traits.GetEntryInfo(configID, entryID)
-                if entry and entry.definitionID then
-                    nodeByDefinition[entry.definitionID] = {
-                        nodeID = nodeID, entryID = entryID, isChoice = #entryIDs > 1,
-                    }
-                end
-            end
-        end
-    end
-    return nodeByDefinition
-end
-
----Ranks the player has bought in a node for one entry.
-local function PurchasedRanks(configID, target)
-    local node = C_Traits.GetNodeInfo(configID, target.nodeID)
-    if not node then return 0 end
-    if target.isChoice and not (node.activeEntry and node.activeEntry.entryID == target.entryID) then
-        return 0
-    end
-    return node.ranksPurchased or 0
-end
-
-local function CommitTalents(configID)
-    if C_ClassTalents and C_ClassTalents.CommitConfig then
-        local ok, result = pcall(C_ClassTalents.CommitConfig)
-        if ok and result then return true end
-    end
-    local ok, result = pcall(C_Traits.CommitConfig, configID)
-    return ok and result
-end
-
----Whether the player has learned dual specialization (a second talent group).
----@return boolean
-local function HasDualSpec()
-    for _, getCount in ipairs({ GetNumTalentGroups, GetNumSpecGroups }) do
-        if getCount then
-            local ok, count = pcall(getCount)
-            if ok and count and count > 1 then return true end
-        end
-    end
-    return false
-end
-
----Learn the talents of a sim talent string with the player's unspent points. Only works out of
----combat. Talents can't be unlearned outside a class trainer, so a build that needs points moved
----is refused with directions instead of resetting anything.
----@param talentString string
----@return boolean ok
----@return string message For the player.
-function Env.ApplyForeverTalentString(talentString)
-    if InCombatLockdown() then return false, "You can't change talents in combat." end
-    if not C_Traits then return false, "This client has no talent API." end
-    local trees = talentDefinitionIds[select(2, UnitClass("player"))]
-    local configID = GetActiveTalentConfigID()
-    local configInfo = configID and C_Traits.GetConfigInfo(configID)
-    if not trees or not configInfo then return false, "Your talents can't be read right now." end
-
-    local nodeByDefinition = MapDefinitionsToNodes(configID, configInfo)
-    local wanted, wantedRank, unknown = {}, {}, 0
-    local treeStrings = SplitTalentString(talentString or "")
-    for treeIdx, definitionIds in ipairs(trees) do
-        local ranks = treeStrings[treeIdx] or ""
-        for talentIdx, definitionId in ipairs(definitionIds) do
-            local rank = tonumber(ranks:sub(talentIdx, talentIdx)) or 0
-            if rank > 0 then
-                if nodeByDefinition[definitionId] then
-                    table.insert(wanted, { target = nodeByDefinition[definitionId], rank = rank })
-                    wantedRank[definitionId] = rank
-                else
-                    unknown = unknown + 1
-                end
-            end
-        end
-    end
-    if #wanted == 0 then return false, "That talent string has no talents for your class." end
-
-    local current = Env.GetForeverTalentRanks() or {}
-    local needsReset = false
-    for definitionId, rank in pairs(current) do
-        if rank > (wantedRank[definitionId] or 0) then needsReset = true end
-    end
-    if needsReset then
-        local message = "Your current talents don't fit this build, and talents can only be reset at a class trainer. "
-            .. "Visit your class trainer to reset your talents, then apply the build again."
-        if HasDualSpec() then
-            message = message .. " Or switch to your other specialization and apply it there."
-        end
-        return false, message
-    end
-
-    -- Buy in tree order, in passes, so a talent locked behind tier points or a prerequisite
-    -- gets bought once those are in.
-    local progress, passes = true, 0
-    while progress and passes < 60 do
-        progress, passes = false, passes + 1
-        for _, want in ipairs(wanted) do
-            local target = want.target
-            local have = PurchasedRanks(configID, target)
-            if target.isChoice and have == 0 then
-                if C_Traits.SetSelection(configID, target.nodeID, target.entryID) then
-                    progress = true
-                    have = PurchasedRanks(configID, target)
-                end
-            end
-            while have < want.rank and C_Traits.PurchaseRank(configID, target.nodeID) do
-                have = have + 1
-                progress = true
-            end
-        end
-    end
-
-    local learned, total = 0, 0
-    for _, want in ipairs(wanted) do
-        total = total + want.rank
-        learned = learned + math.min(want.rank, PurchasedRanks(configID, want.target))
-    end
-    if learned == 0 then
-        if C_Traits.RollbackConfig then C_Traits.RollbackConfig(configID) end
-        return false, "No talents could be learned. Do you have unspent points?"
-    end
-    if not CommitTalents(configID) then
-        return false, "The game didn't accept the talent change."
-    end
-
-    local message = ("Learned %d of %d talent points."):format(learned, total)
-    if learned < total then
-        message = message .. " The rest need more levels or points."
-    end
-    if unknown > 0 then
-        message = message .. (" %d talents in the string aren't in your trees."):format(unknown)
-    end
-    return true, message
-end
-
----Lay out a talent string as a class's trees, for showing it like the talent window.
----Uses the trees built into the addon (Flavors/Forever/TalentTrees.lua), so it works for any class.
----@param talentString string
----@param classFile string|nil e.g. "MAGE"; the player's class if nil.
----@return table[]|nil trees { name, columns, rows, cells = { { row, column, spellID, icon, rank, maxRank, name } } }
----@return string|nil error
-function Env.GetForeverTalentLayout(talentString, classFile)
-    classFile = (classFile or select(2, UnitClass("player"))):upper()
-    local trees = Env.ForeverTalentTrees and Env.ForeverTalentTrees[classFile]
-    if not trees then return nil, ("No talent trees for %s."):format(classFile) end
-
-    local treeStrings = SplitTalentString(talentString or "")
-    local getTexture = (C_Spell and C_Spell.GetSpellTexture) or GetSpellTexture
-    local layout = {}
-    for treeIdx, treeData in ipairs(trees) do
-        local tree = { name = treeData.name, cells = {}, rows = 0, columns = 4 }
-        local ranks = treeStrings[treeIdx] or ""
-        for talentIdx, talent in ipairs(treeData.talents) do
-            local row, column, spellID, maxRank, name = talent[1], talent[2], talent[3], talent[4], talent[5]
-            table.insert(tree.cells, {
-                row = row, column = column, name = name,
-                spellID = spellID ~= 0 and spellID or nil,
-                icon = (spellID ~= 0 and getTexture(spellID)) or 134400,
-                rank = tonumber(ranks:sub(talentIdx, talentIdx)) or 0,
-                maxRank = maxRank,
-                prereqRow = talent[6],
-                prereqColumn = talent[7],
-            })
-            tree.rows = math.max(tree.rows, row)
-            tree.columns = math.max(tree.columns, column)
-        end
-        table.insert(layout, tree)
-    end
-    return layout
 end

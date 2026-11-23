@@ -68,20 +68,6 @@ function CharacterMeta:SetUnit(unit)
     self.version = Env.VERSION
     self.flavor = Env.Flavor.name
     self.unit = unit
-    if Env.Flavor.namesHaveSurnames then
-        -- Forever names are "Firstname Surname", and UnitFullName returns the surname
-        -- where other clients return the realm.
-        local surname = realm
-        if surname and surname ~= "" then
-            name = name .. " " .. surname
-        end
-        if not UnitIsSameServer or UnitIsSameServer(unit) then
-            realm = GetRealmName()
-        else
-            local guidRealm = select(7, GetPlayerInfoByGUID(self.id))
-            realm = (guidRealm and guidRealm ~= surname) and guidRealm or ""
-        end
-    end
     self.name = name
     self.realm = realm
     self.race = getRace(unit, englishRace)
